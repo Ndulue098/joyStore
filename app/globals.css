@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand-primary: #d97706;
+  --text-white: #e5e5e5;
+
+  --text-primary: #404040;
+  --text-primary-H: #0a0a0a;
 }
 
 @theme inline {
@@ -10,11 +15,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-brand: var(--brand-primary);
+  --color-textWhite: var(--text-white);
+
+  --color-textPry: var(--text-primary);
+  --color-textPry-H: var(--text-primary-H);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #ffffff;
     --foreground: #ededed;
   }
 }
