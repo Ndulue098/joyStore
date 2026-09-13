@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Product } from '../types/types';
-// import {productsData} from '../data/productsData';
+"use client"
+import React from 'react';
 
-// import { StockBadge } from '../../../components/ui/Badge';
-import { Plus, Check, Eye, ArrowRight, Zap } from 'lucide-react';
-import { StockBadge } from '../ui/StockBadge';
-
+import { Plus, Check, Eye, ArrowRight, Zap, PlusCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Product } from '@/src/types/types';
+import { StockBadge } from '@/src/ui/StockBadge';
 export interface ProductCardProps {
   key?: React.Key;
   product: Product;
@@ -13,36 +12,33 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, className = '' }: ProductCardProps) {
-//   const [justAdded, setJustAdded] = useState(false);
-
-  const primaryImage =
-    product.images.find((img) => img.isPrimary) || product.images[0];
-//   const inCart = isInCart(product.id);
-//   const currentQuantity = getItemQuantity(product.id);
-
-//   const handleQuickAdd = (e: React.MouseEvent) => {
-//     e.preventDefault();
-//     e.stopPropagation();
-//     addToCart(product, 1);
-//     setJustAdded(true);
-//     setTimeout(() => setJustAdded(false), 1800);
-//   };
-
-//   const handleCardClick = () => {
-//     router.push(`/products/${product.slug}`);
-//   };
+  function handleClick(){
+    const productData={
+      id:product.id,
+      category_id: product.category_id,
+      name: product.name,
+      slug: product.slug,
+      sku: product.sku,
+      brand: product.brand,
+      description: product.description,
+      short_description: product.short_description,
+      price: product.price,
+      quantity:0
+    }
+ 
+  }
 
   return (
     <div
       className={`group relative flex flex-col justify-between overflow-hidden border border-neutral-200 bg-white transition-all duration-200 hover:border-neutral-300 cursor-pointer ${className}`}
     >
       {/* Image Container with Badges */}
-      <div className="relative aspect-4/3 sm:aspect-12/10 w-full overflow-hidden bg-neutral-100">
-        <img
+      <Link href={`/products/${product.id}`}  className="relative aspect-4/3 sm:aspect-12/10 w-full overflow-hidden bg-neutral-100">
+        {/* <img
           src={primaryImage?.url}
           alt={primaryImage?.alt || product.name}
           className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-        />
+        /> */}
 
         {/* Featured Tag */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-10">
@@ -56,7 +52,7 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
 
         {/* Stock Badge */}
         <div className="absolute top-2.5 right-2.5 z-10">
-          <StockBadge status={product.stockStatus} quantity={product.stockQuantity} />
+          <StockBadge status={product.stock_status} quantity={product.stock_quantity} />
         </div>
 
         {/* Quick hover overlay with "View Details" hint */}
@@ -66,7 +62,7 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
             View Specs
           </span>
         </div>
-      </div>
+      </Link>
 
       {/* Card Content */}
       <div className="p-4 flex flex-col flex-1 justify-between gap-3">
@@ -77,7 +73,7 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
               {product.brand}
             </span>
             <span className="text-[11px] text-neutral-400 truncate max-w-[120px]">
-              {product.categoryName}
+              {product.category?.name}
             </span>
           </div>
 
@@ -92,42 +88,17 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
           <div>
             <span className="text-xs text-neutral-400 block -mb-0.5">Listed Price</span>
             <span className="text-base sm:text-lg font-bold text-neutral-900">
-              $400
+              ${product.price}
             </span>
           </div>
 
-          {/* <button
-            type="button"
-            onClick={handleQuickAdd}
-            aria-label={`Add ${product.name} to order`}
-            disabled={product.stockStatus === 'out_of_stock'}
-            className={`inline-flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer ${
-              product.stockStatus === 'out_of_stock'
-                ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed'
-                : justAdded
-                ? 'bg-emerald-600 text-white shadow-2xs'
-                : inCart
-                ? 'bg-neutral-900 text-white hover:bg-neutral-800 shadow-2xs'
-                : 'bg-amber-500 text-neutral-950 hover:bg-amber-400 shadow-2xs active:scale-95'
-            }`}
-          >
-            {justAdded ? (
-              <>
-                <Check className="h-3.5 w-3.5" />
-                <span>Added</span>
-              </>
-            ) : inCart ? (
-              <>
-                <Plus className="h-3.5 w-3.5" />
-                <span>Add ({currentQuantity})</span>
-              </>
-            ) : (
-              <>
-                <Plus className="h-3.5 w-3.5" />
-                <span>Add to Order</span>
-              </>
-            )}
-          </button> */}
+
+          {/* BUTTON */}
+          <button onClick={()=>handleClick} className='p-2.5 py-1 rounded-sm bg-amber-500/80 border border-neutral-700 flex items-center justify-center gap-2'>
+            <PlusCircle className='h-5 w-5'/>
+            <span className='font-semibold text-base '>Add to cart</span>
+          </button>
+
         </div>
       </div>
     </div>

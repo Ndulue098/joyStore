@@ -195,12 +195,7 @@ export default function NavBar({}: NavBarProps) {
               How It Works
             </Link>
 
-            <a
-              href="#store-contact"
-              className="text-sm font-semibold text-textPry hover:text-textPry-H transition-colors"
-            >
-              Contact
-            </a>
+           
           </div>
 
           {/* RIGHT: Search Bar, Cart/Order, Order Lookup & Mobile Menu */}

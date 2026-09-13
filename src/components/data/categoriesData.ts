@@ -1,5 +1,7 @@
 
-import {Category} from '../types/types';
+// import {Category} from '../types/types';
+
+import { Category } from "@/src/types/types";
 
 export const categoriesData: Category[] = [
   {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { StockStatus, OrderStatus } from '../types/types';
+import { OrderStatus, stock_status } from '../types/types';
 
-export function StockBadge({ status, quantity }: { status: StockStatus; quantity?: number }) {
+export function StockBadge({ status, quantity }: { status: stock_status; quantity?: number }) {
   if (status === 'out_of_stock') {
     return (
       <span className="inline-flex items-center gap-1.5 rounded-md bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 border border-rose-200">
