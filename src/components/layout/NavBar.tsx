@@ -17,18 +17,17 @@ import {
   MessageSquare,
   Sparkles,
 } from 'lucide-react';
+import { useCartContext } from "@/src/features/context/CartContext";
+import Logo from "./Logo";
 
 
 interface NavBarProps {
-  
+ 
 }
 
 
 export default function NavBar({}: NavBarProps) {
-
-//  const { itemCount, subtotal } = useCart();
-//   const { categories, getProductsByCategoryId } = useProducts();
-//   const activeCategories = categories.filter((c) => c.isActive);
+  const {cartItemsLength}=useCartContext()
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
@@ -74,18 +73,7 @@ export default function NavBar({}: NavBarProps) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           {/* LEFT: Logo & Store Name */}
-          <Link href="/" className="flex items-center gap-1.5 shrink-0 group">
-            <div className="h-6 w-6 flex items-center justify-center text-brand ">
-              <Zap className="h-5 w-5 fill-brand text-brand" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-neutral-900">
-                  JOY<span className="text-brand">STORE</span>
-                </span>
-              </div>
-            </div>
-          </Link>
+          <Logo/>
 
           {/* CENTER: Navigation Links with Mega Menu */}
           {/* //! Nav bar -------------// */}
@@ -232,19 +220,20 @@ export default function NavBar({}: NavBarProps) {
               href="/cart"
               id="header-cart-button"
               className="relative flex items-center gap-2 rounded-md border border-neutral-300 bg-white px-3.5 py-1.5 text-neutral-900 shadow-2xs hover:bg-neutral-50 hover:border-neutral-400 transition-colors"
-              aria-label={`Your Order with ${3} items`}
+              aria-label={`Your Order with ${cartItemsLength} items`}
             >
               <ShoppingCart className="h-4 w-4 text-textPry" />
               <span className="text-xs font-bold hidden sm:inline">Your Order</span>
-              <span
-                className={`inline-flex items-center justify-center rounded-md text-xs font-bold transition-all ${
-                  2 > 0
+              {cartItemsLength>0?<span
+                className={`inline-flex items-center justify-center rounded-sm text-xs font-bold transition-all ${
+                  cartItemsLength > 0
                     ? 'h-5 w-5 bg-brand text-textWhite shadow-2xs font-mono'
                     : 'h-5 px-1.5 text-neutral-500 bg-neutral-100 font-mono'
                 }`}
               >
-                {2}
-              </span>
+                {cartItemsLength}
+              </span>:null}
+              
             </Link>
 
             {/* Mobile Menu Hamburger */}

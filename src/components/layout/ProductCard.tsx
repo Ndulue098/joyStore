@@ -1,10 +1,11 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Plus, Check, Eye, ArrowRight, Zap, PlusCircle } from 'lucide-react';
+import { Plus, Check, Eye, ArrowRight, Zap, PlusCircle, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { Product } from '@/src/types/types';
 import { StockBadge } from '@/src/ui/StockBadge';
+import { useCartContext } from '@/src/features/context/CartContext';
 export interface ProductCardProps {
   key?: React.Key;
   product: Product;
@@ -12,7 +13,12 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ product, className = '' }: ProductCardProps) {
+  const [active,setActive]=useState<boolean>(false)
+  const {handleAddToCart}=useCartContext()
+
   function handleClick(){
+    console.log("clicked");
+    
     const productData={
       id:product.id,
       category_id: product.category_id,
@@ -23,9 +29,16 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
       description: product.description,
       short_description: product.short_description,
       price: product.price,
-      quantity:0
+      category:product?.category?.name,
+      total:product.price,
     }
  
+    handleAddToCart(productData,1)
+    setActive(true)
+
+    setTimeout(() => {
+      setActive(false)
+    }, 2000);
   }
 
   return (
@@ -94,8 +107,8 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
 
 
           {/* BUTTON */}
-          <button onClick={()=>handleClick} className='p-2.5 py-1 rounded-sm bg-amber-500/80 border border-neutral-700 flex items-center justify-center gap-2'>
-            <PlusCircle className='h-5 w-5'/>
+          <button onClick={()=>handleClick()} className=' cursor-pointer p-2.5 py-1 rounded-xs bg-amber-500/80 border border-neutral-700 flex items-center justify-center gap-2'>
+            {active?<CheckCircle2 className='h-4 w-4'/>:<PlusCircle className='h-4 w-4'/>}
             <span className='font-semibold text-base '>Add to cart</span>
           </button>
 

@@ -17,7 +17,7 @@ export async function getProductById(id: number | string): Promise<Product | nul
         slug
       )
     `)
-    .eq('id', id)
+    .eq('id', id) 
     .eq('is_active', true)
     .single();
 
