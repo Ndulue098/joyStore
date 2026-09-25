@@ -1,23 +1,67 @@
-import { createClient } from '@/lib/supabase/server';
-import { Product, FetchProductsOptions } from '../types';
+import { createClient } from "@/lib/supabase/server";
 
-export async function getProducts(options: FetchProductsOptions = {}) {
+export interface FetchProductsOptions {
+  featured?: boolean;
+  isBestSeller?: boolean;
+  isNew?: boolean;
+  limit?: number;
+  page?: number;
+}
+
+export async function getProducts(
+  searchParamsPromise?: Promise<{ [key: string]: string | string[] | undefined }>,
+  options: FetchProductsOptions = {}
+) {
   const supabase = await createClient();
+
+  // Await searchParams passed from Next.js 15 Server Components
+  const resolvedSearchParams = searchParamsPromise ? await searchParamsPromise : {};
+  const categoryParam = resolvedSearchParams.category;
+
+  const categorySlug = typeof categoryParam === "string" ? categoryParam : undefined;
+
   const {
-    categorySlug,
     featured,
     isBestSeller,
     isNew,
     limit = 10,
     page = 1,
-  } = options;  
+  } = options;
 
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
-  // 1. Explicitly use left join syntax: category:categories!left(...)
+  let categoryIdsToFilter: number[] = [];
+
+  // If category parameter exists, find its ID and subcategory IDs
+  if (categorySlug && categorySlug.trim() !== "") {
+    // 1. Fetch the target category along with its subcategories
+    const { data: targetCategory } = await supabase
+      .from("categories")
+      .select(`
+        id,
+        subcategories:categories!parent_id (
+          id
+        )
+      `)
+      .eq("slug", categorySlug)
+      .single();
+
+    if (targetCategory) {
+      categoryIdsToFilter.push(targetCategory.id);
+
+      // Add subcategory IDs if present
+      if (Array.isArray(targetCategory.subcategories)) {
+        targetCategory.subcategories.forEach((sub: { id: number }) => {
+          categoryIdsToFilter.push(sub.id);
+        });
+      }
+    }
+  }
+
+  // 2. Build product query
   let query = supabase
-    .from('product')
+    .from("product")
     .select(
       `
       *,
@@ -27,32 +71,34 @@ export async function getProducts(options: FetchProductsOptions = {}) {
         slug
       )
     `,
-      { count: 'exact' }
+      { count: "exact" }
     )
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
-    .range(from, to);
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
 
-//   // 2. Strict check on dynamic filters
-//   if (typeof featured === 'boolean') {
-//     query = query.eq('featured', featured);
-//   }
-//   if (typeof isBestSeller === 'boolean') {
-//     query = query.eq('is_best_seller', isBestSeller);
-//   }
-//   if (typeof isNew === 'boolean') {
-//     query = query.eq('is_new', isNew);
-//   }
-  
-//   // Only filter by category slug if an actual string value exists
-//   if (categorySlug && categorySlug.trim() !== '') {
-//     query = query.eq('category.slug', categorySlug);
-//   }
+  // 3. Apply category filter using category_id .in(...)
+  if (categoryIdsToFilter.length > 0) {
+    query = query.in("category_id", categoryIdsToFilter);
+  }
+
+  // 4. Additional boolean filters
+  if (typeof featured === "boolean") {
+    query = query.eq("featured", featured);
+  }
+  if (typeof isBestSeller === "boolean") {
+    query = query.eq("is_best_seller", isBestSeller);
+  }
+  if (typeof isNew === "boolean") {
+    query = query.eq("is_new", isNew);
+  }
+
+  // Apply pagination
+  query = query.range(from, to);
 
   const { data, count, error } = await query;
 
   if (error) {
-    console.error('Error fetching products:', error.message);
+    console.error("Error fetching products:", error.message);
     throw new Error(error.message);
   }
 

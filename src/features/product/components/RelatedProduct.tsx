@@ -8,8 +8,8 @@ interface RelatedProductProps {
 
 export default async function RelatedProduct({category_id,productId}: RelatedProductProps) {
    const products= await getRelatedProducts(category_id,productId)
-   if(!products)return null
-   console.log("related products", products) 
+   if(!products.length)return null
+
   return (
     <div className="my-16">
         <h3 className="text-2xl font-semibold mb-12">Related Electrical Supplies</h3>

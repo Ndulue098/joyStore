@@ -2,6 +2,7 @@ import Logo from "@/src/components/layout/Logo";
 import { AlarmCheckIcon, CalendarCheck, Clock10, Contact, MessageCircleCheckIcon, NotebookPen, Phone, User } from "lucide-react";
 import { getOrderById } from "./data/getOrderByid";
 import TableRow from "./components/TableRow";
+import { formatPickupDate } from "../lib/formatPickupDate";
 
 interface OrderPageProps {
   orderId:string
@@ -34,28 +35,35 @@ export default async function OrderPage({orderId}: OrderPageProps) {
         </div>
 
         {/* RIGHT: Invoice / Quotation Meta Details */}
-        <div className="flex flex-col sm:items-end text-left sm:text-right space-y-4">
+        <div className="flex flex-col sm:items-end text-left sm:text-right space-y-2">
             {/* Quotation Tag & Order Reference ID */}
             <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700 block mb-1">
-                Official Order Quotation
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-mono text-neutral-900">
-                {public_code}
-            </h3>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700 block mb-1">
+                    Official Order Quotation
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-mono text-neutral-900">
+                    {public_code}
+                </h3>
+
+                <div className="bg-yellow-300 max-w-16 border border-neutral-500 text-center ml-auto text-neutral-800 font-semibold my-2 p-2 py-0.5 text-xs rounded-xs capitalize">    
+                    {status}
+                </div>    
             </div>
 
             {/* Order Date & Customer Info */}
-            <div className="text-xs space-y-1 text-neutral-600 pt-1">
-            <p className="font-mono text-neutral-500">
-                Date: <span className="font-semibold text-neutral-800">December 20th</span>
-            </p>
+            <div className="text-xs space-y-1 text-neutral-600">
+            <div className="pt-2">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block">
+                    Created At
+                </span>
+                 <span className="font-semibold text-neutral-800 mt-0.5">{formatPickupDate(created_at)}</span>
+            </div>
             
             <div className="pt-2">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block">
                 BILLED TO
                 </span>
-                <p className="text-sm font-bold text-neutral-900 mt-0.5">
+                <p className="text-sm font-bold text-neutral-900 mt-0.5"> 
                 {customer_name}
                 </p>
             </div>
@@ -72,8 +80,8 @@ export default async function OrderPage({orderId}: OrderPageProps) {
             <th className="py-3 px-2 w-16 hidden sm:table-cell">Image</th>
             <th className="py-3 px-3">Product</th>
             <th className="py-3 px-3 text-center w-20">Qty</th>
-            <th className="py-3 px-3 text-right w-24">Price</th>
-            <th className="py-3 px-3 text-right w-28">Subtotal</th>
+            <th className="py-3 px-3 text-right w-24">Price (₦)</th>
+            <th className="py-3 px-3 text-right w-28">Subtotal (₦)</th>
             </tr>
         </thead>
 
@@ -90,7 +98,7 @@ export default async function OrderPage({orderId}: OrderPageProps) {
                 <div className="space-y-2 text-right">
                 <div className="flex justify-between sm:justify-end gap-6 text-sm font-bold text-neutral-900 border-b p-2 border-neutral-200 pt-2">
                     <span>Final Price:</span>
-                    <span className="font-mono text-amber-700">{estimated_total}</span>
+                    <span className="font-mono text-amber-700">₦ {estimated_total}</span>
                 </div>
                 </div>
             </td>

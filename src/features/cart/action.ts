@@ -30,7 +30,7 @@ export async function submitOrder(formData:FormValue,items:CartItemTyp[],totalPr
     console.log("items " ,items); 
     
 
-    if (!items || items.length===0){
+    if (!items || items.length===0){ 
         return { success: false, error: 'Your cart is empty.' };
     }
 

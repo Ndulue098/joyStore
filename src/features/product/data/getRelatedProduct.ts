@@ -35,4 +35,4 @@ export async function getRelatedProducts(
   }
 
   return (data as Product[]) ?? [];
-}
+} 

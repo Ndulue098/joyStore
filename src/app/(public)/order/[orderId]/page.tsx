@@ -1,13 +1,29 @@
 import OrderPage from "@/src/features/order/OrderPage";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
 
-interface pageProps {
+interface PageProps {
     params:Promise<{ orderId: string }>;
 
 }
 
-export default async function page({params}: pageProps) {
+
+// export const metadata: Metadata = {
+//   title: "Order",
+// };
+
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { orderId } = await params;
+
+  return {
+    title: `Order #${orderId}`,
+    description: `View details and tracking for order #${orderId}`,
+  };
+}
+
+export default async function page({params}: PageProps) {
       const {orderId}=await params 
     
  

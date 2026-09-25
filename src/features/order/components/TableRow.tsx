@@ -19,7 +19,7 @@ export default function TableRow({order_items}: TableRowProps) {
                     {/* <ImageWithFallback
                         src={item.imageUrl}
                         alt={item.name}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover" 
                         /> */}
                     </div>
                 </td>

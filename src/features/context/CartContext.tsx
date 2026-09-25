@@ -68,7 +68,8 @@ export default function CartProvider({children}: CartProviderProps) {
 
     const updateQuantity=function(id:string,quantity:number){
         if (quantity<=0){
-            return removeItemFromCart(id)
+            // return removeItemFromCart(id)
+            return null
         }
         setCart((prev) =>
             prev.map((item) =>

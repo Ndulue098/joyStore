@@ -23,3 +23,77 @@ export type Order_item={
       unit_price:number
       product_name:string
 }
+
+export type ProductType={
+    brand:string;
+    category_id:number;
+    created_at: string;
+    description: string;
+    discount:number; 
+    featured:boolean;
+    id:number;
+    is_active: boolean;
+    is_best_seller:boolean;
+    is_new:true;
+    name: string;
+    price:number;
+    short_description:string;
+    sku:string;
+    slug:string
+    specifications?:object;
+    stock_quantity:number;
+    stock_status:string;
+    unit:string;
+     updatedAt: string;
+    imageUrl:string
+} 
+
+export type CategoryType={
+    id:number;
+    created_at: string;
+    parent_id: number;
+    name: string;
+    slug: string;
+    description: string;
+    imageUrl: null;
+    is_active: boolean;
+    sort_order: string;
+    updatedAt: string
+    products: ProductType[]
+    // subcategories?:ProductType[]
+}
+
+
+export type OrderType={
+    id:string;
+    public_code:string;
+    customer_name:string;
+    customer_phone:number;
+    pickup_date:string;
+    note:string;
+    estimated_total:number;
+    agreed_total:number|null;
+    status:string;
+    created_at:string;
+    updated_at:string;
+    expires_at:string|null;
+    order_items:[];
+    item_count:number;
+}
+
+// {
+//     id: 'd7726624-eca6-4502-b004-c8552eb361c2',
+//     public_code: 'ORD-F5NRQ',
+//     customer_name: 'okiri',
+//     customer_phone: '09143241605',
+//     pickup_date: '2026-09-17',
+//     notes: 'Time Slot: afternoon | User Notes: nothing there',
+//     estimated_total: 667.48,
+//     agreed_total: null,
+//     status: 'draft',
+//     created_at: '2026-09-15T17:15:55.162197+00:00',
+//     updated_at: '2026-09-15T17:15:55.162197+00:00',
+//     expires_at: null,
+//     order_items: [ [Object] ],
+//     item_count: 3
+//   },

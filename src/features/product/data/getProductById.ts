@@ -13,7 +13,7 @@ export async function getProductById(id: number | string): Promise<Product | nul
       *,
       category:categories!category_id!left (
         id,
-        name,
+        name, 
         slug
       )
     `)
@@ -28,3 +28,4 @@ export async function getProductById(id: number | string): Promise<Product | nul
 
   return data as Product;
 }
+ 

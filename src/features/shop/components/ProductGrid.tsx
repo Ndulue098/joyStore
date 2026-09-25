@@ -5,13 +5,14 @@ import { getProducts } from "../data/getProducts";
 import { ProductCard } from "@/src/components/layout/ProductCard";
 
 interface ProductGridProps {
-  
+ searchParams:Promise<{[key:string]:string | string [] | undefined}> 
 }
 
-export default async function ProductGrid({}: ProductGridProps) {
+export default async function ProductGrid({searchParams}: ProductGridProps) {
+  // const {category}=searchParams || {}
+  const {products}=await getProducts(searchParams)
 
-  const {products}=await getProducts()
-
+  
   console.log("products", products);
 
 
@@ -27,7 +28,7 @@ if (products.length === 0) {
  
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-      {products.map((product) => (
+      {products.map((product) => ( 
         <ProductCard key={product.id} product={product} />
       ))}
     </div>

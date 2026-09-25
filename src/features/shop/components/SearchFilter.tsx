@@ -16,6 +16,12 @@ const sortItems = [
 ]
 
 export default function SearchFilter({}: SearchFilterProps) {
+
+    function handleSort(e){
+        e.preventDefault()
+
+    }
+
   return (
     <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pb-4 mt-8 border-b border-neutral-200">
         {/* Search Input */}
@@ -48,7 +54,7 @@ export default function SearchFilter({}: SearchFilterProps) {
                 <SelectContent>
                     <SelectGroup>
                     {sortItems.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
+                        <SelectItem onChange={()=>handleSort(e)} key={item.value} value={item.value}>
                         {item.label}
                         </SelectItem>
                     ))}
