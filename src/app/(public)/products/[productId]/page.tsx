@@ -1,5 +1,7 @@
+import ProductSkeleton from "@/src/features/product/components/ProductSkeleton";
 import ProductPage from "@/src/features/product/ProductPage";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 interface PageProps {
   params:Promise<{ productId: string }>;
@@ -20,8 +22,9 @@ export default async function page({params}: PageProps) {
  
   return (
     <div className="max-w-6xl mx-auto w-full mt-12">
- 
-      <ProductPage productId={productId} />
+      <Suspense fallback={<ProductSkeleton/>}>
+        <ProductPage productId={productId} />
+      </Suspense>
     </div>
   );
 }  

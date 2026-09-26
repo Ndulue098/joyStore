@@ -23,7 +23,7 @@ if (products.length === 0) {
         title="No products match your criteria"
         description="We couldn't find any electrical supplies matching your filters or search query. Try clearing some filters or searching for another item."
       />
-    );
+    ); 
   }
  
   return (

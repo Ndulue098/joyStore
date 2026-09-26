@@ -12,7 +12,8 @@ interface CartContextProps {
     clearCart:()=>void
     cartItemsLength:number,
     totalPrice:number
-    totalCategories:number
+    totalCategories:number;
+    isInCart:(id: string) => void
 }
 
 interface CartProviderProps {
@@ -67,18 +68,25 @@ export default function CartProvider({children}: CartProviderProps) {
     }
 
     const updateQuantity=function(id:string,quantity:number){
-        if (quantity<=0){
-            // return removeItemFromCart(id)
-            return null
-        }
+        // if (quantity<=0){
+        //     // return removeItemFromCart(id)
+        //     return null
+        // }
+
+        const newQuantity = Math.max(1, quantity);
+
         setCart((prev) =>
             prev.map((item) =>
-            item.id === id ? { ...item, quantity} : item
+            item.id === id ? { ...item, quantity:newQuantity} : item
             )
         );
     }
 
     const clearCart = () => setCart([]);
+
+    const isInCart=function(id:string):boolean{
+       return cart.some((cartId)=>cartId.id===id)
+    } 
 
     const totalCategories=cart.length
     const cartItemsLength = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -93,7 +101,8 @@ export default function CartProvider({children}: CartProviderProps) {
         clearCart,
         totalPrice,
         removeItemFromCart,
-        totalCategories
+        totalCategories,
+        isInCart
     }}>
       {children}
     </CartContext.Provider>

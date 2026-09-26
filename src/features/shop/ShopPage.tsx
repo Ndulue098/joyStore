@@ -8,7 +8,7 @@ import { RotateCcw } from "lucide-react";
 import Link from "next/link";
 
 interface ShopPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined; }>;
 }
 
 export default function ShopPage({searchParams}: ShopPageProps) {
@@ -46,7 +46,7 @@ export default function ShopPage({searchParams}: ShopPageProps) {
                 Showing <strong className="text-neutral-900 font-semibold">{filteredProducts.length}</strong> electrical product(s)
               </span> */}
               {/* {activeFilterCount > 0 && (
-                <button
+                <button 
                   type="button"
                   onClick={handleResetFilters}
                   className="text-amber-700 hover:text-amber-800 font-medium underline cursor-pointer"

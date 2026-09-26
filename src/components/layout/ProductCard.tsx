@@ -17,7 +17,6 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
   const {handleAddToCart}=useCartContext()
 
   function handleClick(){
-    console.log("clicked");
     
     const productData={
       id:product.id,
