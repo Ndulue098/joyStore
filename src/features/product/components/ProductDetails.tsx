@@ -18,6 +18,7 @@ interface ProductDetailsProps {
   category_id: number;
   short_description: string;
   category: undefined;
+  image:string
 }
 
 export default function ProductDetails({
@@ -33,6 +34,7 @@ export default function ProductDetails({
   category_id,
   short_description,
   category,
+  image
 }: ProductDetailsProps) {
   const { cart, handleAddToCart, isInCart, removeItemFromCart, updateQuantity } =
     useCartContext();
@@ -58,6 +60,7 @@ export default function ProductDetails({
       category,
       total: price,
       quantity: localQuantity,
+      imageUrl:image  
     };
     handleAddToCart(productData, localQuantity);
   }

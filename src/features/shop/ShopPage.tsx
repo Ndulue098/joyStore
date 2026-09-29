@@ -6,6 +6,7 @@ import ShopHero from "./components/ShopHero";
 import { ShopSkeleton } from "./components/ShopSkeleton";
 import { RotateCcw } from "lucide-react";
 import Link from "next/link";
+import CustomBreadcrumbs from "../Components/CustomBreadcrumbs";
 
 interface ShopPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined; }>;
@@ -14,6 +15,11 @@ interface ShopPageProps {
 export default function ShopPage({searchParams}: ShopPageProps) {
   return (
     <div>
+      <CustomBreadcrumbs
+              items={[
+                { label: "Shop", href: "/shop" },
+              ]}
+            />
         <ShopHero/>
         <SearchFilter/>
 

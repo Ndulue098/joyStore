@@ -1,18 +1,50 @@
+// "use server"
+// import { createClient } from "@/lib/supabase/server";
+
+// export async function getOrderById(public_code:string){
+//    const supabase=await createClient()
+//   const {data,error}=await supabase
+//     .from("orders")
+//     .select('* , order_items(*)')
+//     .eq("public_code",public_code)
+//     .single()
+
+//     if(error){
+//         console.error("Error fetching order by public code:", error.message);
+//         return null;
+//     }
+
+//     return {data,error}
+
+// } 
+
+"use server";
+
 import { createClient } from "@/lib/supabase/server";
 
-export async function getOrderById(public_code:string){
-   const supabase=await createClient()
-  const {data,error}=await supabase
+export async function getOrderById(public_code: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
     .from("orders")
-    .select('* , order_items(*)')
-    .eq("public_code",public_code)
-    .single()
+    .select(`
+      *,
+      order_items (
+        *,
+        product:product!product_id (
+          id,
+          name,
+          imageUrl
+        )
+      )
+    `)
+    .eq("public_code", public_code)
+    .single();
 
-    if(error){
-        console.error("Error fetching order by public code:", error.message);
-        return null;
-    }
+  if (error) {
+    console.error("Error fetching order by public code:", error.message);
+    return null;
+  }
 
-    return data
-
-} 
+  return { data, error };
+}

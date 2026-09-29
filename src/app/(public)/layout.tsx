@@ -1,4 +1,5 @@
 import NavBar from "@/src/components/layout/NavBar";
+import NavContainer from "@/src/components/layout/NavContainer";
 
 export default function PublicLayout({
   children,
@@ -7,7 +8,8 @@ export default function PublicLayout({
 }) {
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
+      <NavContainer/>
       <main className="flex-1">{children}</main>
     </>
   );

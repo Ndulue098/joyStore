@@ -1,3 +1,4 @@
+import { ImageOff } from "lucide-react";
 import { Order_item } from "../../type";
 
 interface TableRowProps {
@@ -6,6 +7,10 @@ interface TableRowProps {
 
 export default function TableRow({order_items}: TableRowProps) {
     // <TableData order_item={order_item} key={order_item.id}/>
+
+    console.log("orderrrrr=== ",order_items);
+    
+
   return (
     <>
     {order_items.map((order_item,i)=>(
@@ -14,14 +19,16 @@ export default function TableRow({order_items}: TableRowProps) {
                     {i+1}
                 </td>
                 
-                <td className="py-3.5 px-2 hidden sm:table-cell">
-                    <div className="h-10 w-10 shrink-0 rounded-md border border-neutral-200 overflow-hidden bg-neutral-100">
-                    {/* <ImageWithFallback
-                        src={item.imageUrl}
-                        alt={item.name}
-                        className="h-full w-full object-cover" 
-                        /> */}
-                    </div>
+                <td className=" text-center flex items-center sm:table-cell">
+                    {order_item?.product.imageUrl ? (
+                        <img
+                        src={order_item.product.imageUrl}
+                        alt={order_item.name}
+                        className="h-full w-full overflow-hidden rounded-sm object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                        />
+                    ) : (
+                        <ImageOff className="h-6 w-6  stroke-[1.5] text-neutral-300 mx-auto" />
+                    )}
                 </td>
 
                 <td className="py-3.5 px-3">

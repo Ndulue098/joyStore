@@ -15,6 +15,7 @@ export interface ProductCardProps {
 export function ProductCard({ product, className = '' }: ProductCardProps) {
   const [active,setActive]=useState<boolean>(false)
   const {handleAddToCart}=useCartContext()
+  
 
   function handleClick(){
     
@@ -30,6 +31,7 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
       price: product.price,
       category:product?.category?.name,
       total:product.price,
+      imageUrl:product.imageUrl 
     }
  
     handleAddToCart(productData,1)

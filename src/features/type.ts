@@ -11,6 +11,7 @@ export type CartItemTyp={
     quantity: number;
     category:string | undefined
     total:number
+    imageUrl:string
 }
 
 export type Order_item={

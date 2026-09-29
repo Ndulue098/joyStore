@@ -44,6 +44,7 @@ export interface Product {
   is_new: boolean;
   specifications:Record<string, string>;
   category?: category;
+  imageUrl:string
 
 }
 

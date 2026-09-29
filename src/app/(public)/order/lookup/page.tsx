@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export default function page({}) {
   return (
     <section className="min-h-[calc(100dvh-64px)] h-full flex items-center">
+      
       <LookupPage/>
     </section>
   );
