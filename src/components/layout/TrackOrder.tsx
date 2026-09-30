@@ -11,15 +11,15 @@ export default function TrackOrder({}) {
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-neutral-200/80 shadow-xl shadow-neutral-100/80 p-6 sm:p-10 max-w-4xl mx-auto">
+      <div className="relative overflow-hidden rounded-md bg-white border border-neutral-200/80 shadow-xl shadow-neutral-100/80 p-6 sm:p-10 max-w-4xl mx-auto">
         {/* Soft Background Accent Glow */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-14 w-86 h-86 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 lg:gap-12">
           
           {/* Left Side: Header & Text */}
           <div className="space-y-2 text-center md:text-left flex-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/60 text-[11px] font-bold uppercase tracking-wider text-amber-800">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-amber-50 border border-amber-200/60 text-[11px] font-bold uppercase tracking-wider text-amber-800">
               <FileSearch className="h-3.5 w-3.5 text-amber-600 shrink-0" />
               <span>Track Existing Submission</span>
             </div>

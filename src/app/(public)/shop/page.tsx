@@ -13,7 +13,6 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   const resolvedSearchParams = await searchParams;
-  console.log("searchParams --> ", resolvedSearchParams);
 
   return (
     <div className="max-w-7xl mx-auto">

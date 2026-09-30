@@ -32,7 +32,7 @@ export default function FilterByCategory({ cat }: FilterByCategoryProps) {
   const shouldDisplay = hasSubProducts;
 
   const [isOpen, setIsOpen] = useState(false);
-
+ 
   function handleFilter(filter: string) {
     const params = new URLSearchParams(searchParams);
     params.set("category", filter);

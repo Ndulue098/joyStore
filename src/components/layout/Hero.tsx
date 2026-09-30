@@ -184,7 +184,7 @@ export default function Hero() {
       
 
         {/* Headline */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-textPry-H leading-[1.1]">
+        <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black tracking-tight text-textPry-H leading-[1.1]">
           {slide.headline}{' '}
           <span className="inline-block font-black underline decoration-amber-500/40 underline-offset-8">
             {slide.highlightText}
@@ -192,24 +192,24 @@ export default function Hero() {
         </h1>
 
         {/* Supporting Text */}
-        <p className="text-sm sm:text-base text-textPry max-w-xl font-normal leading-relaxed">
+        <p className="text-sm sm:text-base text-neutral-600 max-w-xl font-medium leading-relaxed">
           {slide.supportingText}
         </p>
 
         {/* CTAs */}
         <div className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
-          <button className="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-sm sm:text-base shadow-lg shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer flex items-center gap-2">
+          <button className="px-6 py-3 rounded-md bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold text-sm sm:text-base shadow-lg shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer flex items-center gap-2">
             <span>{slide.ctaText}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
-          <button className="px-6 py-3.5 rounded-xl border border-neutral-700 bg-neutral-900/60 hover:bg-neutral-800 text-white font-semibold text-sm sm:text-base backdrop-blur-sm transition-all duration-200 cursor-pointer">
+          <button className="px-6 py-3 rounded-md border border-neutral-700 bg-neutral-900/60 hover:bg-neutral-800 text-white font-semibold text-sm sm:text-base backdrop-blur-sm transition-all duration-200 cursor-pointer">
             {slide.secondaryCtaText}
           </button>
         </div>
 
         {/* Value Proposition Badges */}
-        <div className="pt-4 flex flex-wrap items-center gap-4 text-xs text-neutral-400 border-t border-white/10">
+        <div className="pt-4 flex flex-wrap items-center gap-4 text-xs text-neutral-500 ">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
             <span>Upfront Listed Prices</span>
@@ -231,9 +231,6 @@ export default function Hero() {
       <div className="lg:col-span-6 relative flex items-center justify-end rounded-2xl overflow-hidden ">
         {/* Fixed Aspect Ratio Container preventing Layout Shift */}
         <div className="relative w-full max-w-lg aspect-square flex items-center justify-center overflow-hidden rounded-2xl ">
-          
-          {/* Radial Feathering Mask to eliminate rectangular image edges */}
-    
             <img
               key={slide.id}
               src={slide.imageUrl}
@@ -266,25 +263,7 @@ export default function Hero() {
         </span> */}
       </div>
 
-      {/* Navigation Buttons */}
-      {/* <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={prevSlide}
-          aria-label="Previous Slide"
-          className="h-10 w-10 rounded-full bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-neutral-300 hover:text-white flex items-center justify-center transition-all cursor-pointer active:scale-95"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <button
-          type="button"
-          onClick={nextSlide}
-          aria-label="Next Slide"
-          className="h-10 w-10 rounded-full bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-neutral-300 hover:text-white flex items-center justify-center transition-all cursor-pointer active:scale-95"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      </div> */}
+    
     </div>
   </div>
 </section>

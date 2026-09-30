@@ -38,9 +38,8 @@ export function HowItWorks() {
    <section id="how-it-works" className="relative bg-neutral-900 px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {/* <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" /> */}
     <div className='max-w-7xl mx-auto '>
-     {/* Center Warm Spotlight */}
-     {/* Center Warm Spotlight */}
-<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-amber-500/15 rounded-full blur-[120px] pointer-events-none" />
+
+{/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-amber-500/15 rounded-full blur-[120px] pointer-events-none" /> */}
 
 {/* Edge Dark Vignette Overlay */}
 <div className="absolute inset-0 bg-neutral-950/20 pointer-events-none" />
@@ -69,7 +68,7 @@ export function HowItWorks() {
               <div>
                 {/* Step Header */}
                 <div className="flex items-center justify-between mb-4 ">
-                  <span className="text-2xl font- font-mono text-amber-500/90 group-hover:text-amber-400 transition-colors">
+                  <span className="text-sm font-semibold text-amber-500/90 group-hover:text-amber-400 transition-colors">
                     {step.number}
                   </span>
                   <div className="h-8 w-8 rounded-md bg-neutral-900 border border-neutral-800 flex items-center justify-center">

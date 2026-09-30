@@ -10,10 +10,12 @@ import ShopwithUs from "@/src/components/layout/ShopwithUs";
 import TrackOrder from "@/src/components/layout/TrackOrder";
 
 interface pageProps {
-  
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default function Home({}: pageProps) {
+export default async function Home({searchParams}: pageProps) {
+    const resolvedSearchParams = await searchParams;
+
   return (
     <div>
       <Hero/>
@@ -22,7 +24,7 @@ export default function Home({}: pageProps) {
       <PromoBanner/> 
       <ShopwithUs/>
       <HowItWorks/>
-      <ProductSection/>
+      <ProductSection resolvedSearchParams={resolvedSearchParams}/>
       <TrackOrder/>
       <Footer/> 
     </div>

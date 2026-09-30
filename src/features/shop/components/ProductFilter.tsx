@@ -16,9 +16,9 @@ export default async function ProductFilter({}: ProductFilterProps) {
   const dataList=data || []
   
 
-  console.log("ca-te-go-ries",data);
+  console.log("ca-te-go-ries",data); 
 
-  return (
+  return ( 
    <div className={`space-y-6 `}>
       {/* Header with Reset */}
       <div className="space-y-3">

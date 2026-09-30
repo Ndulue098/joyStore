@@ -1,15 +1,21 @@
-"use client"
 import { Sparkles, ArrowRight, TrendingUp } from 'lucide-react';
 import Link from "next/link";
 import {productsData} from '../data/productsData';
 import { ProductCard } from './ProductCard';
+import { getProducts } from '@/src/features/shop/data/getProducts';
 
 interface FeaturedProductProps {
   
 }
 
-export default function FeaturedProduct({}: FeaturedProductProps) {
+export default async function FeaturedProduct({}: FeaturedProductProps) {
+  const options={limit:8}
+  const data= await getProducts(undefined,options)
+  const {products}=data || []
 //   const { featuredProducts, products } = useProducts();
+
+  console.log("pro----- ",products);
+  
 
   // If there are fewer than 8 featured products, pad with other products
   const displayProducts =productsData.filter((p) => !p.featured).slice(0, 8);
@@ -42,7 +48,7 @@ export default function FeaturedProduct({}: FeaturedProductProps) {
 
       {/* 4-column Responsive Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {displayProducts.map((product) => (
+        {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
