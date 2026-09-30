@@ -35,25 +35,25 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-   <section id="how-it-works" className="relative bg-neutral-900 px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+   <section id="how-it-works" className="relative bg-neutral-200 px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {/* <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" /> */}
     <div className='max-w-7xl mx-auto '>
 
 {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-amber-500/15 rounded-full blur-[120px] pointer-events-none" /> */}
 
 {/* Edge Dark Vignette Overlay */}
-<div className="absolute inset-0 bg-neutral-950/20 pointer-events-none" />
+<div className="absolute inset-0 bg-neutral-100 pointer-events-none" />
 
-      <div className="  text-white p-6 md:p-8 relative overflow-hidden">
+      <div className="  text-neutral-800 p-6 md:p-8 relative overflow-hidden">
         {/* Subtle Ambient Backing */}
 
         {/* Header */}
         <div className="text-center max-w-xl mx-auto mb-12 relative z-10">
           
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-neutral-800">
             How Ordering Works
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-300 mt-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-neutral-700 mt-2 leading-relaxed">
             Build your order online, then talk to us directly to finalize the price. No online card payments required.
           </p>
         </div>
@@ -63,7 +63,7 @@ export function HowItWorks() {
           {STEPS.map((step, index) => (
               <div
               key={step.number}
-              className={` relative flex flex-col justify-between rounded-md  bg-neutral-800/80 border border-neutral-800 p-6 shadow-md hover:border-amber-400/50 transition-all duration-200 group`}
+              className={` relative flex flex-col justify-between rounded-md  bg-neutral-00 border border-neutral-300 p-6 hover:border-amber-400/50 transition-all duration-200 group`}
               >
               <div>
                 {/* Step Header */}
@@ -71,41 +71,41 @@ export function HowItWorks() {
                   <span className="text-sm font-semibold text-amber-500/90 group-hover:text-amber-400 transition-colors">
                     {step.number}
                   </span>
-                  <div className="h-8 w-8 rounded-md bg-neutral-900 border border-neutral-800 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-sm bg-neutral-100 text-neutral-600 border border-neutral-300 flex items-center justify-center">
                     {step.icon}
                   </div>
                 </div>
 
                 <div className="mb-2 ">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-600 block mb-1">
                     {step.badge}
                   </span>
-                  <h3 className="text-lg font-black text-white">
+                  <h3 className="text-lg font-black text-neutral-600">
                     {step.title}
                   </h3>
                 </div>
 
-                <p className="text-xs text-neutral-300 leading-relaxed">
+                <p className="text-xs text-neutral-500 leading-relaxed">
                   {step.description}
                 </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-neutral-700 flex items-center gap-1 text-[11px] text-amber-400 font-medium">
+              <div className="mt-4 pt-3 border-t border-neutral-400 flex items-center gap-1 text-[11px] text-amber-400 font-medium">
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Step {index+1} Complete</span>
+                <span className='text-neutral-500'>Step {index+1} Complete</span>
               </div>
             </div>
           ))}
         </div>
 
         {/* Bottom Callout */}
-        <div className="mt-10 pt-8 border-t border-neutral-800 text-center flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
-          <p className="text-xs sm:text-sm text-neutral-300">
+        <div className="mt-10 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
+          <p className="text-xs sm:text-sm text-neutral-600">
             Have a custom list from your electrician or site engineer?
           </p>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-xs shadow-md transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-amber-500/90 hover:bg-amber-400 text-neutral-950 font-bold text-xs shadow-md transition-all"
             >
             <span>Start Building Your Order</span>
             <ArrowRight className="h-3.5 w-3.5" />

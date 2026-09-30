@@ -11,9 +11,9 @@ export default function TrackOrder({}) {
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-      <div className="relative overflow-hidden rounded-md bg-white border border-neutral-200/80 shadow-xl shadow-neutral-100/80 p-6 sm:p-10 max-w-4xl mx-auto">
+      <div className="relative overflow-hidden rounded-md bg-neutral-100 p-6 sm:p-10 max-w-4xl mx-auto">
         {/* Soft Background Accent Glow */}
-        <div className="absolute -top-24 -left-14 w-86 h-86 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-6 w-20 h-20 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 lg:gap-12">
           

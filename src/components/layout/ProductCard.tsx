@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Plus, Check, Eye, ArrowRight, Zap, PlusCircle, CheckCircle2, ImageOff } from 'lucide-react';
 import Link from 'next/link';
 import { Product } from '@/src/types/types';
-import { StockBadge } from '@/src/ui/StockBadge';
 import { useCartContext } from '@/src/features/context/CartContext';
 export interface ProductCardProps {
   key?: React.Key;

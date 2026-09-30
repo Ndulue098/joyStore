@@ -1,4 +1,3 @@
-import { getCategoriesSubcategoriesAndProducts } from "@/src/features/admin/categories/data/getComponent";
 import { ArrowRight, Layers, Package } from "lucide-react";
 import Link from "next/link";
 
@@ -13,9 +12,6 @@ export default async function CategoryCard({subcat}: CategoryCardProps) {
       (sub) => sub.products && sub.products.length > 0
     ) || [];
 
-
-  console.log("is sub ", validSubcategories);
-  
   
   return (
     <>

@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import Logo from "./Logo";
 import { useRouter } from "next/navigation";
-import User from "./User";
 import CartItem from "./CartItem";
 import { Session } from "next-auth";
 

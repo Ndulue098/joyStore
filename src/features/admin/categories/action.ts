@@ -3,8 +3,16 @@
 import { createAdminClient } from '@/lib/supabase/admin'; // Adjust import path
 import { revalidatePath } from 'next/cache';
 
+import { getAdminSession } from "@/src/app/(admin)/auth";
+
+
 export async function createCategory(formData: FormData) {
+  const session =await getAdminSession()
+  
   try {
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
     const supabase = createAdminClient();
 
     const title = formData.get('title') as string;
@@ -85,7 +93,12 @@ export async function createCategory(formData: FormData) {
 
 // update category
 export async function updateCategory(formData: FormData) {
+  const session =await getAdminSession()
+  
   try {
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
     const supabase = createAdminClient();
 
     const idRaw = formData.get('id') as string;
@@ -177,7 +190,12 @@ export async function updateCategory(formData: FormData) {
 // creating
 
 export async function createProduct(formData: FormData) {
+  const session =await getAdminSession()
+  
   try {
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
     const supabase = createAdminClient();
 
     const name = formData.get('name') as string;
@@ -275,7 +293,12 @@ export async function createProduct(formData: FormData) {
 
 
 export async function updateProduct(formData: FormData) {
+  const session =await getAdminSession()
+  
   try {
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
     const supabase = createAdminClient();
 
     const idRaw = formData.get('id') as string;
@@ -385,6 +408,11 @@ export async function updateProduct(formData: FormData) {
 
 
 export async function deleteCategoryById(id:number) {
+  const session =await getAdminSession()
+  
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
   const supabase = createAdminClient();
 
   // 1. Check if this category has any subcategories (where parent_id matches this id)
@@ -433,6 +461,12 @@ export async function deleteCategoryById(id:number) {
 
 
 export async function deleteProductById(id:number) {
+   const session =await getAdminSession()
+  
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
+    
     const supabase = createAdminClient();
 
     const {data,error:deleteError}=await supabase

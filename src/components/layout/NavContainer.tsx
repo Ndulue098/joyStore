@@ -9,5 +9,5 @@ const session = await getAdminSession();
     <nav className="sticky top-0 z-40 w-full transition-all duration-200">
       <NavBar session={session}/>
     </nav> 
-  );
-}
+  ); 
+} 

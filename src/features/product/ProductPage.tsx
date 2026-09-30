@@ -48,6 +48,7 @@ export default async function ProductPage({ productId }: ProductPageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+      
       <CustomBreadcrumbs
         items={[
           { label: "Shop", href: "/shop" },

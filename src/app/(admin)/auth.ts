@@ -28,4 +28,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 });
 
-export const getAdminSession = () => auth();
+export const getAdminSession = () => auth(); 

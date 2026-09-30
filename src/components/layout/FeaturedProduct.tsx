@@ -1,6 +1,5 @@
-import { Sparkles, ArrowRight, TrendingUp } from 'lucide-react';
+import { ArrowRight, TrendingUp } from 'lucide-react';
 import Link from "next/link";
-import {productsData} from '../data/productsData';
 import { ProductCard } from './ProductCard';
 import { getProducts } from '@/src/features/shop/data/getProducts';
 
@@ -18,7 +17,6 @@ export default async function FeaturedProduct({}: FeaturedProductProps) {
   
 
   // If there are fewer than 8 featured products, pad with other products
-  const displayProducts =productsData.filter((p) => !p.featured).slice(0, 8);
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14" aria-labelledby="featured-products-heading">

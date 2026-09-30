@@ -34,14 +34,13 @@ export default async function ProductFilter({}: ProductFilterProps) {
       </div>
 
       {/* Price Range */}
-      <div className="space-y-3 pt-2 border-t border-neutral-100">
+      {/* <div className="space-y-3 pt-2 border-t border-neutral-100">
         <div className="flex items-center justify-between">
           <label className="text-xs font-bold uppercase tracking-wider text-neutral-700">
             Max Price
           </label>
           <span className="text-xs font-bold text-neutral-900 font-mono">
             #250,000
-            {/* {filters.maxPrice >= 150000 ? 'Any Price' : formatNaira(filters.maxPrice)} */}
           </span>
         </div>
         <input
@@ -49,8 +48,6 @@ export default async function ProductFilter({}: ProductFilterProps) {
           min={2000}
           max={150000}
           step={5000}
-        //   value={filters.maxPrice}
-        //   onChange={(e) => onFilterChange({ maxPrice: Number(e.target.value) })}
           className="w-full accent-amber-500 h-1.5 bg-neutral-200 rounded-lg cursor-pointer"
         />
         <div className="flex justify-between text-[10px] text-neutral-400 font-mono">
@@ -58,7 +55,7 @@ export default async function ProductFilter({}: ProductFilterProps) {
           <span>₦75,000</span>
           <span>₦150k+</span>
         </div>
-      </div>
+      </div> */}
 
 
       

@@ -306,7 +306,7 @@ export async function getDashboardTotals(): Promise<DashboardStats> {
       supabase
         .from("orders")
         .select("*", { count: "exact", head: true })
-        .eq("status", "confirmed"),
+        .eq("status", "completed"),
     ]);
 
     return {

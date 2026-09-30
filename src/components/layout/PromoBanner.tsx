@@ -19,10 +19,10 @@ export default function PromoBanner({}: PromoBannerProps) {
 
     {/* Subtle Ambient Background */}
     {/* Top Left Soft Yellow Highlight */}
-    <div className="absolute -top-12 -left-12 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="absolute -top-12 -left-12 w-96 h-96 bg-amber-100/40 rounded-full blur-3xl pointer-events-none" />
 
     {/* Bottom Right Warm Amber Glow */}
-    <div className="absolute -bottom-16 -right-16 w-[500px] h-[500px] bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="absolute -bottom-16 -right-16 w-[500px] h-[500px] bg-amber-100/40 rounded-full blur-3xl pointer-events-none" />
 
     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center p-8 sm:p-12 lg:p-14 gap-8 lg:gap-12">
       {/* Left Text Block */}

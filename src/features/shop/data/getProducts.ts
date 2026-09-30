@@ -110,6 +110,10 @@ export interface FetchProductsOptions {
 
  */
 
+
+// *********************************** v2
+// *********************************** v2
+// *********************************** v2
 export async function getProducts(
   searchParamsPromise?: Promise<{ [key: string]: string | string[] | undefined }>,
   options: FetchProductsOptions = {}
