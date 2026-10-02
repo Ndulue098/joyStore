@@ -1,13 +1,14 @@
 import { Package, PencilLine, Plus, Trash } from "lucide-react";
 import ProductForm from "./ProductForm";
-import { CategoryType, ProductType } from "@/src/features/type";
+import { ProductType } from "@/src/features/type";
 import ProductTableRow from "./ProductTableRow";
+import { CategoryType, ProductsType, Subcategories } from "@/src/types/types";
 
 interface ProductComProps {
- products:ProductType[] ;
+ products:ProductsType[] ;
  name:string;
   id: number
-  categoryList:CategoryType[]
+  categoryList:Subcategories[]
 }
 
 export default function ProductCom({products,name,id,categoryList}: ProductComProps) {
@@ -54,7 +55,7 @@ export default function ProductCom({products,name,id,categoryList}: ProductComPr
           </thead>
  
           <tbody className="divide-y divide-neutral-100">
-            {products.map((product)=><ProductTableRow productId={product.id} categoryList={categoryList} id={id} name={name} product={product} key={product.id}/>)}
+            {products.map((product)=><ProductTableRow productId={+product.id} categoryList={categoryList} id={id} name={name} product={product} key={product.id}/>)}
 
             
           </tbody>

@@ -1,8 +1,8 @@
 import { ImageOff } from "lucide-react";
-import { Order_item } from "../../type";
+import { OrderItemType } from "@/src/types/types";
 
 interface TableRowProps {
-  order_items:Order_item[]
+  order_items:OrderItemType[]
 }
 
 export default function TableRow({order_items}: TableRowProps) {
@@ -23,7 +23,7 @@ export default function TableRow({order_items}: TableRowProps) {
                     {order_item?.product.imageUrl ? (
                         <img
                         src={order_item.product.imageUrl}
-                        alt={order_item.name}
+                        alt={order_item?.product.name}
                         className="h-full w-full overflow-hidden rounded-sm object-cover object-center transition-transform duration-300 group-hover:scale-105"
                         />
                     ) : (

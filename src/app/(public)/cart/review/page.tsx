@@ -1,10 +1,8 @@
 import ReviewCartPage from "@/src/features/cart/reviewCart/ReviewCartPage";
 
-interface pageProps {
-  
-}
 
-export default function page({}: pageProps) {
+
+export default function page({}) {
   return (
     <div>
         <ReviewCartPage/>

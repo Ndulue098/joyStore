@@ -2,16 +2,13 @@ import OverviewPage from "@/src/features/admin/Overview/OverviewPage";
 import { Metadata } from "next";
 import { getAdminSession } from "../auth";
 
-interface pageProps {
-  
-}
 
 export const metadata: Metadata = {
   title: "Orders",
   description:"Create, delete, edit, and manage product and orders"
 };
 
-export default async function page({}: pageProps) {
+export default async function page({}) {
   const session = await getAdminSession();
   return (
     <div className="space-y-6">

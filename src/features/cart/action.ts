@@ -1,8 +1,9 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
-import { CartItemTyp } from "../type";
+// import { CartItemTyp } from "../type";
 import { generatePublicCode } from "./lib/generatePublicCode";
+import { CartType } from "@/src/types/types";
 
 interface FormValue{
     fullName: string;
@@ -22,7 +23,7 @@ interface FormValue{
 // }
 
 
-export async function submitOrder(formData:FormValue,items:CartItemTyp[],totalPrice:number){
+export async function submitOrder(formData:FormValue,items:CartType[],totalPrice:number){
     const supabase=await createClient()
     
 

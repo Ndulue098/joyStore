@@ -43,7 +43,6 @@ export default function ParentCard({ parent,categoriesParent }: ParentCardProps)
 
   const hasSubcategories = totalSubcategories > 0;
 
-  console.log("categoro list ----------------->>>>",categoryList);
   
 
   function handleDeleteClick() {

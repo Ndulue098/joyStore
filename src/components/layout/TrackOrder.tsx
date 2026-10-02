@@ -6,8 +6,7 @@ import { FileSearch, ArrowRight, Search, AlertCircle, Loader2 } from "lucide-rea
 
 
 export default function TrackOrder({}) {
-  const { error, loading, handleSubmitForm, setOrderCode, orderCode, setError } =
-    useTrackOrder(getOrderById);
+  const { error, loading, handleSubmitForm, setOrderCode, orderCode, setError } =useTrackOrder(getOrderById);
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-10 sm:py-14">

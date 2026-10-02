@@ -1,14 +1,14 @@
 "use client"
 import Link from "next/link";
 import { useCartContext } from "../../context/CartContext";
-import { CartItemTyp } from "../../type";
 import CartItem from "./CartItem";
+import { CartType } from "@/src/types/types";
  
 interface CartItemRowProps {
-    key: string; 
-    item: CartItemTyp;
-    deleteItem: (id: string) => void; 
-    updateQuantity:(id:string,quantity:number)=>void
+    // key: string; 
+    item: CartType;
+    // deleteItem: (id: string) => void; 
+    // updateQuantity:(id:string,quantity:number)=>void
 }
 
 export default function CartItemRow({item}: CartItemRowProps) {
@@ -21,4 +21,4 @@ export default function CartItemRow({item}: CartItemRowProps) {
     {/* ))} */}
     </ul>
   );
-} 
+}  

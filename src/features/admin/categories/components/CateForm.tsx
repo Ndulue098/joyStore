@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/field"
 import Button from "./Button"
 import { createCategory, updateCategory } from "../action"
-import { CategoryType } from "@/src/features/type"
+import { CategoryType, Subcategories } from "@/src/types/types"
 
 const buildFormSchema = (isEditing: boolean) =>
   z.object({
@@ -69,31 +69,36 @@ const buildFormSchema = (isEditing: boolean) =>
           ),
   })
 
-type FormValues = z.infer<ReturnType<typeof buildFormSchema>>
-
-interface ParentCategoryType extends CategoryType {
-  subcategories?: CategoryType[];
+type FormValues = {
+  title: string
+  description?: string
+  parentId?: string
+  isActive: boolean
+  image?: File
 }
 
-interface CateFormProps { 
-  categoryList?: CategoryType[]
+interface CateFormProps {
+  categoryList?: Subcategories[]
   onSubmit?: (data: FormValues) => void
   children: React.ReactNode
-  category?: CategoryType
-  parentId?:number
-  categoryParentList?:ParentCategoryType[];
-  parentName?:string
+  category?: Subcategories
+  parentId?: number
+  categoryParentList?: CategoryType[]
+  parentName?: string
 }
 
-export default function CateForm({ categoryList = [], category, children,parentId,categoryParentList,parentName}: CateFormProps) {
-
-
-  // Calculate default parent ID properly
+export default function CateForm({
+  category,
+  children,
+  parentId,
+  categoryParentList,
+  parentName,
+}: CateFormProps) {
   const defaultParentId = category?.parent_id
     ? String(category.parent_id)
     : parentId
     ? String(parentId)
-    : "none";
+    : "none"
 
   const [open, setOpen] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
@@ -111,7 +116,22 @@ export default function CateForm({ categoryList = [], category, children,parentI
     },
   })
 
-  // Sync form values whenever dialog opens or parentId / category changes
+  const handleReset = useCallback(() => {
+    form.reset({
+      title: "",
+      description: "",
+      parentId: defaultParentId,
+      isActive: true,
+    })
+    setPreview((prev) => {
+      if (prev && prev.startsWith("blob:")) {
+        URL.revokeObjectURL(prev)
+      }
+      return null
+    })
+  }, [form, defaultParentId])
+
+  // Synchronize form inputs deferred outside synchronous effect stack
   useEffect(() => {
     if (open) {
       if (category) {
@@ -121,34 +141,24 @@ export default function CateForm({ categoryList = [], category, children,parentI
           parentId: category.parent_id ? String(category.parent_id) : "none",
           isActive: category.is_active ?? true,
         })
-        setPreview(category.imageUrl || null)
+        queueMicrotask(() => {
+          setPreview(category.imageUrl || null)
+        })
       } else {
         form.reset({
           title: "",
           description: "",
-          parentId: defaultParentId, // <--- Correctly uses parentId prop when creating subcategory
+          parentId: defaultParentId,
           isActive: true,
         })
-        setPreview(null)
+        queueMicrotask(() => {
+          setPreview(null)
+        })
       }
     }
-  }, [open, category, parentId, defaultParentId])
+  }, [open, category, defaultParentId, form])
 
-  function handleReset() {
-    form.reset({
-      title: "",
-      description: "",
-      parentId: defaultParentId,
-      isActive: true,
-    })
-    if (preview && preview.startsWith("blob:")) {
-      URL.revokeObjectURL(preview)
-    }
-    setPreview(null)
-  }
-
-  // ... rest of your code ...
-
+  // Cleanup Object URL on unmount or preview changes
   useEffect(() => {
     return () => {
       if (preview && preview.startsWith("blob:")) {
@@ -166,7 +176,7 @@ export default function CateForm({ categoryList = [], category, children,parentI
       data.parentId === "none" ? "" : data.parentId || ""
     )
     formData.append("isActive", String(data.isActive))
-    
+
     if (data.image) {
       formData.append("image", data.image)
     }
@@ -188,19 +198,6 @@ export default function CateForm({ categoryList = [], category, children,parentI
     }
   }
 
-  // function handleReset() {
-  //   form.reset({
-  //     title: "",
-  //     description: "",
-  //     parentId: "none",
-  //     isActive: true,
-  //   })
-  //   if (preview && preview.startsWith("blob:")) {
-  //     URL.revokeObjectURL(preview)
-  //   }
-  //   setPreview(null)
-  // }
-
   return (
     <Dialog
       open={open}
@@ -220,7 +217,7 @@ export default function CateForm({ categoryList = [], category, children,parentI
           <DialogDescription className="text-sm text-neutral-500">
             {isEditing
               ? "Update category details and image."
-              : "Provide details and upload an image for your category."} 
+              : "Provide details and upload an image for your category."}
           </DialogDescription>
         </DialogHeader>
 
@@ -243,84 +240,51 @@ export default function CateForm({ categoryList = [], category, children,parentI
               )}
             />
 
-            {/* <Controller
-              name="parentId"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Parent Category</FieldLabel>
-
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || defaultParentId}
-                  >
-                    <SelectTrigger id={field.name} className="w-full">
-                      <SelectValue placeholder="Select parent category" />
-                    </SelectTrigger>
-
-                    <SelectContent>
-                        {(!parentId && !category?.parent_id) && (
-                          <SelectItem value="none">None (Top-Level Category)</SelectItem>
+            {!isEditing && parentId ? (
+              <Field>
+                <FieldLabel>Parent Category</FieldLabel>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-neutral-200 bg-neutral-100 dark:bg-neutral-800 dark:border-neutral-700 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  <span className="text-xs uppercase font-extrabold text-indigo-600 bg-indigo-100 dark:bg-indigo-950 dark:text-indigo-300 px-2 py-0.5 rounded">
+                    Locked
+                  </span>
+                  <span>{parentName || "Selected Parent Category"}</span>
+                </div>
+              </Field>
+            ) : (
+              <Controller
+                name="parentId"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Parent Category</FieldLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || "none"}
+                    >
+                      <SelectTrigger id={field.name} className="w-full">
+                        <SelectValue placeholder="Select parent category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(!category || category.parent_id === null) && (
+                          <SelectItem value="none">
+                            None (Top-Level Category)
+                          </SelectItem>
                         )}
 
                         {categoryParentList
-                          ?.filter((cat) => !isEditing || cat.id !== category?.id)
+                          ?.filter((cat) => cat.id !== category?.id)
                           ?.map((cat) => (
                             <SelectItem key={cat.id} value={String(cat.id)}>
                               {cat.name}
                             </SelectItem>
                           ))}
                       </SelectContent>
-                  </Select>
-
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            /> */}
-
-         {!isEditing && parentId ? (
-  <Field>
-    <FieldLabel>Parent Category</FieldLabel>
-    <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-neutral-200 bg-neutral-100 dark:bg-neutral-800 dark:border-neutral-700 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-      <span className="text-xs uppercase font-extrabold text-indigo-600 bg-indigo-100 dark:bg-indigo-950 dark:text-indigo-300 px-2 py-0.5 rounded">
-        Locked
-      </span>
-      <span>{parentName || "Selected Parent Category"}</span>
-    </div>
-    {/* Removed hidden <input> since React Hook Form now tracks parentId internally */}
-  </Field>
-) : (
-  <Controller
-    name="parentId"
-    control={form.control}
-    render={({ field, fieldState }) => (
-      <Field data-invalid={fieldState.invalid}>
-        <FieldLabel htmlFor={field.name}>Parent Category</FieldLabel>
-        <Select onValueChange={field.onChange} value={field.value || "none"}>
-          <SelectTrigger id={field.name} className="w-full">
-            <SelectValue placeholder="Select parent category" />
-          </SelectTrigger>
-          <SelectContent>
-            {(!category || category.parent_id === null) && (
-              <SelectItem value="none">None (Top-Level Category)</SelectItem>
+                    </Select>
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
             )}
-
-            {categoryParentList
-              ?.filter((cat) => cat.id !== category?.id)
-              ?.map((cat) => (
-                <SelectItem key={cat.id} value={String(cat.id)}>
-                  {cat.name}
-                </SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
-        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-      </Field>
-    )}
-  />
-)}
 
             <Controller
               name="description"
@@ -342,13 +306,19 @@ export default function CateForm({ categoryList = [], category, children,parentI
               name="isActive"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="flex items-center gap-2">
+                <Field
+                  data-invalid={fieldState.invalid}
+                  className="flex items-center gap-2"
+                >
                   <Checkbox
                     id="isActive"
                     checked={field.value ?? false}
                     onCheckedChange={field.onChange}
                   />
-                  <FieldLabel htmlFor="isActive" className="text-sm font-medium cursor-pointer">
+                  <FieldLabel
+                    htmlFor="isActive"
+                    className="text-sm font-medium cursor-pointer"
+                  >
                     Active
                   </FieldLabel>
                 </Field>
@@ -358,7 +328,10 @@ export default function CateForm({ categoryList = [], category, children,parentI
             <Controller
               name="image"
               control={form.control}
-              render={({ field: { onChange, value, ref, ...fieldProps }, fieldState }) => (
+              render={({
+                field: { onChange, value, ref, ...fieldProps },
+                fieldState,
+              }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="image-upload">
                     Upload Image {isEditing ? "(Optional)" : "*"}
@@ -395,7 +368,8 @@ export default function CateForm({ categoryList = [], category, children,parentI
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <Upload className="w-8 h-8 mb-2 text-neutral-400" />
                         <p className="text-sm text-neutral-600">
-                          <span className="font-semibold">Click to upload</span> or drag and drop
+                          <span className="font-semibold">Click to upload</span> or drag
+                          and drop
                         </p>
                         <p className="text-xs text-neutral-400 mt-1">
                           PNG, JPG, or WEBP (Max 5MB)

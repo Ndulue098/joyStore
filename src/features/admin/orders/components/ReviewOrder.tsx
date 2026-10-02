@@ -19,28 +19,9 @@ import {
 import { Layers, Loader2, User, Phone, Calendar, FileText } from "lucide-react";
 import { getOrderById, updateOrderNegotiation } from "../action"; // Adjust action imports
 import { formatPickupDate } from "@/src/features/lib/formatPickupDate";
+import { OrderItemType, OrderType } from "@/src/types/types";
 
-interface OrderItemType {
-  id: string;
-  product_id: number;
-  product_name: string;
-  unit_price: number;
-  quantity: number;
-  subtotal: number;
-}
 
-interface OrderDetailsType {
-  id: string;
-  public_code: string;
-  customer_name: string;
-  customer_phone: string;
-  pickup_date: string;
-  notes: string;
-  estimated_total: number;
-  agreed_total: number | null;
-  status: string;
-  orderItems: OrderItemType[];
-}
 
 interface ReviewOrderProps {
   children: React.ReactNode;
@@ -52,7 +33,7 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
   const [loading, setLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const [order, setOrder] = useState<OrderDetailsType | null>(null);
+  const [order, setOrder] = useState<OrderType | null>(null);
   const [discounts, setDiscounts] = useState<Record<string, number>>({});
   const [status, setStatus] = useState<string>("draft");
   const [agreedTotal, setAgreedTotal] = useState<number | string>("");
@@ -65,15 +46,15 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
       setLoading(true);
       try {
         const data = await getOrderById(id);
-        
+        const {orderItems,...restData}=data 
         if (data) {
           console.log("order item data:: ", data);
-          setOrder(data);
+          setOrder({...restData,order_items:orderItems});
           setStatus(data.status || "draft");
           
           // Initial discounts start at 0
           const initialDiscounts: Record<string, number> = {};
-          data.orderItems?.forEach((item: OrderItemType) => {
+          data.order_items?.forEach((item: OrderItemType) => {
             initialDiscounts[item.id] = 0;
           });
           setDiscounts(initialDiscounts);
@@ -105,8 +86,8 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
     setDiscounts(updatedDiscounts);
 
     // Auto-recalculate agreed total sum across all items
-    if (order?.orderItems) {
-      const newAgreedTotal = order.orderItems.reduce((acc, item) => {
+    if (order?.order_items) {
+      const newAgreedTotal = order.order_items.reduce((acc, item) => {
         const itemDiscount = updatedDiscounts[item.id] || 0;
         return acc + calculateSubtotal(item.unit_price, item.quantity, itemDiscount);
       }, 0);
@@ -121,7 +102,7 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
     startTransition(async () => {
       try {
         // Map line items with their applied discounts for the server action
-        const itemsPayload = order.orderItems.map((item) => ({
+        const itemsPayload = order.order_items.map((item) => ({
           itemId: item.id,
           unitPrice: item.unit_price,
           quantity: item.quantity,
@@ -149,7 +130,7 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger >{children}</DialogTrigger>
 
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-6 rounded-xl">
         <DialogHeader>
@@ -229,7 +210,7 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100 text-neutral-700">
-                  {order.orderItems?.map((item) => {
+                  {order.order_items?.map((item) => {
                     const currentDiscount = discounts[item.id] || 0;
                     const calculatedSubtotal = calculateSubtotal(
                       item.unit_price,
@@ -276,7 +257,7 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
                 <label className="text-xs font-semibold text-neutral-700">
                   Update Status
                 </label>
-                <Select value={status} onValueChange={setStatus}>
+                <Select value={status} onValueChange={(value) => setStatus(value ?? "")}>
                   <SelectTrigger className="w-full h-9 text-xs">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>

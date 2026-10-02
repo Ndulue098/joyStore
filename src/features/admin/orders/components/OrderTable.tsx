@@ -1,4 +1,4 @@
-import { OrderType } from "@/src/features/type";
+import { OrderType } from "@/src/types/types";
 import OrderTableRow from "./OrderTableRow";
 
 interface OrderTableProps {

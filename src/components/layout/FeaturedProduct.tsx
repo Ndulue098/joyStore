@@ -2,21 +2,14 @@ import { ArrowRight, TrendingUp } from 'lucide-react';
 import Link from "next/link";
 import { ProductCard } from './ProductCard';
 import { getProducts } from '@/src/features/shop/data/getProducts';
+import { ProductsType } from '@/src/types/types';
 
-interface FeaturedProductProps {
-  
-}
-
-export default async function FeaturedProduct({}: FeaturedProductProps) {
+export default async function FeaturedProduct({}) {
   const options={limit:8}
   const data= await getProducts(undefined,options)
-  const {products}=data || []
-//   const { featuredProducts, products } = useProducts();
+  const {products =[]}=data ?? {}
 
-  console.log("pro----- ",products);
-  
-
-  // If there are fewer than 8 featured products, pad with other products
+  // const products = (data?.products ?? []) as ProductsType[]
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14" aria-labelledby="featured-products-heading">

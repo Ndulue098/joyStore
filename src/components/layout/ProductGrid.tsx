@@ -2,12 +2,14 @@ import { getProducts } from "@/src/features/shop/data/getProducts";
 import { ProductCard } from "./ProductCard";
 
 interface ProductGridProps {
-  resolvedSearchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  // resolvedSearchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  resolvedSearchParams: { [key: string]: string | string[] | undefined; }
+
 }
 
 export default async function ProductGrid({ resolvedSearchParams }: ProductGridProps) {
   const options = { limit: 8 };
-  const { products } = await getProducts(resolvedSearchParams, options);
+  const { products } = await getProducts(Promise.resolve(resolvedSearchParams), options);
 
   if (!products || products.length === 0) {
     return (

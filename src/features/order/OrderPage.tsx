@@ -8,11 +8,6 @@ import {
   Clock, 
   MessageCircle, 
   ArrowLeft, 
-  Printer, 
-  Tag, 
-  CheckCircle2, 
-  Clock3, 
-  XCircle 
 } from "lucide-react";
 import { getOrderById } from "./data/getOrderByid";
 import TableRow from "./components/TableRow";
@@ -21,8 +16,8 @@ import CustomBreadcrumbs from "../Components/CustomBreadcrumbs";
 import { getStatusBadge } from "../lib/getStatusBadge";
 
 export default async function OrderPage({ orderId }: { orderId: string }) {
-  const { data: order } = await getOrderById(orderId);
-  console.log("orderrroriw", order);
+  const response = await getOrderById(orderId) ;
+  const order=response?.data
   
   if (!order) {
     return (

@@ -1,7 +1,5 @@
 import { CheckCircle2, Layers, Package, ShoppingBag } from "lucide-react";
 import { getCategoryRevenue, getDashboardTotals, getDiscountBreakdownByCategory, getMonthlyOrdersByStatus, getTopSellingProducts } from "./data/getCategoryRev";
-import { CategoryRevChart } from "./components/CategoryRevChart";
-import { DiscountBreakdownChart } from "./components/DiscountBreakdownChart";
 import { OrderStatusChart } from "./components/OrderStatusChart";
 import { TopProductsChart } from "./components/TopProductsChart";
 import { getAllOrders } from "../orders/data/getOrderData";

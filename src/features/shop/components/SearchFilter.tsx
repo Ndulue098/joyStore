@@ -25,12 +25,12 @@ export default function SearchFilter({}: SearchFilterProps) {
     const [isPending,startTransition]=useTransition()
     const [value, setValue] = useState(searchParams.get("search") || "");
 
-    function handleSort(value:string){
+    function handleSort(value:string | null){
+        if (!value) return;
         const params = new URLSearchParams(searchParams);
         params.set("sort", value);
         router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
-
 
     function handleSearch(term:string){
         const params=new URLSearchParams(searchParams.toString());

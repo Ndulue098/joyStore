@@ -15,9 +15,6 @@ interface ProductPageProps {
 export default async function ProductPage({ productId }: ProductPageProps) {
   const product = await getProductById(productId);
 
-  console.log("productttt=== ", product);
-  
-
   if (!product) {
     return (
       <div className="min-h-[400px] flex items-center justify-center text-neutral-500 font-semibold">
@@ -52,7 +49,7 @@ export default async function ProductPage({ productId }: ProductPageProps) {
       <CustomBreadcrumbs
         items={[
           { label: "Shop", href: "/shop" },
-          { label: product.category?.name, href: `/shop/shop?search=${product.name}` },
+          { label: `${product.category?.name}`, href: `/shop/shop?search=${product.name}` },
           { label: product.name }
         ]}
       />
@@ -60,11 +57,11 @@ export default async function ProductPage({ productId }: ProductPageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start border-b border-neutral-200 pb-12">
           <ProductImage image={image} name={name}/>
           {/* Right Column: Details & Order Actions (7 cols) */}
-          <ProductDetails image={image} id={id} slug={slug} category_id={category_id} short_description={short_description} category={category} brand={brand} sku={sku} name={name} description={description} unit={unit} specArray={specArray} price={price}/>
+          <ProductDetails image={image} id={Number(id)} slug={slug} category_id={Number(category_id)} short_description={short_description} category={category?{...category,id:Number(category.id)}:undefined} brand={brand} sku={sku} name={name} description={description} unit={unit} specArray={specArray} price={price}/>
       </div>
 
       {/* Bottom Related Products Component */}
-      <RelatedProduct category_id={category_id} productId={productId} />
+      <RelatedProduct category_id={category_id} productId={Number(productId)} />
     </div>
   );
 }

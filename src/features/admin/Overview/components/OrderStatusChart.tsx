@@ -71,10 +71,17 @@ export function OrderStatusChart({
                   tickFormatter={(val) => `₦${(val / 1000).toFixed(0)}k`}
                 />
                 <Tooltip
-                  formatter={(value: number, name: string) => [
-                    `₦${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
-                    name.charAt(0).toUpperCase() + name.slice(1),
-                  ]}
+                  formatter={(value, name) => {
+                    const formattedName = name ? String(name) : "";
+                    const capitalizedName = formattedName
+                      ? formattedName.charAt(0).toUpperCase() + formattedName.slice(1)
+                      : "";
+
+                    return [
+                      `₦${(value ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+                      capitalizedName,
+                    ];
+                  }}
                   contentStyle={{
                     backgroundColor: "#1e293b",
                     borderRadius: "8px",

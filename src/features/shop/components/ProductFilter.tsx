@@ -1,16 +1,9 @@
-// import { categoriesData } from "@/app/data/categoriesData";
-// import { categoriesData } from "@/src/components/data/categoriesData";
-import { ChevronDown, CircleArrowDownIcon, MoveDownIcon, RotateCcw, Sparkles } from "lucide-react";
-import { getCategories } from "../data/getProducts";
-import { getCategoriesSubcategoriesAndProducts, getComponent } from "../../admin/categories/data/getComponent";
+import { getCategoriesSubcategoriesAndProducts } from "../../admin/categories/data/getComponent";
 import FilterByCategory from "./FilterByCategory";
 import Link from "next/link";
 
-interface ProductFilterProps {
-  
-}
 
-export default async function ProductFilter({}: ProductFilterProps) {
+export default async function ProductFilter({}) {
 // comming formt the admin function
   const data=await getCategoriesSubcategoriesAndProducts()
   const dataList=data || []

@@ -33,6 +33,7 @@ import {
 import Button from "./Button"
 import { createProduct, updateProduct } from "../action"
 import { CategoryType, ProductType } from "@/src/features/type"
+import { ProductsType, Subcategories } from "@/src/types/types"
 
 // Validation schema factory function
 const buildFormSchema = (isEditing: boolean) =>
@@ -87,8 +88,8 @@ interface ProductFormProps {
   children?: React.ReactNode
   id?: number
   name?: string
-  product?: ProductType
-  categoryList?: CategoryType[]
+  product?: ProductsType
+  categoryList?: Subcategories[]
 }
 
 export default function ProductForm({
@@ -168,8 +169,10 @@ export default function ProductForm({
           category_id: String(product.category_id || id || ""),
           price: product.price ?? 0,
           discount: product.discount ?? 0,
-          stockQuantity: product.stock_quantity ?? product.stockQuantity ?? 0,
-          stockStatus: (product.stock_status || product.stockStatus || "In Stock") as
+          // stockQuantity: product.stock_quantity ?? product.stockQuantity ?? 0,
+          stockQuantity: product.stock_quantity ?? product.stock_quantity ?? 0,
+          // stockStatus: (product.stock_status || product.stockStatus || "In Stock") as
+          stockStatus: (product.stock_status || product.stock_status || "In Stock") as
             | "In Stock"
             | "Out of Stock"
             | "Pre-Order",
@@ -182,7 +185,7 @@ export default function ProductForm({
           specifications: parsedSpecs,
         })
 
-        setPreview(product.imageUrl || product.image || null)
+        setPreview(product.imageUrl || null)
       } else {
         handleReset()
       }

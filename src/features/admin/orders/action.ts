@@ -16,7 +16,7 @@ interface UpdateOrderNegotiationPayload {
   status: string;
   agreedTotal: number;
   items: ItemDiscountUpdate[];
-  discounts:number
+  discounts:Record<string, number>;
 }
 
 export async function getOrderById(id: string) {

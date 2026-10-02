@@ -6,4 +6,4 @@ export default function page({}) {
       <OrdersPage/>
     </div>
   );
-}
+} 

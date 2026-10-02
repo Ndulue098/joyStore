@@ -1,9 +1,9 @@
 import { formatPickupDate } from "@/src/features/lib/formatPickupDate";
-import { OrderType } from "@/src/features/type";
 import { Eye } from "lucide-react";
 import { getOrderById } from "../action";
 import ReviewOrder from "./ReviewOrder";
 import Status from "./Status";
+import { OrderType } from "@/src/types/types";
 
 interface OrderTableRowProps {
   order: OrderType;

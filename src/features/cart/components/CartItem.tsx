@@ -1,18 +1,17 @@
 "use client"
 import { ImageOff, Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useCartContext } from "../../context/CartContext";
-import { CartItemTyp } from "../../type";
+import { CartType } from "@/src/types/types";
 
 interface CartItemProps {
-  item:CartItemTyp
-  deleteItem:(id:string)=>void
-  updateQuantity:(id:string,quantity:number)=>void
+  item:CartType
+  deleteItem:(id:number)=>void;
+  updateQuantity:(id:number,quantity:number)=>void
 }
 
 export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps) {
   const subtotal = (item.price || item.total) * item.quantity;
-  
+   
   return (
     <div className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-4 px-2 sm:px-3 rounded-xl hover:bg-neutral-50/80 border-b border-neutral-200/80 transition-colors">
       {/* Product Image & Meta Details */}
@@ -61,7 +60,7 @@ export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps
           <button
             type="button"
             disabled={item.quantity <= 1}
-            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+            onClick={() => updateQuantity(+item.id, item.quantity - 1)}
             className="p-1.5 sm:p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Decrease quantity"
           >
@@ -74,7 +73,7 @@ export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps
 
           <button
             type="button"
-            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+            onClick={() => updateQuantity(+item.id, item.quantity + 1)}
             className="p-1.5 sm:p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer"
             aria-label="Increase quantity"
           >
@@ -95,7 +94,7 @@ export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps
         {/* Delete Button */}
         <button
           type="button"
-          onClick={() => deleteItem(item.id)}
+          onClick={() => deleteItem(+item.id)}
           className="p-2 text-neutral-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
           aria-label="Remove item from order"
         >

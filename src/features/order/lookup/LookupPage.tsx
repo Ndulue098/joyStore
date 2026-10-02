@@ -9,28 +9,7 @@ import useTrackOrder from "./hooks/useTrackOrder";
 
 
 export default function LookupPage() {
-  // const [orderCode, setOrderCode] = useState("");
-  // const [error, setError] = useState(false);
-  // const [loading, setLoading] = useState(false);
-  // const router = useRouter();
 
-  // async function handleSubmitForm(e: React.FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-    
-  //   if (!orderCode.trim()) return;
-
-  //   setLoading(true);
-  //   setError(false);
-
-  //   const { data, error: fetchError } = await getOrderById(orderCode.trim());
-
-  //   if (data) {
-  //     router.push(`/order/${orderCode.trim()}`);
-  //   } else if (fetchError || !data) {
-  //     setError(true);
-  //     setLoading(false);
-  //   }
-  // }
   const {error,loading,handleSubmitForm,setOrderCode,orderCode,setError}=useTrackOrder(getOrderById)
 
   return (

@@ -1,9 +1,7 @@
-import { PlusCircle } from "lucide-react";
 import Button from "./components/Button";
-import CategoryCard from "./components/CategoryCard";
 import CateForm from "./components/CateForm";
 import ProductForm from "./components/ProductForm";
-import { getCategoriesSubcategoriesAndProducts, getComponent } from "./data/getComponent";
+import { getCategoriesSubcategoriesAndProducts } from "./data/getComponent";
 import ParentCard from "./components/ParentCard";
 
 

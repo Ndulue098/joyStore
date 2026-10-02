@@ -2,8 +2,8 @@
 
 import { CheckCircle2, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { useCartContext } from "../../context/CartContext";
-import { CartItemTyp } from "../../type";
 import { useState } from "react";
+import { CartItem, ProductCategoty } from "@/src/types/types";
 
 interface ProductDetailsProps {
   brand: string;
@@ -13,11 +13,11 @@ interface ProductDetailsProps {
   unit: string;
   specArray: [string, string][];
   price: number;
-  id: string;
+  id: number;
   slug: string;
   category_id: number;
   short_description: string;
-  category: undefined;
+  category?: ProductCategoty | undefined;
   image:string
 }
 
@@ -47,7 +47,7 @@ export default function ProductDetails({
   const currentQuantity = inCart ? cartItem?.quantity || 1 : localQuantity;
 
   function handleAdd() {
-    const productData: CartItemTyp = {
+    const productData: CartItem = {
       id,
       category_id,
       name,
@@ -57,7 +57,7 @@ export default function ProductDetails({
       description,
       short_description,
       price,
-      category,
+      category:category?.name,
       total: price,
       quantity: localQuantity,
       imageUrl:image  
@@ -178,14 +178,14 @@ export default function ProductDetails({
           )}
         </button>
 
-        {inCart && <button
+        {inCart? <button
             type="button"
             onClick={() => removeItemFromCart(id)}
             className="py-3 px-5 active:scale-[0.99] transition-all rounded-xl font-semibold flex items-center justify-center gap-2 border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:border-rose-300 shadow-2xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
           >
             <Trash2 className="w-4 h-4 stroke-[2]" />
             <span>Remove Item</span>
-          </button>
+          </button>:null
         }
       </div>
 

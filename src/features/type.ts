@@ -25,29 +25,37 @@ export type Order_item={
       product_name:string
 }
 
-export type ProductType={
-    brand:string;
-    category_id:number;
-    created_at: string;
-    description: string;
-    discount:number; 
-    featured:boolean;
-    id:number;
-    is_active: boolean;
-    is_best_seller:boolean;
-    is_new:true;
-    name: string;
-    price:number;
-    short_description:string;
-    sku:string;
-    slug:string
-    specifications?:object;
-    stock_quantity:number;
-    stock_status:string;
-    unit:string;
-     updatedAt: string;
-    imageUrl:string
-} 
+export type CategoryRelation = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
+export type ProductType = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  short_description?: string;
+  brand?: string;
+  sku?: string;
+  price: number;
+  discount?: number;
+  is_active: boolean;
+  featured: boolean;
+  is_best_seller: boolean;
+  is_new: boolean; // Changed from literal 'true' to boolean
+  stock_quantity: number;
+  stock_status?: string;
+  unit?: string;
+  specifications?: Record<string, any>;
+  created_at: string;
+  updatedAt?: string;
+  imageUrl?: string;
+  images?: string[];
+  category_id: number;
+  category?: CategoryRelation; // Added relation populated by Supabase select
+};
 
 export type CategoryType={
     id:number;

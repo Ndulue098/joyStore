@@ -16,10 +16,8 @@ import CustomBreadcrumbs from "../Components/CustomBreadcrumbs";
    // Adjust path if needed
 
 export default function CartPage() {
-  const { cart, clearCart, updateQuantity, removeItemFromCart } = useCartContext();
+  const { cart, clearCart} = useCartContext();
 
-  console.log("carrrrrrtt",cart);
-  
 
   /* -------------------------------------------------------------------------- */
   /*                              EMPTY CART STATE                             */
@@ -104,11 +102,11 @@ export default function CartPage() {
           {/* Render Cart Item Rows */}
           <div className="divide-y divide-neutral-100">
             {cart.map((item) => (
-              <CartItemRow
+              <CartItemRow 
                 key={item.id}
-                item={item}
-                updateQuantity={updateQuantity}
-                deleteItem={removeItemFromCart}
+                item={item} 
+                // updateQuantity={updateQuantity}
+                // deleteItem={removeItemFromCart}
               />
             ))}
           </div>

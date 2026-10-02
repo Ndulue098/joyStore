@@ -6,24 +6,32 @@ import Button from "./Button";
 import ProductForm from "./ProductForm";
 import CateForm from "./CateForm";
 import ProductCom from "./ProductCom";
-import { CategoryType } from "@/src/features/type";
+// import { CategoryType } from "@/src/features/type";
 import ConfirmDel from "./ConfirmDel";
 import { toast } from "@/components/ui/toast";
 import { deleteCategoryById } from "../action";
+import { CategoryType, Subcategories } from "@/src/types/types";
 
 
-interface ParentCategoryType extends CategoryType {
-  subcategories?: CategoryType[];
-}
+// interface ParentCategoryType extends CategoryType {
+//   subcategories?: CategoryType[];
+// }
 
 interface CategoryCardProps {
-  categoryList: CategoryType[]
-  category: CategoryType
-  categoriesParent:ParentCategoryType[]
+  categoryList: Subcategories[]
+  category: Subcategories
+  categoryParentList:CategoryType[]
 
 }
 
+  // console.log("category,  , ", category);
+  // console.log("categoryList,  ,",categoryList);
+  // console.log("categoryParentList,  ,",categoryParentList);
+
 export default function CategoryCard({ category,categoryList,categoryParentList}: CategoryCardProps) {
+
+  
+
   const [open, setOpen] = useState(false);
   const hasProducts = Boolean(category?.products?.length);
 

@@ -1,8 +1,9 @@
 import { CartItemTyp } from "@/src/features/type";
+import { CartType } from "@/src/types/types";
 import { ImageOff } from "lucide-react";
 
 interface ReviewItemProps {
- item: CartItemTyp
+ item: CartType
 }
 
 export default function ReviewItem({item}: ReviewItemProps) {

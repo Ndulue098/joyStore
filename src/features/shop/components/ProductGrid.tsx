@@ -7,17 +7,17 @@ import { ProductCard } from "@/src/components/layout/ProductCard";
 // import { getProducts } from "@/lib/actions/getProducts";
 
 interface ProductGridProps {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: { [key: string]: string | string[] | undefined; } ;
 }
 
 export default async function ProductGrid({ searchParams }: ProductGridProps) {
   // 1. Resolve searchParams to read current page
-  const resolvedParams = searchParams ? await searchParams : {};
+  const resolvedParams = searchParams || {};
   const page = Number(resolvedParams.page) || 1;
   const limit = 9;
 
   // 2. Pass current page into options & extract totalCount
-  const { products, totalCount } = await getProducts(searchParams, {
+  const { products, totalCount } = await getProducts(Promise.resolve(searchParams), {
     page,
     limit,
   });

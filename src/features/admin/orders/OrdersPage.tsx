@@ -2,11 +2,9 @@ import { getAllOrders } from "./data/getOrderData";
 import OrderTableRow from "./components/OrderTableRow";
 import OrderTable from "./components/OrderTable";
 
-interface OrdersPageProps {
-  
-}
 
-export default async function OrdersPage({}: OrdersPageProps) {
+
+export default async function OrdersPage({}) {
   const orders=await getAllOrders() 
 
   console.log("orders",orders);

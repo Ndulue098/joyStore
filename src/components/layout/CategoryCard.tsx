@@ -1,8 +1,9 @@
+import { CategoryType } from "@/src/types/types";
 import { ArrowRight, Layers, Package } from "lucide-react";
 import Link from "next/link";
 
 interface CategoryCardProps {
-  
+  subcat:CategoryType
 }
 
 export default async function CategoryCard({subcat}: CategoryCardProps) {

@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { ProductType } from "../../type";
+// import { Product } from "../types";
 
 export interface FetchProductsOptions {
   featured?: boolean;
@@ -122,10 +124,10 @@ export async function getProducts(
 
   // 1. Resolve URL search parameters
   const searchParams = searchParamsPromise ? await searchParamsPromise : {};
-  
+
   const categorySlug =
     typeof searchParams.category === "string" ? searchParams.category : undefined;
-  
+
   const searchQuery =
     typeof searchParams.search === "string" ? searchParams.search.trim() : undefined;
 
@@ -144,17 +146,14 @@ export async function getProducts(
   const to = from + limit - 1;
 
   // 2. Fetch category and subcategory IDs if category filter exists
-  let categoryIdsToFilter: number[] = [];
+  const categoryIdsToFilter: number[] = [];
 
   if (categorySlug && categorySlug.trim() !== "") {
     const { data: targetCategory } = await supabase
       .from("categories")
       .select(`
         id,
-        subcategories:categories!parent_id (
-          id
-        )
-      `)
+        subcategories:categories!parent_id (id)`)
       .eq("slug", categorySlug)
       .single();
 
@@ -175,17 +174,12 @@ export async function getProducts(
     .select(
       `
       *,
-      category:categories!category_id!left (
-        id,
-        name,
-        slug
-      )
-    `,
+      category:categories!category_id!left (id,name,slug)`,
       { count: "exact" }
     )
     .eq("is_active", true);
 
-  // 4. Apply Full-Text Search Filter (Matches product name or description)
+  // 4. Apply Full-Text Search Filter
   if (searchQuery) {
     query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
   }
@@ -240,7 +234,7 @@ export async function getProducts(
   }
 
   return {
-    products: (data as Product[]) ?? [],
+    products: (data as ProductType[]) ?? [],
     totalCount: count ?? 0,
   };
 }

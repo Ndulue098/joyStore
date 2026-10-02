@@ -1,19 +1,19 @@
 "use client"
+import { CartItem } from "@/src/types/types";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import {CartItemTyp } from "../type";
 
 
 
 interface CartContextProps {
-    cart:CartItemTyp[]
-    handleAddToCart: (productData: Omit<CartItemTyp, 'quantity'>, quantity?: number) => void;
-    removeItemFromCart:(id:string)=>void;
-    updateQuantity:(id:string,quantity:number)=>void
+    cart:CartItem[]
+    handleAddToCart: (productData: Omit<CartItem, 'quantity'>, quantity?: number) => void;
+    removeItemFromCart:(id:number)=>void;
+    updateQuantity:(id:number,quantity:number)=>void
     clearCart:()=>void
     cartItemsLength:number,
     totalPrice:number
-    totalCategories:number;
-    isInCart:(id: string) => void
+    totalCategories:number; 
+    isInCart:(id: number) => boolean
 }
 
 interface CartProviderProps {
@@ -23,7 +23,7 @@ interface CartProviderProps {
 const CartContext=createContext<CartContextProps | undefined>(undefined); 
 
 export default function CartProvider({children}: CartProviderProps) {
-    const [cart,setCart]=useState<CartItemTyp[]>(()=>{
+    const [cart,setCart]=useState<CartItem[]>(()=>{
         if (typeof window != "undefined"){
             const savedCart=localStorage.getItem("shoppingCart")
             if(savedCart){
@@ -46,7 +46,7 @@ export default function CartProvider({children}: CartProviderProps) {
 
 
     // ✅ CORRECT
-    const handleAddToCart = function (productData: Omit<CartItemTyp, 'quantity'>, quantity = 1) {
+    const handleAddToCart = function (productData: Omit<CartItem, 'quantity'>, quantity = 1) {
     setCart((prev) => {
         const existing = prev.find((item) => item.id === productData.id);
 
@@ -63,11 +63,11 @@ export default function CartProvider({children}: CartProviderProps) {
     };
 
 
-    const removeItemFromCart=function(id:string){
+    const removeItemFromCart=function(id:number){
         setCart((prev)=>prev.filter((item)=>item.id!==id))
     }
 
-    const updateQuantity=function(id:string,quantity:number){
+    const updateQuantity=function(id:number,quantity:number){
         // if (quantity<=0){
         //     // return removeItemFromCart(id)
         //     return null
@@ -84,13 +84,17 @@ export default function CartProvider({children}: CartProviderProps) {
 
     const clearCart = () => setCart([]);
 
-    const isInCart=function(id:string):boolean{
-       return cart.some((cartId)=>cartId.id===id)
-    } 
+    // const isInCart=function(id:string):boolean{
+    //    return cart.some((cartId)=>cartId.id===id)
+    // } 
+    // Inside CartContext
+    const isInCart = (id: number): boolean => {
+        return cart.some((item) => item.id === id);
+    };
 
     const totalCategories=cart.length
     const cartItemsLength = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <CartContext.Provider value={{
@@ -115,4 +119,4 @@ export function useCartContext(){
         throw new Error ("Context was used outside provider")
     }
     return context
-}
+} 

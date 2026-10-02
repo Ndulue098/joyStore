@@ -5,9 +5,12 @@ import { getCategoriesSubcategoriesAndProducts } from "@/src/features/admin/cate
 import ProductBtn from "./ProductBtn";
 import { ProductSkeleton } from "./ProductSkeleton";
 import ProductGrid from "./ProductGrid";
+import { Subcategories } from "@/src/types/types";
 
 interface ProductSectionProps {
-  resolvedSearchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  // resolvedSearchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  resolvedSearchParams: { [key: string]: string | string[] | undefined; }
+  
 }
 
 export default async function ProductSection({ resolvedSearchParams }: ProductSectionProps) {
@@ -15,7 +18,7 @@ export default async function ProductSection({ resolvedSearchParams }: ProductSe
 
   // Extract valid subcategories
   const allSubcategories = catdata.flatMap(
-    (cat) => cat?.subcategories?.filter((sub) => sub.products && sub.products.length > 0) || []
+    (cat) => cat?.subcategories?.filter((sub:Subcategories) => sub.products && sub.products.length > 0) || []
   );
 
   const searchParams = await resolvedSearchParams;

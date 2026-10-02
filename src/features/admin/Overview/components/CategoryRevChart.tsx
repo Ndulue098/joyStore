@@ -80,8 +80,8 @@ export function CategoryRevChart({ data }: CategoryRevChartProps) {
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(value: number) => [
-                    `₦${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+                  formatter={(value) => [
+                    `₦${value?.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
                     "Revenue",
                   ]}
                   contentStyle={{

@@ -67,8 +67,8 @@ export function DiscountBreakdownChart({ data }: DiscountBreakdownChartProps) {
                   tickFormatter={(val) => `₦${val.toLocaleString()}`}
                 />
                 <Tooltip
-                  formatter={(value: number, name: string) => [
-                    `₦${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+                  formatter={(value, name) => [
+                    `₦${value?.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
                     name === "catalogDiscount" ? "Catalog Discount" : "Negotiated Discount",
                   ]}
                   contentStyle={{

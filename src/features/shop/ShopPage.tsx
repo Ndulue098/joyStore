@@ -8,7 +8,7 @@ import { RotateCcw } from "lucide-react";
 import Link from "next/link";
 import CustomBreadcrumbs from "../Components/CustomBreadcrumbs";
 interface ShopPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {

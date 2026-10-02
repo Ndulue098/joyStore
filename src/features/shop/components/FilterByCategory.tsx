@@ -1,17 +1,17 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import { CategoryType } from "../../type";
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { CategoryType } from "@/src/types/types";
 
-interface ParentCategoryType extends CategoryType {
-  subcategories?: (CategoryType & { products?: any[] })[];
-  products?: any[];
-}
+// interface ParentCategoryType extends CategoryType {
+//   subcategories?: (CategoryType & { products?: any[] })[];
+//   products?: any[];
+// }
 
 interface FilterByCategoryProps {
-  cat: ParentCategoryType;
+  cat: CategoryType;
 }
 
 export default function FilterByCategory({ cat }: FilterByCategoryProps) {
@@ -35,8 +35,12 @@ export default function FilterByCategory({ cat }: FilterByCategoryProps) {
  
   function handleFilter(filter: string) {
     const params = new URLSearchParams(searchParams);
+    if(params.get("page")){
+      params.delete("page")
+    }
     params.set("category", filter);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
   }
 
   if (!shouldDisplay) return null;

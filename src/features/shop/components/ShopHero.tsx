@@ -1,8 +1,5 @@
-interface ShopHeroProps {
-  
-}
 
-export default function ShopHero({}: ShopHeroProps) {
+export default function ShopHero({}) {
   return (
       <div className="rounded-md bg-neutral-200 text-neutral-700 p-6 sm:p-8 relative overflow-hidden s">
     {/* Subtle Background Glow Accent */}

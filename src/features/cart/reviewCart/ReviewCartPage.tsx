@@ -25,7 +25,7 @@ export default function ReviewCartPage({}) {
           </p>
         </div>
       </div>
-       <ReviewLayout/>
+       <ReviewLayout/>  
     </div>
   );
 }

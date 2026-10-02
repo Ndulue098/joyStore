@@ -3,12 +3,13 @@ import { Package, PencilLine, Trash } from "lucide-react";
 import ProductForm from "./ProductForm";
 import ConfirmDel from "./ConfirmDel";
 import { deleteProductById } from "../action";
+import { ProductsType, Subcategories } from "@/src/types/types";
 
 interface ProductTableRowProps {
- product:ProductType ;
+ product:ProductsType ;
   id:number;
   name:string
-  categoryList:CategoryType[]
+  categoryList:Subcategories[]
   productId:number
 }
 
@@ -18,9 +19,21 @@ export default function ProductTableRow({product,id,name,categoryList,productId}
               {/* Product Info & Thumbnail */}
               <td className="py-3 px-3">
                 <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 shrink-0 rounded-md border border-neutral-200 bg-neutral-100 overflow-hidden flex items-center justify-center text-neutral-400">
-                    <Package className="h-4 w-4" />
+                  <div className="h-8 w-8 shrink-0 rounded-sm border border-neutral-200 bg-neutral-100 overflow-hidden flex items-center justify-center text-neutral-400">
+                    {product.imageUrl ? (
+                      <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <Package className="h-5 w-5 stroke-[1.5]" />
+                    )}
                   </div>
+                  {/* <div className="h-9 w-9 shrink-0 rounded-md border border-neutral-200 bg-neutral-100 overflow-hidden flex items-center justify-center text-neutral-400">
+                    <Package className="h-4 w-4" />
+
+                  </div> */}
                   <span className="font-semibold text-neutral-900 leading-snug">
                     {product.name}
                   </span>

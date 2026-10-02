@@ -1,10 +1,7 @@
-import { Sparkles, ArrowRight, ShieldCheck, Zap, Layers } from 'lucide-react';
+import {ShieldCheck, Zap} from 'lucide-react';
 
-interface PromoBannerProps {
-  
-}
 
-export default function PromoBanner({}: PromoBannerProps) {
+export default function PromoBanner({}) {
   return (
     <section className="max-w-7xl mx-auto p-6">
   <div className="relative rounded-md text-neutral-800 overflow-hidden">

@@ -1,18 +1,9 @@
 import OrderPage from "@/src/features/order/OrderPage";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { Metadata } from "next";
-import CustomBreadcrumbs from "@/src/features/Components/CustomBreadcrumbs";
-
 interface PageProps {
     params:Promise<{ orderId: string }>;
 
 }
-
-
-// export const metadata: Metadata = {
-//   title: "Order",
-// };
 
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

@@ -1,21 +1,18 @@
 "use client"
 import React, { useState } from 'react';
 
-import { Plus, Check, Eye, ArrowRight, Zap, PlusCircle, CheckCircle2, ImageOff } from 'lucide-react';
+import {Eye, Zap, PlusCircle, CheckCircle2, ImageOff } from 'lucide-react';
 import Link from 'next/link';
-import { Product } from '@/src/types/types';
 import { useCartContext } from '@/src/features/context/CartContext';
+import { ProductsType } from '@/src/types/types';
 export interface ProductCardProps {
-  key?: React.Key;
-  product: Product;
-  className?: string;
+  product: ProductsType;
 }
 
-export function ProductCard({ product, className = '' }: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
   const [active,setActive]=useState<boolean>(false)
   const {handleAddToCart}=useCartContext()
   
-
   function handleClick(){
     
     const productData={
@@ -28,7 +25,7 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
       description: product.description,
       short_description: product.short_description,
       price: product.price,
-      category:product?.category?.name,
+      category:product?.category?.name, 
       total:product.price,
       imageUrl:product.imageUrl 
     }
@@ -43,7 +40,7 @@ export function ProductCard({ product, className = '' }: ProductCardProps) {
 
   return (
     <div
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200/80 bg-white shadow-xs transition-all duration-200 hover:border-neutral-300 hover:shadow-md ${className}`}
+      className={`group relative flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200/80 bg-white shadow-xs transition-all duration-200 hover:border-neutral-300 hover:shadow-md `}
     >
       {/* Image Container with Badges */}
       <Link

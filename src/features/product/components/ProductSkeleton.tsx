@@ -1,8 +1,5 @@
-interface ProductSkeletonProps {
-  
-}
 
-export default function ProductSkeleton({}: ProductSkeletonProps) {
+export default function ProductSkeleton({}) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 animate-pulse">
       {/* Top Product Hero Section Skeleton */}
