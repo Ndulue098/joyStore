@@ -9,6 +9,7 @@ interface ProductGridProps {
 
 export default async function ProductGrid({ resolvedSearchParams }: ProductGridProps) {
   const options = { limit: 8 };
+  
   const { products } = await getProducts(Promise.resolve(resolvedSearchParams), options);
 
   if (!products || products.length === 0) {

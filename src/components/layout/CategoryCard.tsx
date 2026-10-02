@@ -9,7 +9,7 @@ interface CategoryCardProps {
 export default async function CategoryCard({subcat}: CategoryCardProps) {
   
    const validSubcategories =
-    subcat?.subcategories?.filter(
+    subcat?.subcategories?.filter( 
       (sub) => sub.products && sub.products.length > 0
     ) || [];
 

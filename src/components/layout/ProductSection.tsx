@@ -9,7 +9,7 @@ import { Subcategories } from "@/src/types/types";
 
 interface ProductSectionProps {
   // resolvedSearchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-  resolvedSearchParams: { [key: string]: string | string[] | undefined; }
+  resolvedSearchParams: { [key: string]: string | string[] | undefined };
   
 }
 
@@ -18,11 +18,11 @@ export default async function ProductSection({ resolvedSearchParams }: ProductSe
 
   // Extract valid subcategories
   const allSubcategories = catdata.flatMap(
-    (cat) => cat?.subcategories?.filter((sub:Subcategories) => sub.products && sub.products.length > 0) || []
+    (cat) => cat?.subcategories?.filter((sub: Subcategories) => sub.products && sub.products.length > 0) || []
   );
 
-  const searchParams = await resolvedSearchParams;
-  const key = (typeof searchParams?.category === "string" ? searchParams.category : "all");
+  // Directly access properties since resolvedSearchParams is already an object
+  const key = typeof resolvedSearchParams?.category === "string" ? resolvedSearchParams.category : "all";
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14" aria-labelledby="more-products-heading">
