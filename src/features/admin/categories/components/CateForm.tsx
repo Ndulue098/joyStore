@@ -69,13 +69,14 @@ const buildFormSchema = (isEditing: boolean) =>
           ),
   })
 
-type FormValues = {
-  title: string
-  description?: string
-  parentId?: string
-  isActive: boolean
-  image?: File
-}
+// type FormValues = {
+//   title: string
+//   description?: string
+//   parentId?: string
+//   isActive: boolean
+//   image?: File
+// }
+type FormValues = z.infer<ReturnType<typeof buildFormSchema>>
 
 interface CateFormProps {
   categoryList?: Subcategories[]
@@ -106,15 +107,15 @@ export default function CateForm({
 
   const schema = useMemo(() => buildFormSchema(isEditing), [isEditing])
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      title: "",
-      description: "",
-      parentId: defaultParentId,
-      isActive: true,
-    },
-  })
+  const form = useForm({
+  resolver: zodResolver(schema),
+  defaultValues: {
+    title: "",
+    description: "",
+    parentId: defaultParentId,
+    isActive: true,
+  },
+})
 
   const handleReset = useCallback(() => {
     form.reset({
@@ -206,7 +207,7 @@ export default function CateForm({
         if (!val) handleReset()
       }}
     >
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger >{children}</DialogTrigger>
 
       <DialogContent className="sm:max-w-md overflow-y-auto p-6 rounded-md">
         <DialogHeader>

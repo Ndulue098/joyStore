@@ -1,7 +1,7 @@
 import { ImageOff } from "lucide-react";
 
 interface ProductImageProps {
-  image:string;
+  image:string | null | undefined;
   name:string;
 }
 

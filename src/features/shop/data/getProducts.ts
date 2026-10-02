@@ -234,7 +234,7 @@ export async function getProducts(
   }
 
   return {
-    products: (data as ProductType[]) ?? [],
+    products: (data as unknown as ProductType[]) ?? [],
     totalCount: count ?? 0,
   };
 }

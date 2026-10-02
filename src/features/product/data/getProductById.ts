@@ -1,10 +1,10 @@
  import { createClient } from '@/lib/supabase/server';
-import { Product } from '@/src/types/types';
+import { ProductsType } from '@/src/types/types';
 
 /**
  * Fetch a single product by its ID, including its category details
  */
-export async function getProductById(id: number | string): Promise<Product | null> {
+export async function getProductById(id: number | string): Promise<ProductsType | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -26,6 +26,6 @@ export async function getProductById(id: number | string): Promise<Product | nul
     return null;
   }
 
-  return data as Product;
+  return data as unknown as ProductsType;
 }
  

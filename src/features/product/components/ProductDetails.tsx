@@ -6,19 +6,19 @@ import { useState } from "react";
 import { CartItem, ProductCategoty } from "@/src/types/types";
 
 interface ProductDetailsProps {
-  brand: string;
+  brand: string | null | undefined;
   sku: string | undefined;
   name: string;
   description: string;
-  unit: string;
+  unit: string | undefined;
   specArray: [string, string][];
   price: number;
   id: number;
   slug: string;
   category_id: number;
-  short_description: string;
+  short_description: string | undefined;
   category?: ProductCategoty | undefined;
-  image:string
+  image:string | null | undefined
 }
 
 export default function ProductDetails({

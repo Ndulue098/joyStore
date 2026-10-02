@@ -16,6 +16,7 @@ export interface MonthlyOrderStatusData {
   completed: number;
   cancelled: number;
   pending: number;
+  estimated_total?:number
 }
 
 export interface TopProductData {
@@ -153,6 +154,7 @@ export async function getDiscountBreakdownByCategory(): Promise<CategoryDiscount
   }));
 }
 
+
 export async function getMonthlyOrdersByStatus(
   year: number = new Date().getFullYear()
 ): Promise<MonthlyOrderStatusData[]> {
@@ -164,7 +166,7 @@ export async function getMonthlyOrdersByStatus(
 
   const { data, error } = await supabase
     .from("orders")
-    .select("created_at, status, agreed_total")
+    .select("created_at, status, agreed_total,estimated_total")
     .gte("created_at", startDate)
     .lte("created_at", endDate);
 

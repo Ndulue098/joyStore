@@ -54,7 +54,7 @@ export default function ConfirmDel({children,name,tablename,onDelete}: ConfirmDe
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogTrigger>{children}</AlertDialogTrigger>
 
       <AlertDialogContent className="sm:max-w-[420px] text-center p-6 rounded-md border border-neutral-200 bg-white">
         <AlertDialogHeader className="flex flex-col items-center sm:items-start text-center sm:text-left gap-3">

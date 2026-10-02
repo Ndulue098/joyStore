@@ -107,29 +107,29 @@ export default function ProductForm({
 
   const schema = useMemo(() => buildFormSchema(isEditing), [isEditing])
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      name: "",
-      brand: "",
-      sku: "",
-      category_id: defaultCategoryId,
-      price: 5000,
-      discount: 0,
-      stockQuantity: 20,
-      stockStatus: "In Stock",
-      unit: "pcs",
-      short_description: "",
-      description: "",
-      is_active: true,
-      is_best_seller: false,
-      is_new: false,
-      specifications: [
-        { key: "Wattage", value: "15W" },
-        { key: "Voltage", value: "220–240V AC" },
-      ],
-    },
-  })
+const form = useForm({
+  resolver: zodResolver(schema),
+  defaultValues: {
+    name: "",
+    brand: "",
+    sku: "",
+    category_id: defaultCategoryId,
+    price: 5000,
+    discount: 0,
+    stockQuantity: 20,
+    stockStatus: "In Stock",
+    unit: "pcs",
+    short_description: "",
+    description: "",
+    is_active: true,
+    is_best_seller: false,
+    is_new: false,
+    specifications: [
+      { key: "Wattage", value: "15W" },
+      { key: "Voltage", value: "220–240V AC" },
+    ],
+  },
+})
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -279,7 +279,7 @@ export default function ProductForm({
         if (!val) handleReset()
       }}
     >
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger >{children}</DialogTrigger>
 
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-6 rounded-md">
         <DialogHeader className="space-y-1 mt-2">
