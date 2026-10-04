@@ -27,10 +27,6 @@ export async function submitOrder(formData:FormValue,items:CartType[],totalPrice
     const supabase=await createClient()
     
 
-    console.log("form ",formData);
-    console.log("items " ,items); 
-    
-
     if (!items || items.length===0){ 
         return { success: false, error: 'Your cart is empty.' };
     }
@@ -47,7 +43,6 @@ export async function submitOrder(formData:FormValue,items:CartType[],totalPrice
         .filter(Boolean)
         .join(' | ');
 
-    console.log("Note---> ",formattedNotes);
     
     const public_code = generatePublicCode();
 

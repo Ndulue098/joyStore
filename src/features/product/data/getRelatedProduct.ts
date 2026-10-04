@@ -7,7 +7,7 @@ import { ProductsType } from "@/src/types/types";
 export async function getRelatedProducts(
   categoryId: number | null,
   currentProductId: number | string,
-  limit: number = 4
+  limit: number = 8
 ): Promise<ProductsType[]> {
   // If the current product has no category assigned, return an empty list
   if (!categoryId) return [];

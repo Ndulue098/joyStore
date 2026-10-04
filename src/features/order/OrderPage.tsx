@@ -18,6 +18,7 @@ import { getStatusBadge } from "../lib/getStatusBadge";
 export default async function OrderPage({ orderId }: { orderId: string }) {
   const response = await getOrderById(orderId) ;
   const order=response?.data
+
   
   if (!order) {
     return (

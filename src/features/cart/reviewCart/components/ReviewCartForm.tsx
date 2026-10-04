@@ -70,7 +70,7 @@ export default function ReviewCartForm({ startTransition,onSuccess }: ReviewCart
         } else {
           // Standard Next.js client-side navigation
           form.reset()
-          router.push(`/order/${res.publicCode}`);
+          router.push(`/order/${res.publicCode}`); 
           // clear cart after i push
           clearCart()
         }
