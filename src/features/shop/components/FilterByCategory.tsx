@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CategoryType } from "@/src/types/types";
+import { useCartContext } from "../../context/CartContext";
 
 // interface ParentCategoryType extends CategoryType {
 //   subcategories?: (CategoryType & { products?: any[] })[];
@@ -12,9 +13,11 @@ import { CategoryType } from "@/src/types/types";
 
 interface FilterByCategoryProps {
   cat: CategoryType;
-}
+} 
 
 export default function FilterByCategory({ cat }: FilterByCategoryProps) {
+  const {setOpen}=useCartContext()
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -47,6 +50,9 @@ export default function FilterByCategory({ cat }: FilterByCategoryProps) {
 
   const currentCategoryParam = searchParams.get("category");
   const isParentSelected = currentCategoryParam === cat.slug;
+
+
+ 
 
   return (
     <div className="group">
@@ -97,7 +103,9 @@ export default function FilterByCategory({ cat }: FilterByCategoryProps) {
             return (
               <button
                 key={subProduct.id}
-                onClick={() => handleFilter(subProduct.slug)}
+                onClick={() =>{ handleFilter(subProduct.slug)
+                   setOpen(false)
+                  }}
                 type="button"
                 className={`w-full text-left px-2 py-1.5 rounded-md text-xs transition-colors truncate block cursor-pointer ${
                   isSubSelected

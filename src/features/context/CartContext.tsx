@@ -14,6 +14,8 @@ interface CartContextProps {
     totalPrice:number
     totalCategories:number; 
     isInCart:(id: number) => boolean
+    setOpen:(open: boolean) => void
+    open:boolean
 }
 
 interface CartProviderProps {
@@ -23,6 +25,8 @@ interface CartProviderProps {
 const CartContext=createContext<CartContextProps | undefined>(undefined); 
 
 export default function CartProvider({children}: CartProviderProps) {
+    const [open, setOpen] = useState(false)
+
     const [cart,setCart]=useState<CartItem[]>(()=>{
         if (typeof window != "undefined"){
             const savedCart=localStorage.getItem("shoppingCart")
@@ -96,6 +100,11 @@ export default function CartProvider({children}: CartProviderProps) {
     const cartItemsLength = cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+
+
+    //filter findw
+
+
   return (
     <CartContext.Provider value={{
         cart,
@@ -106,7 +115,9 @@ export default function CartProvider({children}: CartProviderProps) {
         totalPrice,
         removeItemFromCart,
         totalCategories,
-        isInCart
+        isInCart,
+        setOpen,
+        open,
     }}>
       {children}
     </CartContext.Provider>
