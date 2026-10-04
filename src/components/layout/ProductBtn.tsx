@@ -29,7 +29,7 @@ export default function ProductBtn({ slug, name }: ProductBtnProps) {
     <button
       type="button"
       onClick={() => handleSelect(slug)}
-      className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-150 cursor-pointer ${
+      className={`px-4 py-2 rounded-md text-xs font-bold whitespace-nowrap transition-all duration-150 cursor-pointer ${
         isActive
           ? "bg-neutral-900 text-white shadow-xs"
           : "bg-white border border-neutral-200/80 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"

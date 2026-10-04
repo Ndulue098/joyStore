@@ -52,11 +52,11 @@ export default function NavBar({session}:NavBarProps) {
   
 
   return (
-    <div
-      className={`${
+    <header
+      className={`sticky top-0 z-50 transition-all duration-200 ${
         scrolled
-          ? "bg-white/90 backdrop-blur-md shadow-xs border-b border-neutral-200/80 py-2.5"
-          : "bg-white border-b border-neutral-200 py-3.5"
+          ? "bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md shadow-xs border-b border-neutral-200/80 dark:border-neutral-800 py-2.5"
+          : "bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-3.5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
@@ -66,28 +66,28 @@ export default function NavBar({session}:NavBarProps) {
         </div>
 
         {/* CENTER: Primary Navigation Links */}
-        <div className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-8">
           <Link
             href="/"
-            className="text-sm font-semibold text-neutral-700 hover:text-neutral-900 transition-colors"
+            className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           >
             Home
           </Link>
 
           <Link
             href="/shop"
-            className="text-sm font-semibold text-neutral-700 hover:text-neutral-900 transition-colors"
+            className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           >
             Shop
           </Link>
 
           <Link
             href="/#how-it-works"
-            className="text-sm font-semibold text-neutral-700 hover:text-neutral-900 transition-colors"
+            className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           >
             How It Works
           </Link>
-        </div>
+        </nav>
 
         {/* RIGHT: Search, Order Tracking & Cart */}
         <div className="flex items-center gap-3">
@@ -97,13 +97,13 @@ export default function NavBar({session}:NavBarProps) {
             className="hidden md:flex relative w-52 lg:w-64"
           >
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search cables, switches..."
                 value={headerSearch}
                 onChange={(e) => setHeaderSearch(e.target.value)}
-                className="w-full rounded-xl bg-neutral-100/80 pl-9 pr-3 py-1.5 text-xs font-medium text-neutral-900 placeholder:text-neutral-400 border border-transparent focus:border-neutral-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/5 transition-all"
+                className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-800 pl-9 pr-3 py-1.5 text-xs font-medium text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 border border-transparent focus:border-amber-500/80 focus:bg-white dark:focus:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
               />
             </div>
           </form>
@@ -111,52 +111,52 @@ export default function NavBar({session}:NavBarProps) {
           {/* Order Lookup Button */}
           <Link
             href="/order/lookup"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-neutral-200 bg-neutral-50/50 hover:bg-neutral-100 text-neutral-700 hover:text-neutral-900 text-xs font-semibold transition-all shadow-2xs"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 text-xs font-semibold transition-all shadow-2xs"
             title="Track existing order"
           >
-            <FileSearch className="h-3.5 w-3.5 text-neutral-500" />
+            <FileSearch className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
             <span className="hidden xl:inline">Track Order</span>
           </Link>
 
-          <CartItem/>
+          {/* Cart Component */}
+          <CartItem />
 
-
+          {/* Auth State */}
           {session?.user ? (
             session.user.image ? (
-              <div className="flex items-center gap-2 pb-1 border-b">
+              <div className="flex items-center gap-2.5 shrink-0">
                 <Link
-                  href={"/admin"}
-                  className="rounded-full overflow-hidden border border-neutral-200 shrink-0"
+                  href="/admin"
+                  className="rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-700 shrink-0 hover:ring-2 hover:ring-amber-500/50 transition-all"
                 >
-                  {session?.user?.image ? (
-                    <img
-                      src={session.user.image}
-                      alt={session.user.name || "Admin"}
-                      className="w-7 h-7 object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="w-7 h-7 bg-neutral-900 text-white font-bold text-xs flex items-center justify-center uppercase">
-                      {session?.user?.name?.[0] || "A"}
-                    </div>
-                  )}
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name || "Admin"}
+                    className="w-7 h-7 object-cover"
+                    referrerPolicy="no-referrer"
+                  />
                 </Link>
 
                 <Link
-                  href={"/api/auth/signout"}
-                  className="text-neutral-600 hover:text-neutral-900 font-semibold text-xs"
+                  href="/api/auth/signout"
+                  className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 font-semibold text-xs transition-colors"
                 >
                   Sign Out
                 </Link>
-            </div>
-            ) : (
-              <div className="bg-neutral-100 p-2 rounded-full border border-neutral-200 text-neutral-600">
-                <User2 className="w-4 h-4" />
               </div>
+            ) : (
+              <Link
+                href="/admin"
+                className="bg-neutral-100 dark:bg-neutral-800 p-2 rounded-full border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              >
+                <User2 className="w-4 h-4" />
+              </Link>
             )
           ) : (
-            /* Optional: What to show when no admin is logged in */
-            <Link href="/api/auth/signin" className="text-xs font-semibold text-neutral-600 hover:text-neutral-900">
+            <Link
+              href="/api/auth/signin"
+              className="text-xs font-bold text-neutral-700 dark:text-neutral-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors px-1 py-1"
+            >
               Sign In
             </Link>
           )}
@@ -165,7 +165,7 @@ export default function NavBar({session}:NavBarProps) {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl text-neutral-700 hover:bg-neutral-100 focus:outline-none transition-colors cursor-pointer"
+            className="lg:hidden p-2 rounded-xl text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none transition-colors cursor-pointer"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -175,17 +175,17 @@ export default function NavBar({session}:NavBarProps) {
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-neutral-200/80 bg-white px-4 pt-4 pb-6 mt-3 shadow-xl animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden border-t rounded-b-2xl border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 pt-4 pb-6 mt-2.5 shadow-xl animate-in slide-in-from-top-2 duration-200">
           {/* Mobile Search Input */}
           <form onSubmit={handleSearchSubmit} className="mb-4">
             <div className="relative">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search products, cables, sockets..."
                 value={headerSearch}
                 onChange={(e) => setHeaderSearch(e.target.value)}
-                className="w-full rounded-xl bg-neutral-100/80 pl-10 pr-4 py-2.5 text-xs text-neutral-900 border border-neutral-200/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-800 pl-10 pr-4 py-2.5 text-xs text-neutral-900 dark:text-neutral-100 border border-neutral-200/80 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
               />
             </div>
           </form>
@@ -194,7 +194,7 @@ export default function NavBar({session}:NavBarProps) {
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-neutral-100 transition-colors"
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
               Home
             </Link>
@@ -202,7 +202,7 @@ export default function NavBar({session}:NavBarProps) {
             <Link
               href="/shop"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-neutral-100 transition-colors"
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
               Shop Catalogue
             </Link>
@@ -210,7 +210,7 @@ export default function NavBar({session}:NavBarProps) {
             <Link
               href="/#how-it-works"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-neutral-100 transition-colors"
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
               How Ordering Works
             </Link>
@@ -218,36 +218,15 @@ export default function NavBar({session}:NavBarProps) {
             <Link
               href="/order/lookup"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-neutral-100 transition-colors"
+              className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
-              <FileSearch className="h-4 w-4 text-amber-600" />
+              <FileSearch className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               <span>Track Order Reference</span>
             </Link>
 
-            <div className="pt-3 mt-2 border-t border-neutral-100 flex flex-col space-y-2">
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200/80"
-              >
-                <LayoutDashboard className="h-4 w-4 text-amber-600" />
-                <span>Admin Portal</span>
-              </Link>
-              
-              <div className="px-3 py-2 text-xs text-neutral-500 space-y-1.5 font-medium">
-                <div className="flex items-center gap-2">
-                  <Phone className="h-3.5 w-3.5 text-neutral-400" />
-                  <span>Call Us: +234 803 123 4567</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MessageSquare className="h-3.5 w-3.5 text-emerald-500" />
-                  <span>WhatsApp Negotiation Available</span>
-                </div>
-              </div>
-            </div>
           </nav>
         </div>
       )}
-    </div>
+    </header>
   );
 }

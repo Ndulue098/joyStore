@@ -35,36 +35,49 @@ const TRUST_PILLARS: ShopwithUsProps[] = [
 
 export default function ShopwithUs() {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14" aria-labelledby="why-shop-heading">
-      <div className="text-center max-w-xl mx-auto mb-10">
-        
-        <h2 id="why-shop-heading" className="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight">
+    <section
+      className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 py-10 sm:py-16"
+      aria-labelledby="why-shop-heading"
+    >
+      {/* Section Header */}
+      <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+        <h2
+          id="why-shop-heading"
+          className="text-2xl sm:text-3xl lg:text-4xl font-black text-neutral-900 dark:text-neutral-100 tracking-tight"
+        >
           Why Shop With Us?
         </h2>
-        <p className="text-xs sm:text-sm  text-neutral-500 mt-1">
+        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-2 font-medium leading-relaxed">
           Designed specifically for how contractors, electricians, and homeowners buy electrical materials in Nigeria.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Grid Layout with Stacking Protection */}
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
         {TRUST_PILLARS.map((item, index) => (
           <div
             key={index}
-            className="rounded-md bg-white border border-neutral-200/80 p-6 hover:border-amber-300 transition-all duration-200 flex flex-col justify-between group"
+            className="group relative z-10 max-w-80 mx-auto sm:max-w-full rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
           >
             <div>
-              <div className="h-7 w-7 rounded-md bg-neutral-100 group-hover:bg-amber-50 border border-neutral-200 group-hover:border-amber-200 flex items-center justify-center transition-colors mb-3">
-                {item.icon}
+              {/* Icon Badge */}
+              <div className="h-9 w-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 group-hover:bg-amber-50 dark:group-hover:bg-amber-950/60 border border-neutral-200 dark:border-neutral-700 group-hover:border-amber-200 dark:group-hover:border-amber-800/80 flex items-center justify-center transition-colors mb-4">
+                <span className="text-neutral-700 dark:text-neutral-300 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                  {item.icon}
+                </span>
               </div>
-              <h3 className="text-base font-extrabold text-neutral-900 mb-2">
+
+              {/* Title & Description */}
+              <h3 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-2">
                 {item.title}
               </h3>
-              <p className="text-xs text-neutral-600 leading-relaxed">
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
                 {item.description}
               </p>
             </div>
 
-            <div className="mt-4 pt-2 border-t border-neutral-100 flex items-center gap-1 text-[11px] font-semibold text-neutral-400 group-hover:text-amber-700 transition-colors">
+            {/* Footer Tag */}
+            <div className="mt-5 pt-3 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
               <span>VoltDirect Standard</span>
             </div>
           </div>

@@ -166,8 +166,8 @@ export default function Hero() {
   const slide = HERO_SLIDES[currentSlide];
 
   return (
-  <section
-  className={`relative max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-4 md:mt-6 rounded-2xl transition-colors `}
+ <section
+  className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-4 md:mt-6 rounded-2xl transition-colors"
   onMouseEnter={() => setIsPaused(true)}
   onMouseLeave={() => setIsPaused(false)}
   aria-label="Electrical Store Highlights"
@@ -175,16 +175,13 @@ export default function Hero() {
   <div className="relative text-primary-H overflow-hidden">
     
     {/* Main Slide Content Grid */}
-    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center min-h-[480px] sm:min-h-[520px] p-4 lg:p-6 gap-8 lg:gap-12">
+    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center min-h-[auto] lg:min-h-[500px] p-4 sm:p-6 lg:p-8 gap-8 lg:gap-12">
       
       {/* Left Column: Typography & CTAs */}
-      <div className="lg:col-span-6 flex flex-col justify-center space-y-5 sm:space-y-6">
+      <div className="lg:col-span-6 flex flex-col justify-center items-center lg:items-start space-y-4 sm:space-y-6 ">
         
-        {/* Eyebrow / Badge */}
-      
-
         {/* Headline */}
-        <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black tracking-tight text-textPry-H leading-[1.1]">
+        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-textPry-H leading-[1.15] text-center lg:text-start flex flex-col md:flex-none">
           {slide.headline}{' '}
           <span className="inline-block font-black underline decoration-amber-500/40 underline-offset-8">
             {slide.highlightText}
@@ -192,51 +189,51 @@ export default function Hero() {
         </h1>
 
         {/* Supporting Text */}
-        <p className="text-sm sm:text-base text-neutral-600 max-w-xl font-medium leading-relaxed">
+        <p className="text-sm sm:text-base text-neutral-600 max-w-xl font-medium leading-relaxed text-center md:text-start">
           {slide.supportingText}
         </p>
 
         {/* CTAs */}
-        <div className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
-          <button className="px-6 py-3 rounded-md bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold text-sm sm:text-base shadow-lg shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer flex items-center gap-2">
+        <div className="pt-2 flex flex-col sm:flex-row items-center sm:justify-center lg:justify-start gap-3 sm:gap-4 w-full">
+          <button className="px-6 py-3 rounded-md bg-amber-500 hover:bg-amber-400 text-gray-950 w-full sm:w-auto font-bold text-sm md:text-base shadow-lg shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2">
             <span>{slide.ctaText}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
-          <button className="px-6 py-3 rounded-md border border-neutral-700 bg-neutral-900/60 hover:bg-neutral-800 text-white font-semibold text-sm sm:text-base backdrop-blur-sm transition-all duration-200 cursor-pointer">
+          <button className="px-6 py-3 rounded-md border border-neutral-700 bg-neutral-900/60 w-full sm:w-auto hover:bg-neutral-800 text-white font-semibold text-sm md:text-base backdrop-blur-sm transition-all duration-200 cursor-pointer text-center">
             {slide.secondaryCtaText}
           </button>
         </div>
 
         {/* Value Proposition Badges */}
-        <div className="pt-4 flex flex-wrap items-center gap-4 text-xs text-neutral-500 ">
+        <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-neutral-500 font-medium">
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />
             <span>Upfront Listed Prices</span>
           </div>
-          <span className="text-neutral-600">•</span>
+          <span className="hidden sm:inline text-neutral-400">•</span>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />
             <span>Direct WhatsApp Negotiation</span>
           </div>
-          <span className="text-neutral-600">•</span>
+          <span className="hidden sm:inline text-neutral-400">•</span>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-amber-400 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />
             <span>In-Store Pickup</span>
           </div>
         </div>
       </div>
 
       {/* Right Column: Hero Visual Showcase */}
-      <div className="lg:col-span-6 relative flex items-center justify-end rounded-2xl overflow-hidden ">
+      <div className="lg:col-span-6 relative flex items-center justify-center lg:justify-end rounded-2xl overflow-hidden">
         {/* Fixed Aspect Ratio Container preventing Layout Shift */}
-        <div className="relative w-full max-w-lg aspect-square flex items-center justify-center overflow-hidden rounded-2xl ">
-            <img
-              key={slide.id}
-              src={slide.imageUrl}
-              alt={slide.imageAlt}
-              className="h-full w-full object-contain object-center transition-all duration-700 ease-out transform-gpu will-change-transform mix-blend-multiply scale-105"
-            />
+        <div className="relative w-full max-w-md lg:max-w-lg aspect-square sm:aspect-[4/3] lg:aspect-square flex items-center justify-center overflow-hidden rounded-2xl">
+          <img
+            key={slide.id}
+            src={slide.imageUrl}
+            alt={slide.imageAlt}
+            className="h-full w-full max-h-[350px] lg:max-h-[460px] object-contain object-center transition-all duration-700 ease-out transform-gpu will-change-transform mix-blend-multiply scale-105"
+          />
         </div>
       </div>
     </div>
@@ -258,12 +255,7 @@ export default function Hero() {
             }`}
           />
         ))}
-        {/* <span className="text-xs font-mono text-neutral-400 ml-2">
-          0{currentSlide + 1} / 0{totalSlides}
-        </span> */}
       </div>
-
-    
     </div>
   </div>
 </section>
