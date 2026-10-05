@@ -1,4 +1,4 @@
-import { Layers, LayoutDashboard, LogOut, MoveLeft, Package, ShoppingBag } from "lucide-react";
+import { Layers, LayoutDashboard, LogOut, MoveLeft, Package, Shield, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import Nav from "./Nav";
 import { Metadata } from "next";
@@ -56,38 +56,66 @@ export default async function layout({children}: layoutProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col md:flex-row items-start">
-      <div className="w-full md:w-64 bg-white border-r border-neutral-200 p-4 space-y-1 sticky top-0 h-screen shrink-0 flex flex-col justify-between">
-        {/* Admin Sidebar */}
-        <aside className="">
-          <h1 className="text-center font-bold text-xl border-b border-neutral-300 mb-6 pb-1"> ADMIN DASHBOARD</h1>
-          <div className="mb-3 text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-            Store Management
+    <div className="min-h-screen flex flex-row w-full overflow-x-hidden bg-neutral-50/50 dark:bg-neutral-950">
+      
+      {/* 
+        ADMIN SIDEBAR
+        - Fixed icon sidebar on mobile (w-16)
+        - Expanded sidebar on desktop (md:w-64)
+      */}
+      <aside className="w-16 md:w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 px-2 py-4 md:p-4 space-y-1 sticky top-0 h-screen shrink-0 flex flex-col justify-between transition-all duration-200 z-30">
+        
+        {/* Top Section */}
+        <div className="space-y-6">
+          
+          {/* Header Branding */}
+          <div className="border-b border-neutral-200 dark:border-neutral-800 pb-3 text-center">
+            <h1 className="hidden md:block font-extrabold text-xs tracking-wider uppercase text-neutral-900 dark:text-neutral-100">
+              Admin Dashboard
+            </h1>
+            <div className="flex md:hidden justify-center text-neutral-900 dark:text-neutral-100 py-0.5" title="Admin Dashboard">
+              <Shield className="h-5 w-5 text-amber-600" />
+            </div>
           </div>
 
-          <Nav/>
-        </aside>
+          {/* Section Label */}
+          <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 text-center md:text-left md:px-1">
+            <span className="hidden md:inline">Store Management</span>
+            <span className="md:hidden text-[10px] block text-center">• • •</span>
+          </div>
 
-        <div className="pt-4 border-t border-neutral-100 mt-6">
-          <Link href={"/shop"} className="flex items-center justify-center gap-2 w-full px-3 py-2.5 text-xs font-semibold">
-            <MoveLeft className="h-3.5 w-3.5"/>
-            <span>Back to store</span>
+          {/* Navigation Items */}
+          <Nav /> 
+        </div>
+
+        {/* Bottom Section */}
+        <div className="pt-4 border-t border-neutral-200/80 dark:border-neutral-800 space-y-1.5">
+          <Link
+            href="/shop"
+            title="Back to store"
+            className="flex items-center justify-center md:justify-start gap-3 w-full px-2 md:px-3 py-2.5 text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-xl transition-all"
+          >
+            <MoveLeft className="h-4 w-4 shrink-0" />
+            <span className="hidden md:inline truncate">Back to store</span>
           </Link>
+
           <Link
             href="/logout"
-            className="flex items-center justify-center gap-2 w-full px-3 py-2.5 rounded-md text-xs font-semibold text-neutral-700 bg-neutral-100/80 hover:bg-neutral-200/60 hover:text-neutral-900 transition-all border border-neutral-200/50 group"
+            title="Sign out"
+            className="flex items-center justify-center md:justify-start gap-3 w-full px-2 md:px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800/80 hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 transition-all border border-neutral-200/60 dark:border-neutral-700/60 group"
           >
-            <LogOut className="h-3.5 w-3.5 text-neutral-500 group-hover:-translate-x-0.5 transition-transform" />
-            <span>Sign out</span>
+            <LogOut className="h-4 w-4 text-neutral-500 group-hover:-translate-x-0.5 transition-transform shrink-0" />
+            <span className="hidden md:inline truncate">Sign out</span>
           </Link>
         </div>
         
-      </div>    
+      </aside>    
 
-  {/* Admin Page Content */}
-  <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
-    {children}
-  </main>
-</div>
+      {/* Main Content Area */}
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
+        {children}
+      </main>
+
+    </div>
   ); 
 }

@@ -13,9 +13,9 @@ export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps
   const subtotal = (item.price || item.total) * item.quantity;
    
   return (
-    <div className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-4 px-2 sm:px-3 rounded-xl hover:bg-neutral-50/80 border-b border-neutral-200/80 transition-colors">
+    <div className="group flex flex-col sm:flex-row  items-start sm:items-center justify-between gap-4 py-2 sm:py-4 px-2 sm:px-3 rounded-xl hover:bg-neutral-50/80 border-y border-neutral-200/80 transition-colors">
       {/* Product Image & Meta Details */}
-      <div className="flex items-center gap-3.5 flex-1 min-w-0">
+      <div className="flex items-center gap-3.5 flex-1 min-w-0 ">
         <Link
           href={`/products/${item.id}`}
           className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-lg border border-neutral-200/80 bg-neutral-100 flex items-center justify-center group-hover:border-neutral-300 transition-colors"
@@ -27,7 +27,7 @@ export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps
               className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
-            <ImageOff className="h-6 w-6 stroke-[1.5] text-neutral-300" />
+            <ImageOff className="h-4 w-4 md:h-6 md:w-6 stroke-[1.5] text-neutral-300" />
           )}
         </Link>
 

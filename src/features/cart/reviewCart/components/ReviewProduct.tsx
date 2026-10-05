@@ -13,7 +13,7 @@ export default function ReviewProduct({isPending}: ReviewProductProps) {
     
   return (
     <div className="lg:col-span-5 space-y-4">
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-xs space-y-5">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-3 sm:p-6 shadow-xs space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
               <h3 className="text-base font-bold text-neutral-900">
                 Selected Products ({cartItemsLength})
@@ -46,7 +46,7 @@ export default function ReviewProduct({isPending}: ReviewProductProps) {
               <button
               type="submit"
               form="review-cart-form"
-                className="w-full cursor-pointer flex items-center justify-center gap-2 rounded-sm py-1.5 px-2 bg-neutral-700 text-gray-200 font-bold shadow-sm"
+                className="w-full cursor-pointer flex items-center justify-center gap-2 rounded-sm py-1.5 px-2 bg-neutral-800 text-gray-200 font-bold shadow-sm"
               >
                 {isPending?"submitting...": <span className="flex items-center gap-2">
                   Generate Order

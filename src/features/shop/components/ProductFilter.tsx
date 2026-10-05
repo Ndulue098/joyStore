@@ -9,7 +9,6 @@ export default async function ProductFilter({}) {
   const dataList=data || []
   
 
-  console.log("ca-te-go-ries",data); 
 
   return ( 
    <div className="flex flex-col h-full space-y-3">

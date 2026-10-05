@@ -10,15 +10,15 @@ export default function ReviewItem({item}: ReviewItemProps) {
   return (
     <div  className="pt-3 first:pt-0 flex items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2.5 min-w-0">
-        <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-neutral-100 border border-neutral-200">
+        <div className="sm:h-12 sm:w-12 h-8 w-8 shrink-0 overflow-hidden rounded-sm md:rounded-lg bg-neutral-100 border border-neutral-200">
              {item.imageUrl ? (
             <img
               src={item.imageUrl}
               alt={item.name}
-              className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full  object-cover object-center transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
-            <ImageOff className="h-6 w-6 stroke-[1.5] text-neutral-300" />
+            <ImageOff className="h-full w-full  stroke-[1.5] text-neutral-300" />
           )}
         </div>
         <div className="min-w-0">

@@ -1,57 +1,57 @@
 "use client"
-import { Layers, LayoutDashboard, Package, ShoppingBag } from "lucide-react";
-import { usePathname, useSearchParams } from "next/navigation";
-import Link from "next/link";
+
+import { Layers, LayoutDashboard, ShoppingBag } from "lucide-react"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 
 const navItems = [
-    {
-      id: 'dashboard',
-      label: 'Overview',
-      href: '/admin',
-      icon: <LayoutDashboard className="h-4 w-4" />,
-    },
-    // {
-    //   id: 'products',
-    //   label: 'Products',
-    //   href: '/admin/products',
-    //   icon: <Package className="h-4 w-4" />,
-    // },
-    {
-      id: 'categories',
-      label: 'Categories',
-      href: '/admin/categories',
-      icon: <Layers className="h-4 w-4" />,
-    },
-    {
-      id: 'orders',
-      label: 'Orders & Quotations',
-      href: '/admin/orders',
-      icon: <ShoppingBag className="h-4 w-4" />,
-    },
-  ];
+  {
+    id: "dashboard",
+    label: "Overview",
+    href: "/admin",
+    icon: LayoutDashboard,
+  },
+  {
+    id: "categories",
+    label: "Categories",
+    href: "/admin/categories",
+    icon: Layers,
+  },
+  {
+    id: "orders",
+    label: "Orders & Quotations",
+    href: "/admin/orders",
+    icon: ShoppingBag,
+  },
+]
 
 export default function Nav() {
-
-  const pathname = usePathname(); // e.g., "/admin"
-  console.log(pathname);
-  
-  console.log("/admin"===pathname);
-    
+  const pathname = usePathname()
 
   return (
-    <nav className="flex md:flex-col gap-1 overflow-x-auto pb-2 md:pb-0">
-      {navItems.map((item) => (
-        <Link
-          key={item.id}
-          href={item.href}
-          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 
-            ${item.href===pathname?"bg-neutral-200":""}
-            `}
-        >
-          <span className="text-neutral-400">{item.icon}</span>
-          <span>{item.label}</span>
-        </Link>
-      ))}
+    <nav className="flex flex-col space-y-1.5 w-full">
+      {navItems.map((item) => {
+        const Icon = item.icon
+        const isActive = pathname === item.href
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            title={item.label}
+            className={`flex items-center justify-center md:justify-start gap-3 px-2 md:px-3 py-2.5 rounded-xl text-xs font-semibold transition-all w-full ${
+              isActive
+                ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 shadow-sm"
+                : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
+            }`}
+          >
+            <Icon className={`h-4 w-4 shrink-0 ${isActive ? "text-current" : "text-neutral-500"}`} />
+            
+            {/* Hidden on mobile viewports, shown on medium screens and up */}
+            <span className="hidden md:inline truncate">{item.label}</span>
+          </Link>
+        )
+      })}
     </nav>
-  );
+  )
 }

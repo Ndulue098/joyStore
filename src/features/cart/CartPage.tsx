@@ -100,7 +100,7 @@ export default function CartPage() {
           </div>
 
           {/* Render Cart Item Rows */}
-          <div className="divide-y divide-neutral-100">
+          <div className=" space-y-2 sm:space-y-4 ">
             {cart.map((item) => (
               <CartItemRow 
                 key={item.id}

@@ -3,13 +3,18 @@ import { RotateCcw, ChevronRight, SlidersHorizontal, X } from "lucide-react"
 import ProductFilter from "./ProductFilter";
 import ProductGrid from "./ProductGrid";
 import MobileFilterSheet from "./MobileFilterSheet";
+import { Suspense } from "react";
+import { ShopSkeleton } from "./ShopSkeleton";
 
-export default function ShopLayout({
+export default async function ShopLayout({
   
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+
+    const resolvedSearchParams = await searchParams;
+  const suspenseKey = JSON.stringify(resolvedSearchParams);
   return (
     <>
       {/* Mobile Trigger Component (Rendered outside grid to avoid occupying CSS Grid columns) */}
@@ -41,8 +46,11 @@ export default function ShopLayout({
         </aside>
 
         {/* Product Grid Listing Area (9 Cols on Desktop, Full Width on Mobile) */}
+        
         <main className="lg:col-span-9 relative z-10 min-w-0">
+        <Suspense fallback={<ShopSkeleton />} key={suspenseKey}>
           <ProductGrid searchParams={searchParams} />
+        </Suspense>
         </main>
 
       </div>

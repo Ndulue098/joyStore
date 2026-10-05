@@ -88,8 +88,8 @@ export default function ReviewCartForm({ startTransition,onSuccess }: ReviewCart
   }
 
   return (
-     <div className="lg:col-span-7 space-y-6">
-     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-xs space-y-5">
+     <div className="lg:col-span-7 md:space-y-6 space-y-2">
+     <div className="rounded-lg border border-neutral-200 bg-white p-3 sm:p-6 shadow-xs space-y-2 md:space-y-5">
         <div className="flex items-center gap-2 pb-3 border-b border-neutral-100">
         <User className="h-5 w-5 text-amber-500" />
         <h2 className="text-base font-bold text-neutral-900">
@@ -97,7 +97,7 @@ export default function ReviewCartForm({ startTransition,onSuccess }: ReviewCart
         </h2>
         </div>
     <form id="review-cart-form" onSubmit={form.handleSubmit(handleFormSubmit)}>
-      <FieldGroup className="space-y-6">
+      <FieldGroup className="md:space-y-6 space-y-2">
         {/* Full Name / Company Name */}
         <Controller
           name="fullName"

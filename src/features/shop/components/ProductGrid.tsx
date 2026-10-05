@@ -7,12 +7,12 @@ import { ProductCard } from "@/src/components/layout/ProductCard";
 // import { getProducts } from "@/lib/actions/getProducts";
 
 interface ProductGridProps {
-  searchParams: { [key: string]: string | string[] | undefined; } ;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>; 
 }
 
 export default async function ProductGrid({ searchParams }: ProductGridProps) {
   // 1. Resolve searchParams to read current page
-  const resolvedParams = searchParams || {};
+  const resolvedParams = await searchParams || {};
   const page = Number(resolvedParams.page) || 1;
   const limit = 9;
 
