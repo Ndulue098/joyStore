@@ -9,7 +9,7 @@ import Link from "next/link";
 import CustomBreadcrumbs from "../Components/CustomBreadcrumbs";
 import ShopLayout from "./components/ShopLayout";
 interface ShopPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined; }>;
+  searchParams: { [key: string]: string | string[] | undefined; };
 }
 
 export default function ShopPage({ searchParams }: ShopPageProps) {

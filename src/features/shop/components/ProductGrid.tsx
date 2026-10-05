@@ -7,7 +7,7 @@ import { ProductCard } from "@/src/components/layout/ProductCard";
 // import { getProducts } from "@/lib/actions/getProducts";
 
 interface ProductGridProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>; 
+  searchParams: { [key: string]: string | string[] | undefined }; 
 }
 
 export default async function ProductGrid({ searchParams }: ProductGridProps) {

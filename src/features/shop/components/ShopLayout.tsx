@@ -10,7 +10,7 @@ export default async function ShopLayout({
   
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
 
     const resolvedSearchParams = await searchParams;
