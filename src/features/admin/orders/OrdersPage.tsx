@@ -16,37 +16,20 @@ export default async function OrdersPage({}) {
   }
 
   return (
-    <div>
-      <div className="flex flex-col">
-
-      <div className="flex flex-col items-center justify-between mb-12">
-        <h2 className="text-3xl font-bold">
+    <div className="w-full max-w-full overflow-hidden space-y-6">
+      {/* Header Section */}
+      <div className="flex flex-col items-start justify-between gap-1 pb-4 border-b border-neutral-200/80 dark:border-neutral-800">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-neutral-900 dark:text-neutral-100 tracking-tight">
           Orders & WhatsApp Negotiations
-        </h2>
-        <p className="text-xs text-neutral-500">Review incoming quotations, adjust agreed negotiation prices, and confirm pickup fulfillment</p>
+        </h1>
+        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-2xl leading-relaxed">
+          Review incoming quotations, adjust agreed negotiation prices, and confirm pickup fulfillment.
+        </p>
       </div>
 
-      {/* <div className="overflow-x-auto rounded-md border border-neutral-200 bg-white shadow-2xs">
-        <table className="w-full text-left text-xs sm:text-sm border-collapse">
-          <thead>
-            <tr className="border-b border-neutral-200 bg-neutral-50/80 text-[11px] font-bold uppercase tracking-wider text-neutral-500">
-              <th className="py-3 px-4">Order Code</th>
-              <th className="py-3 px-4">Date</th>
-              <th className="py-3 px-4">Customer</th>
-              <th className="py-3 px-4 text-center">Products</th>
-              <th className="py-3 px-4 text-right">Listed Total</th>
-              <th className="py-3 px-4 text-right">Agreed Total</th>
-              <th className="py-3 px-4 text-center">Status</th>
-              <th className="py-3 px-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-100 font-normal text-neutral-700">
-            {orders.map((order)=><OrderTableRow key={order.id} order={order}/>)}
-            
-          </tbody>
-        </table>
-      </div> */}
-      <OrderTable orders={orders}/>
+      {/* Responsive Table Wrapper */}
+      <div className="w-full max-w-full overflow-x-auto rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-xs">
+        <OrderTable orders={orders} />
       </div>
     </div>
   );

@@ -13,10 +13,10 @@ interface ProductComProps {
 
 export default function ProductCom({products,name,id,categoryList}: ProductComProps) {
   return (
-    <div className="bg-neutral-50/60 border-t border-t-neutral-400   border-neutral-200 p-4 sm:p-5 space-y-3.5">
+    <div className="bg-neutral-50/60 border-t border-t-neutral-400   border-neutral-200 p-2 sm:p-5 space-y-3.5">
       
       {/* Sub-header Bar */} 
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row gap-2 items-center justify-between sm:gap-4">
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
             Products under
@@ -30,10 +30,10 @@ export default function ProductCom({products,name,id,categoryList}: ProductComPr
             <span>
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 hover:text-amber-800 hover:bg-amber-100/60 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold bg-amber-500/20 text-amber-700 hover:text-amber-800 hover:bg-amber-100/60 sm:px-2.5 sm:py-1.5 px-1.5 py-1  rounded-md transition-colors cursor-pointer"
                 >
                 <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Add Product to Category</span>
+                <span>Add Product</span>
               </button>
             </span>
           </ProductForm>

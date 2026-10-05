@@ -7,7 +7,7 @@ export default function loading({}: loadingProps) {
     <div className="flex items-center justify-center h-full w-full">
 
      <div
-      className={`relative inline-block  max-w-32 max-h-32 text-center`}
+      className={`relative inline-block  w-32 h-32 text-center`}
       // style={{ width: size, height: size }}
       role="status"
       aria-label="loading"

@@ -13,66 +13,71 @@ export default function OrderTableRow({ order }: OrderTableRowProps) {
 
 
   return (
-    <tr className="hover:bg-neutral-50/60 transition-colors">
-      <td className="py-3.5 px-4 font-mono font-bold text-neutral-900">
+    <tr className="hover:bg-neutral-50/80 dark:hover:bg-neutral-800/40 transition-colors">
+      {/* Order Code */}
+      <td className="py-3.5 px-4 font-mono font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
         {order.public_code}
       </td>
 
+      {/* Pickup Date */}
       <td className="py-3.5 px-4 whitespace-nowrap">
-        <div className="flex flex-col text-xs text-neutral-500 font-semibold">
-          <span>Pickup date:</span>
-          <span className="font-normal text-neutral-800">
+        <div className="flex flex-col text-xs">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+            Pickup Date
+          </span>
+          <span className="font-semibold text-neutral-800 dark:text-neutral-200 mt-0.5">
             {formatPickupDate(order.pickup_date)}
           </span>
         </div>
       </td>
 
-      <td className="py-3.5 px-4 text-xs">
+      {/* Customer Info */}
+      <td className="py-3.5 px-4 text-xs whitespace-nowrap">
         <div className="flex flex-col">
-          <span className="font-semibold text-neutral-900 capitalize">
+          <span className="font-bold text-neutral-900 dark:text-neutral-100 capitalize">
             {order.customer_name}
           </span>
-          <span className="font-mono text-neutral-500">
+          <span className="font-mono text-neutral-500 dark:text-neutral-400 text-[11px]">
             {order.customer_phone}
           </span>
         </div>
       </td>
 
-      <td className="py-3.5 px-4 text-center">
-        <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-neutral-100 border border-neutral-200/80 text-xs font-medium text-neutral-600">
+      {/* Items Count Badge */}
+      <td className="py-3.5 px-4 text-center whitespace-nowrap">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700/60 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
           {order.item_count} item(s)
         </span>
       </td>
 
-      <td className="py-3.5 px-4 text-right font-mono text-neutral-500">
-        ₦{order.estimated_total}
+      {/* Listed Total */}
+      <td className="py-3.5 px-4 text-right font-mono text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
+        ₦{order.estimated_total?.toLocaleString()}
       </td>
 
-      <td className="py-3.5 px-4 text-right font-mono font-bold text-neutral-900">
+      {/* Agreed Total */}
+      <td className="py-3.5 px-4 text-right font-mono font-extrabold text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
         {order.agreed_total ? (
-          `₦${order.agreed_total}`
+          `₦${order.agreed_total.toLocaleString()}`
         ) : (
-          <span className="text-neutral-400 font-normal">—</span>
+          <span className="text-neutral-400 dark:text-neutral-600 font-normal">—</span>
         )}
       </td>
 
-      <td className="py-3.5 px-4 text-center">
-        {/* <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200/60 capitalize">
-          <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-          {order.status}
-        </span> */}
-        <Status order={order.status}/>
+      {/* Status Badge */}
+      <td className="py-3.5 px-4 text-center whitespace-nowrap">
+        <Status order={order.status} />
       </td>
 
-      <td className="py-3.5 px-4 text-right">
+      {/* Review Action */}
+      <td className="py-3.5 px-4 text-right whitespace-nowrap">
         <ReviewOrder id={order.id}>
           <span>
             <button
               type="button"
-              
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-100 hover:text-neutral-900 transition-colors shadow-2xs cursor-pointer active:bg-neutral-200"
-              >
-              <Eye className="w-3.5 h-3.5 text-neutral-500" />
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs cursor-pointer active:scale-95"
+            >
+              <Eye className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />
               <span>Review</span>
             </button>
           </span>

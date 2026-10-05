@@ -209,9 +209,9 @@ export default function CateForm({
     >
       <DialogTrigger >{children}</DialogTrigger>
 
-      <DialogContent className="sm:max-w-md overflow-y-auto p-6 rounded-md">
-        <DialogHeader>
-          <DialogTitle className="text-lg font-bold text-neutral-900 flex items-center gap-2">
+      <DialogContent className="sm:max-w-md overflow-y-auto p-6 rounded-md max-h-screen mt-3 mb-3">
+        <DialogHeader className="p-4 sm:p-6 pl-0 sm:pl-0 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
+          <DialogTitle className="text-base sm:text-lg font-extrabold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
             <Layers className="h-5 w-5 text-amber-500" />
             {isEditing ? "Edit Category" : "Add New Category"}
           </DialogTitle>

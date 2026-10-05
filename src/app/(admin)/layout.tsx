@@ -56,14 +56,9 @@ export default async function layout({children}: layoutProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-row w-full overflow-x-hidden bg-neutral-50/50 dark:bg-neutral-950">
+    <div className="min-h-screen flex flex-row w-full bg-neutral-50/50 dark:bg-neutral-950 ">
       
-      {/* 
-        ADMIN SIDEBAR
-        - Fixed icon sidebar on mobile (w-16)
-        - Expanded sidebar on desktop (md:w-64)
-      */}
-      <aside className="w-16 md:w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 px-2 py-4 md:p-4 space-y-1 sticky top-0 h-screen shrink-0 flex flex-col justify-between transition-all duration-200 z-30">
+      <aside className="w-12 md:w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 px-1 py-4 md:p-4 space-y-1 sticky top-0 h-screen shrink-0 flex flex-col justify-between transition-all duration-200 z-30">
         
         {/* Top Section */}
         <div className="space-y-6">
@@ -112,7 +107,7 @@ export default async function layout({children}: layoutProps) {
       </aside>    
 
       {/* Main Content Area */}
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
+      <main className="flex-1 p-4 sm:p-6 lg:p-6 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
         {children}
       </main>
 

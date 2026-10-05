@@ -26,10 +26,10 @@ export default async function OverviewPage({}) {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* 1. TOP METRICS CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Products */}
         <div className="p-4 sm:p-5 rounded-2xl border border-blue-200/80 bg-blue-50/40 dark:bg-blue-950/20 dark:border-blue-900/50 shadow-2xs hover:shadow-md transition-all">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col-reverse sm:flex-row text-center gap-2 sm:text-start items-center justify-between">
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
               Total Products
             </span>
@@ -37,14 +37,14 @@ export default async function OverviewPage({}) {
               <Package className="h-4 w-4 stroke-[2.25]" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-900 dark:text-neutral-100 mt-3">
+          <p className="text-2xl sm:text-3xl font-extrabold text-center font-mono text-neutral-900  mt-3">
             {totalProducts}
           </p>
         </div>
 
         {/* Total Categories */}
         <div className="p-4 sm:p-5 rounded-2xl border border-amber-200/80 bg-amber-50/40 dark:bg-amber-950/20 dark:border-amber-900/50 shadow-2xs hover:shadow-md transition-all">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col-reverse sm:flex-row text-center gap-2 sm:text-start items-center justify-between">
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-400">
               Total Categories
             </span>
@@ -52,14 +52,14 @@ export default async function OverviewPage({}) {
               <Layers className="h-4 w-4 stroke-[2.25]" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-900 dark:text-neutral-100 mt-3">
+          <p className="text-2xl sm:text-3xl font-extrabold text-center font-mono text-neutral-900  mt-3">
             {totalCategories}
           </p>
         </div>
 
         {/* Total Orders */}
         <div className="p-4 sm:p-5 rounded-2xl border border-emerald-200/80 bg-emerald-50/40 dark:bg-emerald-950/20 dark:border-emerald-900/50 shadow-2xs hover:shadow-md transition-all">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col-reverse sm:flex-row text-center gap-2 sm:text-start items-center justify-between">
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
               Total Orders
             </span>
@@ -67,14 +67,14 @@ export default async function OverviewPage({}) {
               <ShoppingBag className="h-4 w-4 stroke-[2.25]" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-900 dark:text-neutral-100 mt-3">
+          <p className="text-2xl sm:text-3xl font-extrabold text-center font-mono text-neutral-900  mt-3">
             {totalOrders}
           </p>
         </div>
 
         {/* Confirmed Orders */}
         <div className="p-4 sm:p-5 rounded-2xl border border-purple-200/80 bg-purple-50/40 dark:bg-purple-950/20 dark:border-purple-900/50 shadow-2xs hover:shadow-md transition-all">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col-reverse sm:flex-row text-center gap-2 sm:text-start items-center justify-between">
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-purple-700 dark:text-purple-400">
               Confirmed Orders
             </span>
@@ -82,17 +82,17 @@ export default async function OverviewPage({}) {
               <CheckCircle2 className="h-4 w-4 stroke-[2.25]" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-900 dark:text-neutral-100 mt-3">
+          <p className="text-2xl sm:text-3xl font-extrabold text-center font-mono text-neutral-900  mt-3">
             {totalConfirmedOrders}
           </p>
         </div>
       </div>
 
       {/* 2. ACTIONABLE ORDERS TABLE CONTAINER */}
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-2xs overflow-hidden flex flex-col p-4 sm:p-6 space-y-4">
+      <div className="bg-white dark:bg-neutral-900  border-neutral-200/80 dark:border-neutral-800 shadow-2xs overflow-hidden flex flex-col p-0 sm:p-3 space-y-4">
         <div className="flex items-center justify-between border-b border-neutral-200/80 dark:border-neutral-800 pb-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-sm font-extrabold uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
+          <div className="flex items-center sm:gap-2 gap-1">
+            <h2 className="text-sm font-extrabold uppercase tracking-wider text-neutral-900 ">
               Uncompleted Orders
             </h2>
             <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-bold">
@@ -106,11 +106,11 @@ export default async function OverviewPage({}) {
 
       {/* 3. ANALYTICS CHARTS GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-        <div className="rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 sm:p-6 shadow-2xs overflow-hidden">
+        <div className=" border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-2xs overflow-hidden">
           <TopProductsChart data={topSales} />
         </div>
         
-        <div className="rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 sm:p-6 shadow-2xs overflow-hidden">
+        <div className="rounded-md  dark:border-neutral-800 bg-white dark:bg-neutral-900  shadow-2xs overflow-hidden">
           <OrderStatusChart data={orderStatus} />
         </div>
       </div>
