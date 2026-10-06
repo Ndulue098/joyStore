@@ -5,13 +5,12 @@ import { revalidatePath } from 'next/cache';
 
 import { getAdminSession } from "@/src/app/(admin)/auth";
 
-
 export async function createCategory(formData: FormData) {
-  const session =await getAdminSession()
+  const session = await getAdminSession();
   
   try {
-    if(!session){
-      throw new Error("You must be logged in to create a category")
+    if (!session) {
+      throw new Error("You must be logged in to create a category");
     }
     const supabase = createAdminClient();
 
@@ -19,10 +18,8 @@ export async function createCategory(formData: FormData) {
     const description = (formData.get('description') as string) || null;
     const image = formData.get('image') as File;
     
-    // Parse boolean from string "true" / "false"
     const is_active = formData.get('isActive') === 'true';
 
-    // Parse string ID into integer, or null if "null" / missing
     const parentIdRaw = formData.get('parentId') as string;
     const parent_id = parentIdRaw && parentIdRaw !== 'null' ? Number(parentIdRaw) : null;
 
@@ -38,7 +35,21 @@ export async function createCategory(formData: FormData) {
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '');
 
-    // 2. Upload image to Supabase Storage bucket ('categories')
+    // 2. Check if a category with this slug already exists
+    const { data: existingCategory } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', slug)
+      .maybeSingle();
+
+    if (existingCategory) {
+      return { 
+        success: false, 
+        error: `The category "${title}" already exists. Please use a different name.` 
+      };
+    }
+
+    // 3. Upload image to Supabase Storage bucket ('categories')
     const fileExt = image.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
     const filePath = `categories/${fileName}`;
@@ -55,14 +66,14 @@ export async function createCategory(formData: FormData) {
       return { success: false, error: 'Failed to upload category image.' };
     }
 
-    // 3. Get Public URL for the uploaded image
+    // 4. Get Public URL for the uploaded image
     const { data: urlData } = supabase.storage
       .from('categories')
       .getPublicUrl(filePath);
 
     const imageUrl = urlData.publicUrl;
 
-    // 4. Insert row into 'categories' database table
+    // 5. Insert row into 'categories' table
     const { data, error: dbError } = await supabase
       .from('categories')
       .insert({
@@ -70,13 +81,21 @@ export async function createCategory(formData: FormData) {
         slug,
         description,
         imageUrl,
-        is_active,  // Column name in DB is is_active
-        parent_id,  // Column name in DB is parent_id
+        is_active,
+        parent_id,
       })
       .select()
       .single();
 
     if (dbError) {
+      // Fallback check for Postgres unique constraint (code 23505)
+      if (dbError.code === '23505' || dbError.message.includes('categories_slug_unique')) {
+        return { 
+          success: false, 
+          error: `The category "${title}" already exists.` 
+        };
+      }
+      
       console.error('Database Insert Error:', dbError.message);
       return { success: false, error: dbError.message };
     }

@@ -74,7 +74,7 @@ export default function OrderTableRow({ order }: OrderTableRowProps) {
         <ReviewOrder id={order.id}>
           <span>
             <button
-              type="button"
+              type="button" 
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs cursor-pointer active:scale-95"
             >
               <Eye className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />

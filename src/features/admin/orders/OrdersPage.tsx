@@ -32,5 +32,5 @@ export default async function OrdersPage({}) {
         <OrderTable orders={orders} />
       </div>
     </div>
-  );
+  ); 
 }
