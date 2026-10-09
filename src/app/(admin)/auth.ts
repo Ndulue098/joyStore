@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 
-const ADMIN_EMAILS = ["christianndulue47@gmail.com","sinachpat@gmail.com","okeke.p.ebube@gmail.com","joycy2angel@gmail.com"];
+const ADMIN_EMAILS = ["christianndulue47@gmail.com","joycy2angel@gmail.com"];
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true, // Required for v5 host detection
