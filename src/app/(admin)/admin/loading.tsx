@@ -1,11 +1,7 @@
-interface loadingProps {
-  
-}
 
-export default function loading({}: loadingProps) {
+export default function loading({}) {
   return (
     <div className="flex items-center justify-center h-full w-full">
-
      <div
       className={`relative inline-block  w-32 h-32 text-center`}
       // style={{ width: size, height: size }}
