@@ -61,7 +61,7 @@ export default async function layout({children}: layoutProps) {
       space-y-1 sticky top-0 md:h-screen shrink-0 flex md:flex-col justify-between transition-all duration-200 z-30
          flex-row-reverse
  */}
-      <aside className="fixed  bottom-0 left-0 right-0 z-40 md:w-64 bg-amber-100  dark:bg-neutral-900 border-t
+      <aside className="fixed  bottom-0 left-0 right-0 z-40 md:w-64 bg-white dark:bg-neutral-900 border-t
        md:border-t-0 md:border-r border-neutral-200 dark:border-neutral-800 px-3 py-2 md:p-4 md:sticky md:top-0 md:h-screen md:shrink-0 flex md:flex-col justify-between items-center
         md:items-stretch shadow-lg md:shadow-none transition-all duration-200 shrink-0">
         
