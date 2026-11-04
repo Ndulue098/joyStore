@@ -19,8 +19,9 @@ export default async function OrderPage({ orderId }: { orderId: string }) {
   const response = await getOrderById(orderId) ;
   const order=response?.data
 
+  console.log("order-----> ",order)
   
-  if (!order) {
+  if (!order) { 
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-4">
         <h2 className="text-xl font-bold text-neutral-900">Quotation Not Found</h2>
@@ -62,7 +63,7 @@ export default async function OrderPage({ orderId }: { orderId: string }) {
         <CustomBreadcrumbs 
           items={[
             { label: "Shop", href: "/shop" },
-            { label: "Order Tracking", href: "/lookup" },
+            { label: "Order Tracking", href: "/order/lookup" },
             { label: public_code || orderId, href: `#` }
           ]} 
         />

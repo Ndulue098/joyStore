@@ -7,6 +7,7 @@ interface OrderTableProps {
 }
 
 export default function OrderTable({ orders }: OrderTableProps) {
+
   if (!orders || orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center border border-dashed border-neutral-200 dark:border-neutral-800 rounded-xl bg-neutral-50/50 dark:bg-neutral-900/50">

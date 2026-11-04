@@ -51,10 +51,10 @@ export default function ReviewCartForm({ startTransition,onSuccess }: ReviewCart
   const {cart,totalPrice,clearCart}=useCartContext()    
   
 
-  const form = useForm<FormValues>({
+  const form = useForm<FormValues>({ 
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
+      fullName: "", 
       phone: "",
       notes: "",
       pickupTimeSlot: "afternoon",

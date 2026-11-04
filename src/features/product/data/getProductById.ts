@@ -1,9 +1,7 @@
- import { createClient } from '@/lib/supabase/server';
+// src/features/admin/categories/data/getProductById.ts (or your path)
+import { createClient } from '@/lib/supabase/server';
 import { ProductsType } from '@/src/types/types';
 
-/**
- * Fetch a single product by its ID, including its category details
- */
 export async function getProductById(id: number | string): Promise<ProductsType | null> {
   const supabase = await createClient();
 
@@ -15,7 +13,9 @@ export async function getProductById(id: number | string): Promise<ProductsType 
         id,
         name, 
         slug
-      )
+      ),
+      product_variants(*),
+      product_variant_fields(*)
     `)
     .eq('id', id) 
     .eq('is_active', true)
@@ -28,4 +28,3 @@ export async function getProductById(id: number | string): Promise<ProductsType 
 
   return data as unknown as ProductsType;
 }
- 

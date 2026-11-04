@@ -34,6 +34,9 @@ export async function getOrderById(id: string) {
         unit_price,
         quantity,
         subtotal,
+        discount,
+        attributes,
+        images,
         created_at,
         product:product(*)
       )
@@ -46,13 +49,10 @@ export async function getOrderById(id: string) {
     return null;
   }
 
-
-  console.log(data);
-  
+  console.log("Fetched order with items & attributes:", data);
 
   return data;
 }
-
 
 
 
@@ -201,8 +201,7 @@ export async function updateOrderNegotiation({
     return { success: false, error: error.message };
   }
 } */
-
-  export async function updateOrderNegotiation({
+export async function updateOrderNegotiation({
   orderId,
   status,
   agreedTotal,
@@ -225,10 +224,15 @@ export async function updateOrderNegotiation({
 
     const estimatedTotal = Number(currentOrder.estimated_total || 0);
     let totalOrderDiscountAmount = 0;
+    let hasDiscount = false; // <--- Track if any discount is applied
 
     // 2. Update line-item discounts in order_items
     for (const item of items) {
       const discountPct = discounts[item.itemId] || 0;
+      if (discountPct > 0) {
+        hasDiscount = true; // <--- Flag as true if item has discount
+      }
+
       const rawTotal = item.unitPrice * item.quantity;
       const discountAmount = (rawTotal * discountPct) / 100;
 
@@ -253,11 +257,14 @@ export async function updateOrderNegotiation({
       ? Number(((totalOrderDiscountAmount / estimatedTotal) * 100).toFixed(2))
       : 0;
 
-    // 4. Update the main order record
+    // 4. Automatically set status to "completed" if a discount is applied
+    const finalStatus = hasDiscount|| agreedTotal ? "completed" : status;
+
+    // 5. Update the main order record
     const { error: orderUpdateError } = await supabase
       .from("orders")
       .update({
-        status,
+        status: finalStatus,                // <--- Uses "completed" if discounted
         agreed_total: agreedTotal,
         discount: totalOrderDiscountAmount, // Total monetary discount (₦)
         discountnumber: discountNumber,     // Weighted overall percentage discount (%)
@@ -276,4 +283,25 @@ export async function updateOrderNegotiation({
     console.error("Error in updateOrderNegotiation:", error);
     return { success: false, error: error.message };
   }
-} 
+}
+export async function deleteOrder(orderId: string) {
+  const supabase = createAdminClient();
+
+  try {
+    // Delete order items first (or rely on database cascading foreign keys if enabled)
+    await supabase.from("order_items").delete().eq("order_id", orderId);
+
+    // Delete the parent order
+    const { error } = await supabase.from("orders").delete().eq("id", orderId);
+
+    if (error) {
+      throw new Error(`Failed to delete order: ${error.message}`);
+    }
+
+    revalidatePath("/admin/orders");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error in deleteOrder:", error);
+    return { success: false, error: error.message };
+  }
+}

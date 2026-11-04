@@ -35,13 +35,15 @@ export default function ReviewProduct({isPending}: ReviewProductProps) {
               <div className="flex justify-between items-baseline">
                 <span className="text-sm font-semibold text-neutral-700">Estimated Total:</span>
                 {/* <PriceDisplay amount={estimatedTotal} size="lg" isEstimated /> */}
-                <span className="text-xl font-bold tracking-tight">{totalPrice}</span>
+                <span className="text-xl font-bold tracking-tight">
+                  ₦{Number(totalPrice).toLocaleString()}
+                </span>
               </div>
               <p className="text-[11px] text-neutral-500 italic">
                 * Note: Final agreed price will be finalized with the seller during WhatsApp negotiation.
               </p>
             </div>
-
+ 
             {/* Submit Action */}
               <button
               type="submit"

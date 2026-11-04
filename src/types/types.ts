@@ -34,6 +34,26 @@ export type ProductCategoty={
   id:number|string
 }
 
+export type ProductVariant={
+  id:number|string
+  name:string
+  price:number
+  attributes:Record<string,string>
+  image_url:string|null
+  stock_quantity:number
+  stock_status:stock_status
+  sku:string
+  unit:string
+  description:string
+  specifications:Record<string,string>
+  created_at:string
+  updated_at:string
+  discount_price:number|null
+  is_active:boolean
+  product_id:number|string
+}
+
+
 export type ProductsType={
 brand?:string | null;
 category_id:number;
@@ -57,7 +77,8 @@ stock_status?:"in_stock"|"out_of_order"|undefined|string
 unit?:"pcs"|"box"|string |undefined
 updated_at?:string
 category?:ProductCategoty
-
+product_variants?:ProductVariant[]
+colors?:string[]
 }
 
 
@@ -107,6 +128,8 @@ export type CartItem=Pick<
   category?:string;
   total: number;
   quantity: number;
+  variantId?: number | string;
+  attributes?: Record<string, string>;
 }
 
 
@@ -131,6 +154,9 @@ product_name:string
 quantity:number
 subtotal:number
 unit_price:number
+attributes?:Record<string,string> | string | null
+images?:string | null
+discountnumber?:number
 }
 
 export type OrderType={
@@ -155,18 +181,20 @@ item_count?:number
 
 // cart
 export type CartType={
-  brand?:string | null | undefined
-  category?:string | undefined
-  category_id:number
-  description:string
-  id:number|string
-  imageUrl?:string | null | undefined
-  name:string
-  price:number
-  quantity:number
-  short_description?:string|undefined
-  sku?:undefined|string
-  slug:string
-  total:number
+  brand?: string | null | undefined
+  category?: string | undefined
+  category_id: number
+  description: string
+  id: number | string
+  imageUrl?: string | null | undefined
+  name: string
+  price: number
+  quantity: number
+  short_description?: string | undefined
+  sku?: undefined | string
+  slug: string
+  total: number
+  baseProductId?: any;                   // <--- Add this line
+  attributes?: Record<string, string>;
 }
 // i mutated the getCategoryrev on the getMontlyOrdersByStatus

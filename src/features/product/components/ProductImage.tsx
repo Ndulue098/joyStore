@@ -1,13 +1,14 @@
+// src/app/products/[productId]/components/ProductImage.tsx
 import { ImageOff } from "lucide-react";
 
 interface ProductImageProps {
-  image:string | null | undefined;
-  name:string;
+  image: string | null | undefined;
+  name: string;
 }
 
-export default function ProductImage({image,name}: ProductImageProps) {
+export default function ProductImage({ image, name }: ProductImageProps) {
   return (
-    <div className="lg:col-span-5 w-full">
+    <div className="lg:col-span-5 w-full sticky top-8 pt-10">
       <div className="relative aspect-square w-full rounded-2xl bg-neutral-100 border border-neutral-200/80 overflow-hidden shadow-xs flex items-center justify-center">
         {image ? (
           <img

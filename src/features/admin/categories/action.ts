@@ -5,6 +5,13 @@ import { revalidatePath } from 'next/cache';
 
 import { getAdminSession } from "@/src/app/(admin)/auth";
 
+function generateAutoSku(brand: string, name: string): string {
+  const brandPrefix = brand.replace(/[^\w]/g, '').substring(0, 3).toUpperCase() || 'PRD';
+  const namePrefix = name.replace(/[^\w]/g, '').substring(0, 4).toUpperCase() || 'ITEM';
+  const randomSuffix = Math.random().toString(36).substring(2, 7).toUpperCase();
+  return `${brandPrefix}-${namePrefix}-${randomSuffix}`;
+}
+
 export async function createCategory(formData: FormData) {
   const session = await getAdminSession();
   
@@ -207,27 +214,21 @@ export async function updateCategory(formData: FormData) {
 }
 
 // creating
-
 export async function createProduct(formData: FormData) {
-  const session =await getAdminSession()
+  const session = await getAdminSession()
   
   try {
-    if(!session){
-      throw new Error("You must be logged in to create a category")
+    if (!session) {
+      throw new Error("You must be logged in to create a product")
     }
     const supabase = createAdminClient();
 
     const name = formData.get('name') as string;
     const brand = formData.get('brand') as string;
-    const sku = (formData.get('sku') as string) || null;
     const category_id = formData.get('category_id') as string;
-    const price = Number(formData.get('price'));
-    const discount = Number(formData.get('discount') || 0);
-    const stock_quantity = Number(formData.get('stock_quantity'));
-    const stock_status = formData.get('stock_status') as string;
-    const unit = (formData.get('unit') as string) || 'pcs';
     const short_description = (formData.get('short_description') as string) || null;
-    const description = (formData.get('description') as string) || null;
+    const description = formData.get('description') as string;
+    const unit = (formData.get('unit') as string) || 'pcs';
     
     const is_active = formData.get('is_active') === 'true';
     const is_best_seller = formData.get('is_best_seller') === 'true';
@@ -236,13 +237,19 @@ export async function createProduct(formData: FormData) {
     const specificationsRaw = formData.get('specifications') as string;
     const specifications = specificationsRaw ? JSON.parse(specificationsRaw) : {};
 
-    const image = formData.get('image') as File;
+    const variantFieldsRaw = formData.get('variantFields') as string;
+    const variantFields = variantFieldsRaw ? JSON.parse(variantFieldsRaw) : [];
 
-    if (!name || !brand || !category_id || isNaN(price) || !image) {
-      return { success: false, error: 'Required fields missing.' };
+    const variantsRaw = formData.get('variants') as string;
+    const variants = variantsRaw ? JSON.parse(variantsRaw) : [];
+
+    const colorsRaw = formData.get('colors') as string;
+    const colors = colorsRaw ? JSON.parse(colorsRaw) : [];
+
+    if (!name || !brand || !category_id || !description || variants.length === 0) {
+      return { success: false, error: 'Required fields or variants missing.' };
     }
 
-    // 1. Generate slug from name
     const slug = name
       .toLowerCase()
       .trim()
@@ -250,88 +257,131 @@ export async function createProduct(formData: FormData) {
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '');
 
-    // 2. Upload image to 'products' bucket
-    const fileExt = image.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
-    const filePath = `products/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from('products')
-      .upload(filePath, image, { cacheControl: '3600', upsert: false });
-
-    if (uploadError) {
-      console.error('Storage Upload Error:', uploadError.message);
-      return { success: false, error: 'Failed to upload product image.' };
-    }
-
-    // 3. Get Public URL
-    const { data: urlData } = supabase.storage
-      .from('products')
-      .getPublicUrl(filePath);
-
-    const imageUrl = urlData.publicUrl;
-
-    // 4. Insert row into 'products' table
-    const { data, error: dbError } = await supabase
+    // 1. Insert Base Product into 'product' table
+    const { data: productData, error: productError } = await supabase
       .from('product')
       .insert({
         name,
         slug,
         brand,
-        sku,
-        category_id,
-        price,
-        discount,
-        stock_quantity,
-        stock_status,
-        unit,
+        category_id: Number(category_id),
         short_description,
         description,
+        unit,
+        colors, // <--- Add colors here
+        specifications,
         is_active,
         is_best_seller,
         is_new,
-        specifications,
-        imageUrl,
       })
       .select()
       .single();
 
-    if (dbError) {
-      console.error('Database Insert Error:', dbError.message);
-      return { success: false, error: dbError.message };
+    if (productError || !productData) {
+      console.error('Database Product Insert Error:', productError?.message);
+      return { success: false, error: productError?.message || 'Failed to create base product.' };
+    }
+
+    const productId = productData.id;
+
+    // 2. Insert Dynamic Fields into 'product_variant_fields'
+    if (variantFields.length > 0) {
+      const fieldsToInsert = variantFields.map((field: any, index: number) => ({
+        product_id: productId,
+        field_name: field.field_name,
+        field_key: field.field_key,
+        field_type: field.field_type,
+        options: field.options || [],
+        is_required: field.is_required ?? false,
+        sort_order: index + 1,
+      }));
+      await supabase.from('product_variant_fields').insert(fieldsToInsert);
+    }
+
+    // 3. Process and Insert Variations into 'product_variants'
+    const processedVariants = [];
+    for (let i = 0; i < variants.length; i++) {
+      const v = variants[i];
+      let imageUrl = v.image_url || null;
+
+      const variantImageFile = formData.get(`variant_image_${i}`) as File | null;
+      if (variantImageFile && variantImageFile.size > 0) {
+        const fileExt = variantImageFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+        const filePath = `variants/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('productVariant') // <--- Updated to match your exact bucket name
+          .upload(filePath, variantImageFile, { cacheControl: '3600', upsert: false });
+
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage
+            .from('productVariant') // <--- Updated to match your exact bucket name
+            .getPublicUrl(filePath);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+
+      const sku = (v.sku && v.sku.trim() !== '') ? v.sku : generateAutoSku(brand, name);
+
+      // Safe specifications parsing
+      const variantSpecsObject = Array.isArray(v.specifications)
+        ? v.specifications.reduce((acc: any, curr: any) => {
+            if (curr.key?.trim()) acc[curr.key.trim()] = curr.value.trim();
+            return acc;
+          }, {})
+        : (v.specifications || {});
+
+      processedVariants.push({
+        product_id: productId,
+        sku,
+        price: Number(v.price),
+        discount_price: v.discount_price ? Number(v.discount_price) : null,
+        unit,
+        stock_quantity: Number(v.stock_quantity || 0),
+        stock_status: v.stock_status || 'In Stock',
+        description: v.description || null,
+        specifications: variantSpecsObject,
+        is_active: v.is_active ?? true,
+        attributes: v.attributes || {},
+        image_url: imageUrl,
+      });
+    }
+
+    const { error: variantsError } = await supabase
+      .from('product_variants')
+      .insert(processedVariants);
+
+    if (variantsError) {
+      console.error('Product Variants Insert Error:', variantsError.message);
+      await supabase.from('product').delete().eq('id', productId);
+      return { success: false, error: variantsError.message };
     }
 
     revalidatePath('/admin/categories');
-
-    return { success: true, product: data };
+    return { success: true, product: productData };
   } catch (error: any) {
     console.error('Unexpected Error:', error);
     return { success: false, error: error.message || 'An unexpected error occurred.' };
   }
 }
 
-
 export async function updateProduct(formData: FormData) {
-  const session =await getAdminSession()
+  const session = await getAdminSession()
   
   try {
-    if(!session){
-      throw new Error("You must be logged in to create a category")
+    if (!session) {
+      throw new Error("You must be logged in to update a product")
     }
     const supabase = createAdminClient();
 
-    const idRaw = formData.get('id') as string;
+    const id = formData.get('id') as string;
     const name = formData.get('name') as string;
     const brand = formData.get('brand') as string;
-    const sku = (formData.get('sku') as string) || null;
-    const category_id_raw = formData.get('category_id') as string;
-    const price = Number(formData.get('price'));
-    const discount = Number(formData.get('discount') || 0);
-    const stock_quantity = Number(formData.get('stock_quantity'));
-    const stock_status = formData.get('stock_status') as string;
-    const unit = (formData.get('unit') as string) || 'pcs';
+    const category_id = formData.get('category_id') as string;
     const short_description = (formData.get('short_description') as string) || null;
-    const description = (formData.get('description') as string) || null;
+    const description = formData.get('description') as string;
+    const unit = (formData.get('unit') as string) || 'pcs';
 
     const is_active = formData.get('is_active') === 'true';
     const is_best_seller = formData.get('is_best_seller') === 'true';
@@ -340,20 +390,19 @@ export async function updateProduct(formData: FormData) {
     const specificationsRaw = formData.get('specifications') as string;
     const specifications = specificationsRaw ? JSON.parse(specificationsRaw) : {};
 
-    const image = formData.get('image') as File | null;
+    const variantFieldsRaw = formData.get('variantFields') as string;
+    const variantFields = variantFieldsRaw ? JSON.parse(variantFieldsRaw) : [];
 
-    if (!idRaw) {
-      return { success: false, error: 'Product ID is required for updating.' };
+    const variantsRaw = formData.get('variants') as string;
+    const variants = variantsRaw ? JSON.parse(variantsRaw) : [];
+
+    const colorsRaw = formData.get('colors') as string;
+    const colors = colorsRaw ? JSON.parse(colorsRaw) : [];
+
+    if (!id || !name || !brand || !category_id || !description) {
+      return { success: false, error: 'Required fields missing for update.' };
     }
 
-    if (!name || !brand || !category_id_raw || isNaN(price)) {
-      return { success: false, error: 'Required fields missing.' };
-    }
-
-    const id = Number(idRaw);
-    const category_id = Number(category_id_raw);
-
-    // 1. Generate updated slug from product name
     const slug = name
       .toLowerCase()
       .trim()
@@ -361,70 +410,113 @@ export async function updateProduct(formData: FormData) {
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '');
 
-    // 2. Prepare base payload for database update
-    const updatePayload: Record<string, any> = {
-      name,
-      slug,
-      brand,
-      sku,
-      category_id,
-      price,
-      discount,
-      stock_quantity,
-      stock_status,
-      unit,
-      short_description,
-      description,
-      is_active,
-      is_best_seller,
-      is_new,
-      specifications,
-    };
+    // 1. Update Base Product
+    const { error: updateError } = await supabase
+      .from('product')
+      .update({
+        name,
+        slug,
+        brand,
+        category_id: Number(category_id),
+        short_description,
+        description,
+        unit,
+        colors,
+        specifications,
+        is_active,
+        is_best_seller,
+        is_new,
+      })
+      .eq('id', id);
 
-    // 3. Upload new image if provided
-    if (image && image.size > 0) {
-      const fileExt = image.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
-      const filePath = `products/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('products')
-        .upload(filePath, image, { cacheControl: '3600', upsert: false });
-
-      if (uploadError) {
-        console.error('Storage Upload Error:', uploadError.message);
-        return { success: false, error: 'Failed to upload product image.' };
-      }
-
-      const { data: urlData } = supabase.storage
-        .from('products')
-        .getPublicUrl(filePath);
-
-      updatePayload.imageUrl = urlData.publicUrl;
+    if (updateError) {
+      return { success: false, error: updateError.message };
     }
 
-    // 4. Update row in 'product' table
-    const { data, error: dbError } = await supabase
-      .from('product')
-      .update(updatePayload)
-      .eq('id', id)
-      .select()
-      .single();
+    // 2. Sync Dynamic Field Definitions
+    await supabase.from('product_variant_fields').delete().eq('product_id', id);
+    if (variantFields.length > 0) {
+      const fieldsToInsert = variantFields.map((field: any, index: number) => ({
+        product_id: id,
+        field_name: field.field_name,
+        field_key: field.field_key,
+        field_type: field.field_type,
+        options: field.options || [],
+        is_required: field.is_required ?? false,
+        sort_order: index + 1,
+      }));
+      await supabase.from('product_variant_fields').insert(fieldsToInsert);
+    }
 
-    if (dbError) {
-      console.error('Database Update Error:', dbError.message);
-      return { success: false, error: dbError.message };
+    // 3. Sync Variants
+    const submittedVariantIds = variants.filter((v: any) => v.id).map((v: any) => v.id);
+    if (submittedVariantIds.length > 0) {
+      await supabase.from('product_variants').delete().eq('product_id', id).not('id', 'in', `(${submittedVariantIds.join(',')})`);
+    } else {
+      await supabase.from('product_variants').delete().eq('product_id', id);
+    }
+
+    for (let i = 0; i < variants.length; i++) {
+      const v = variants[i];
+      let imageUrl = v.image_url || null;
+
+      const variantImageFile = formData.get(`variant_image_${i}`) as File | null;
+      if (variantImageFile && variantImageFile.size > 0) {
+        const fileExt = variantImageFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+        const filePath = `variants/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('productVariant') // <--- Updated to match your exact bucket name
+          .upload(filePath, variantImageFile, { cacheControl: '3600', upsert: false });
+
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage
+            .from('productVariant') // <--- Updated to match your exact bucket name
+            .getPublicUrl(filePath);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+
+      const sku = (v.sku && v.sku.trim() !== '') ? v.sku : generateAutoSku(brand, name);
+
+      // Safe specifications parsing
+      const variantSpecsObject = Array.isArray(v.specifications)
+        ? v.specifications.reduce((acc: any, curr: any) => {
+            if (curr.key?.trim()) acc[curr.key.trim()] = curr.value.trim();
+            return acc;
+          }, {})
+        : (v.specifications || {});
+
+      const variantPayload = {
+        product_id: id,
+        sku,
+        price: Number(v.price),
+        discount_price: v.discount_price ? Number(v.discount_price) : null,
+        unit,
+        stock_quantity: Number(v.stock_quantity || 0),
+        stock_status: v.stock_status || 'In Stock',
+        description: v.description || null,
+        specifications: variantSpecsObject,
+        is_active: v.is_active ?? true,
+        attributes: v.attributes || {},
+        image_url: imageUrl,
+      };
+
+      if (v.id) {
+        await supabase.from('product_variants').update(variantPayload).eq('id', v.id);
+      } else {
+        await supabase.from('product_variants').insert(variantPayload);
+      }
     }
 
     revalidatePath('/admin/categories');
-
-    return { success: true, product: data };
+    return { success: true };
   } catch (error: any) {
-    console.error('Unexpected Error:', error);
+    console.error('Unexpected Update Error:', error);
     return { success: false, error: error.message || 'An unexpected error occurred.' };
   }
 }
-
 
 export async function deleteCategoryById(id:number) {
   const session =await getAdminSession()

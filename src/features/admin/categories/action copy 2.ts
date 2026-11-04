@@ -1,0 +1,575 @@
+'use server';
+
+import { createAdminClient } from '@/lib/supabase/admin'; // Adjust import path
+import { revalidatePath } from 'next/cache';
+
+import { getAdminSession } from "@/src/app/(admin)/auth";
+
+
+function generateAutoSku(brand: string, name: string): string {
+  const brandPrefix = brand.replace(/[^\w]/g, '').substring(0, 3).toUpperCase() || 'PRD';
+  const namePrefix = name.replace(/[^\w]/g, '').substring(0, 4).toUpperCase() || 'ITEM';
+  const randomSuffix = Math.random().toString(36).substring(2, 7).toUpperCase();
+  return `${brandPrefix}-${namePrefix}-${randomSuffix}`;
+}
+
+
+export async function createCategory(formData: FormData) {
+  const session = await getAdminSession();
+  
+  try {
+    if (!session) {
+      throw new Error("You must be logged in to create a category");
+    }
+    const supabase = createAdminClient();
+
+    const title = formData.get('title') as string;
+    const description = (formData.get('description') as string) || null;
+    const image = formData.get('image') as File;
+    
+    const is_active = formData.get('isActive') === 'true';
+
+    const parentIdRaw = formData.get('parentId') as string;
+    const parent_id = parentIdRaw && parentIdRaw !== 'null' ? Number(parentIdRaw) : null;
+
+    if (!title || !image) {
+      return { success: false, error: 'Title and image are required.' };
+    }
+
+    // 1. Generate slug from title
+    const slug = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    // 2. Check if a category with this slug already exists
+    const { data: existingCategory } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', slug)
+      .maybeSingle();
+
+    if (existingCategory) {
+      return { 
+        success: false, 
+        error: `The category "${title}" already exists. Please use a different name.` 
+      };
+    }
+
+    // 3. Upload image to Supabase Storage bucket ('categories')
+    const fileExt = image.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+    const filePath = `categories/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('categories')
+      .upload(filePath, image, {
+        cacheControl: '3600',
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error('Storage Upload Error:', uploadError.message);
+      return { success: false, error: 'Failed to upload category image.' };
+    }
+
+    // 4. Get Public URL for the uploaded image
+    const { data: urlData } = supabase.storage
+      .from('categories')
+      .getPublicUrl(filePath);
+
+    const imageUrl = urlData.publicUrl;
+
+    // 5. Insert row into 'categories' table
+    const { data, error: dbError } = await supabase
+      .from('categories')
+      .insert({
+        name: title,
+        slug,
+        description,
+        imageUrl,
+        is_active,
+        parent_id,
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      // Fallback check for Postgres unique constraint (code 23505)
+      if (dbError.code === '23505' || dbError.message.includes('categories_slug_unique')) {
+        return { 
+          success: false, 
+          error: `The category "${title}" already exists.` 
+        };
+      }
+      
+      console.error('Database Insert Error:', dbError.message);
+      return { success: false, error: dbError.message };
+    }
+
+    revalidatePath('/admin/categories');
+
+    return { success: true, category: data };
+  } catch (error: any) {
+    console.error('Unexpected Error:', error);
+    return { success: false, error: error.message || 'An unexpected error occurred.' };
+  }
+}
+
+
+// update category
+export async function updateCategory(formData: FormData) {
+  const session =await getAdminSession()
+  
+  try {
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
+    const supabase = createAdminClient();
+
+    const idRaw = formData.get('id') as string;
+    const title = formData.get('title') as string;
+    const description = (formData.get('description') as string) || null;
+    const image = formData.get('image') as File | null;
+    
+    // Parse boolean from string "true" / "false"
+    const is_active = formData.get('isActive') === 'true';
+
+    // Parse string ID into integer, or null if "null" / missing / "none"
+    const parentIdRaw = formData.get('parentId') as string;
+    const parent_id = parentIdRaw && parentIdRaw !== 'null' && parentIdRaw !== '' ? Number(parentIdRaw) : null;
+
+    if (!idRaw) {
+      return { success: false, error: 'Category ID is required for updating.' };
+    }
+
+    if (!title) {
+      return { success: false, error: 'Title is required.' };
+    }
+
+    const id = Number(idRaw);
+
+    // 1. Generate slug from updated title
+    const slug = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    // 2. Prepare payload with fields that always update
+    const updatePayload: Record<string, any> = {
+      name: title,
+      slug,
+      description,
+      is_active,
+      parent_id,
+    };
+
+    // 3. Upload new image if provided
+    if (image && image.size > 0) {
+      const fileExt = image.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+      const filePath = `categories/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('categories')
+        .upload(filePath, image, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (uploadError) {
+        console.error('Storage Upload Error:', uploadError.message);
+        return { success: false, error: 'Failed to upload category image.' };
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('categories')
+        .getPublicUrl(filePath);
+
+      updatePayload.imageUrl = urlData.publicUrl;
+    }
+
+    // 4. Update row in 'categories' database table
+    const { data, error: dbError } = await supabase
+      .from('categories')
+      .update(updatePayload)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('Database Update Error:', dbError.message);
+      return { success: false, error: dbError.message };
+    }
+
+    revalidatePath('/admin/categories');
+
+    return { success: true, category: data };
+  } catch (error: any) {
+    console.error('Unexpected Error:', error);
+    return { success: false, error: error.message || 'An unexpected error occurred.' };
+  }
+}
+
+/// creating
+export async function createProduct(formData: FormData) {
+  const session = await getAdminSession()
+  
+  try {
+    if (!session) {
+      throw new Error("You must be logged in to create a product")
+    }
+    const supabase = createAdminClient();
+
+    const name = formData.get('name') as string;
+    const brand = formData.get('brand') as string;
+    const category_id = formData.get('category_id') as string;
+    const short_description = (formData.get('short_description') as string) || null;
+    const description = formData.get('description') as string;
+    const unit = (formData.get('unit') as string) || 'pcs';
+    
+    const is_active = formData.get('is_active') === 'true';
+    const is_best_seller = formData.get('is_best_seller') === 'true';
+    const is_new = formData.get('is_new') === 'true';
+
+    const specificationsRaw = formData.get('specifications') as string;
+    const specifications = specificationsRaw ? JSON.parse(specificationsRaw) : {};
+
+    const variantFieldsRaw = formData.get('variantFields') as string;
+    const variantFields = variantFieldsRaw ? JSON.parse(variantFieldsRaw) : [];
+
+    const variantsRaw = formData.get('variants') as string;
+    const variants = variantsRaw ? JSON.parse(variantsRaw) : [];
+
+    if (!name || !brand || !category_id || !description || variants.length === 0) {
+      return { success: false, error: 'Required fields or variants missing.' };
+    }
+
+    const slug = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    // 1. Insert Base Product into 'product' table
+    const { data: productData, error: productError } = await supabase
+      .from('product')
+      .insert({
+        name,
+        slug,
+        brand,
+        category_id: Number(category_id),
+        short_description,
+        description,
+        unit,
+        specifications,
+        is_active,
+        is_best_seller,
+        is_new,
+      })
+      .select()
+      .single();
+
+    if (productError || !productData) {
+      console.error('Database Product Insert Error:', productError?.message);
+      return { success: false, error: productError?.message || 'Failed to create base product.' };
+    }
+
+    const productId = productData.id;
+
+    // 2. Insert Dynamic Fields into 'product_variant_fields'
+    if (variantFields.length > 0) {
+      const fieldsToInsert = variantFields.map((field: any, index: number) => ({
+        product_id: productId,
+        field_name: field.field_name,
+        field_key: field.field_key,
+        field_type: field.field_type,
+        options: field.options || [],
+        is_required: field.is_required ?? false,
+        sort_order: index + 1,
+      }));
+      await supabase.from('product_variant_fields').insert(fieldsToInsert);
+    }
+
+    // 3. Process and Insert Variations into 'product_variants'
+    const processedVariants = [];
+    for (let i = 0; i < variants.length; i++) {
+      const v = variants[i];
+      let imageUrl = v.image_url || null;
+
+      const variantImageFile = formData.get(`variant_image_${i}`) as File | null;
+      if (variantImageFile && variantImageFile.size > 0) {
+        const fileExt = variantImageFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+        const filePath = `products/variants/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('product')
+          .upload(filePath, variantImageFile, { cacheControl: '3600', upsert: false });
+
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage
+            .from('product')
+            .getPublicUrl(filePath);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+
+      const sku = (v.sku && v.sku.trim() !== '') ? v.sku : generateAutoSku(brand, name);
+
+      processedVariants.push({
+        product_id: productId,
+        sku,
+        price: Number(v.price),
+        discount_price: v.discount_price ? Number(v.discount_price) : null,
+        unit,
+        stock_quantity: Number(v.stock_quantity || 0),
+        stock_status: v.stock_status || 'In Stock',
+        description: v.description || null,
+        specifications: v.specifications || {},
+        is_active: v.is_active ?? true,
+        attributes: v.attributes || {},
+        image_url: imageUrl,
+      });
+    }
+
+    const { error: variantsError } = await supabase
+      .from('product_variants')
+      .insert(processedVariants);
+
+    if (variantsError) {
+      console.error('Product Variants Insert Error:', variantsError.message);
+      await supabase.from('product').delete().eq('id', productId);
+      return { success: false, error: variantsError.message };
+    }
+
+    revalidatePath('/admin/categories');
+    return { success: true, product: productData };
+  } catch (error: any) {
+    console.error('Unexpected Error:', error);
+    return { success: false, error: error.message || 'An unexpected error occurred.' };
+  }
+}
+
+export async function updateProduct(formData: FormData) {
+  const session = await getAdminSession()
+  
+  try {
+    if (!session) {
+      throw new Error("You must be logged in to update a product")
+    }
+    const supabase = createAdminClient();
+
+    const id = formData.get('id') as string;
+    const name = formData.get('name') as string;
+    const brand = formData.get('brand') as string;
+    const category_id = formData.get('category_id') as string;
+    const short_description = (formData.get('short_description') as string) || null;
+    const description = formData.get('description') as string;
+    const unit = (formData.get('unit') as string) || 'pcs';
+
+    const is_active = formData.get('is_active') === 'true';
+    const is_best_seller = formData.get('is_best_seller') === 'true';
+    const is_new = formData.get('is_new') === 'true';
+
+    const specificationsRaw = formData.get('specifications') as string;
+    const specifications = specificationsRaw ? JSON.parse(specificationsRaw) : {};
+
+    const variantFieldsRaw = formData.get('variantFields') as string;
+    const variantFields = variantFieldsRaw ? JSON.parse(variantFieldsRaw) : [];
+
+    const variantsRaw = formData.get('variants') as string;
+    const variants = variantsRaw ? JSON.parse(variantsRaw) : [];
+
+    if (!id || !name || !brand || !category_id || !description) {
+      return { success: false, error: 'Required fields missing for update.' };
+    }
+
+    const slug = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    // 1. Update Base Product
+    const { error: updateError } = await supabase
+      .from('product')
+      .update({
+        name,
+        slug,
+        brand,
+        category_id: Number(category_id),
+        short_description,
+        description,
+        unit,
+        specifications,
+        is_active,
+        is_best_seller,
+        is_new,
+      })
+      .eq('id', id);
+
+    if (updateError) {
+      return { success: false, error: updateError.message };
+    }
+
+    // 2. Sync Dynamic Field Definitions
+    await supabase.from('product_variant_fields').delete().eq('product_id', id);
+    if (variantFields.length > 0) {
+      const fieldsToInsert = variantFields.map((field: any, index: number) => ({
+        product_id: id,
+        field_name: field.field_name,
+        field_key: field.field_key,
+        field_type: field.field_type,
+        options: field.options || [],
+        is_required: field.is_required ?? false,
+        sort_order: index + 1,
+      }));
+      await supabase.from('product_variant_fields').insert(fieldsToInsert);
+    }
+
+    // 3. Sync Variants (Track submitted IDs to clean up deleted variant rows)
+    const submittedVariantIds = variants.filter((v: any) => v.id).map((v: any) => v.id);
+    if (submittedVariantIds.length > 0) {
+      await supabase.from('product_variants').delete().eq('product_id', id).not('id', 'in', `(${submittedVariantIds.join(',')})`);
+    } else {
+      await supabase.from('product_variants').delete().eq('product_id', id);
+    }
+
+    for (let i = 0; i < variants.length; i++) {
+      const v = variants[i];
+      let imageUrl = v.image_url || null;
+
+      const variantImageFile = formData.get(`variant_image_${i}`) as File | null;
+      if (variantImageFile && variantImageFile.size > 0) {
+        const fileExt = variantImageFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+        const filePath = `products/variants/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('product')
+          .upload(filePath, variantImageFile, { cacheControl: '3600', upsert: false });
+
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage
+            .from('product')
+            .getPublicUrl(filePath);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+
+      const sku = (v.sku && v.sku.trim() !== '') ? v.sku : generateAutoSku(brand, name);
+
+      const variantPayload = {
+        product_id: id,
+        sku,
+        price: Number(v.price),
+        discount_price: v.discount_price ? Number(v.discount_price) : null,
+        unit,
+        stock_quantity: Number(v.stock_quantity || 0),
+        stock_status: v.stock_status || 'In Stock',
+        description: v.description || null,
+        specifications: v.specifications || {},
+        is_active: v.is_active ?? true,
+        attributes: v.attributes || {},
+        image_url: imageUrl,
+      };
+
+      if (v.id) {
+        await supabase.from('product_variants').update(variantPayload).eq('id', v.id);
+      } else {
+        await supabase.from('product_variants').insert(variantPayload); // Note: Ensure valid table name syntax
+      }
+    }
+
+    revalidatePath('/admin/categories');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Unexpected Update Error:', error);
+    return { success: false, error: error.message || 'An unexpected error occurred.' };
+  }
+}
+
+export async function deleteCategoryById(id:number) {
+  const session =await getAdminSession()
+  
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
+  const supabase = createAdminClient();
+
+  // 1. Check if this category has any subcategories (where parent_id matches this id)
+  const { data: subcategories, error: subcategoryError } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('parent_id', id);
+
+  if (subcategoryError) {
+    throw new Error(`Failed to check subcategories: ${subcategoryError.message}`);
+  }
+
+  if (subcategories && subcategories.length > 0) {
+    throw new Error('Cannot delete category: It contains one or more subcategories.');
+  }
+
+  // 2. Check if this category has any associated products
+  const { data: products, error: productError } = await supabase
+    .from('product')
+    .select('id')
+    .eq('category_id', id); // Adjust 'category_id' if your foreign key column in 'product' table is named differently
+
+  if (productError) {
+    throw new Error(`Failed to check associated products: ${productError.message}`);
+  }
+
+  if (products && products.length > 0) {
+    throw new Error('Cannot delete category: It has existing products associated with it.');
+  }
+
+  // 3. Delete the category since both checks passed
+  const { data, error: deleteError } = await supabase
+    .from('categories')
+    .delete()
+    .eq('id', id)
+    .select();
+
+  if (deleteError) {
+    throw new Error(`Failed to delete category: ${deleteError.message}`);
+  }
+
+  revalidatePath('/admin/categories');
+
+  return { success: true, deletedCategory: data };
+}
+
+
+export async function deleteProductById(id:number) {
+   const session =await getAdminSession()
+  
+    if(!session){
+      throw new Error("You must be logged in to create a category")
+    }
+    
+    const supabase = createAdminClient();
+
+    const {data,error:deleteError}=await supabase
+      .from("product")
+      .delete()
+      .eq("id",id)
+      .select();
+
+    if (deleteError) {
+    throw new Error(`Failed to delete category: ${deleteError.message}`);
+  }
+
+  revalidatePath('/admin/categories');
+
+  return { success: true, deletedProduct: data };
+
+}

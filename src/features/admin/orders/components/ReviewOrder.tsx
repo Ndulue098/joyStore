@@ -11,17 +11,16 @@ import {
 } from "@/components/ui/dialog";
 import {
   Select,
-  SelectContent,
+  SelectContent, 
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Layers, Loader2, User, Phone, Calendar, FileText } from "lucide-react";
-import { getOrderById, updateOrderNegotiation } from "../action"; // Adjust action imports
+import { getOrderById, updateOrderNegotiation, deleteOrder } from "../action";
 import { formatPickupDate } from "@/src/features/lib/formatPickupDate";
 import { OrderItemType, OrderType } from "@/src/types/types";
-
-
+import ConfirmDel from "@/src/features/admin/categories/components/ConfirmDel";
 
 interface ReviewOrderProps {
   children: React.ReactNode;
@@ -46,20 +45,17 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
       setLoading(true);
       try {
         const data = await getOrderById(id);
-        const {orderItems,...restData}=data 
+        const { orderItems, ...restData } = data;
         if (data) {
-          console.log("order item data:: ", data);
-          setOrder({...restData,order_items:orderItems});
+          setOrder({ ...restData, order_items: orderItems });
           setStatus(data.status || "draft");
           
-          // Initial discounts start at 0
           const initialDiscounts: Record<string, number> = {};
           data.order_items?.forEach((item: OrderItemType) => {
-            initialDiscounts[item.id] = 0;
+            initialDiscounts[item.id] = item.discountnumber || 0;
           });
           setDiscounts(initialDiscounts);
 
-          // Default agreed total to current agreed_total or estimated_total
           setAgreedTotal(data.agreed_total ?? data.estimated_total ?? 0);
         }
       } catch (error) {
@@ -72,18 +68,23 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
     fetchDetails();
   }, [open, id]);
 
-  // Calculate dynamic subtotal for an item based on percentage discount
   const calculateSubtotal = (unitPrice: number, qty: number, discountPct: number) => {
     const rawTotal = unitPrice * qty;
     const discountAmount = (rawTotal * (discountPct || 0)) / 100;
     return Math.max(0, rawTotal - discountAmount);
   };
 
-  // Handle discount percent change per line item and recalculate total
+  // Handle discount percent change per line item and auto-complete status if discounted
   const handleDiscountChange = (itemId: string, percent: number) => {
     const safePercent = Math.min(100, Math.max(0, percent || 0));
     const updatedDiscounts = { ...discounts, [itemId]: safePercent };
     setDiscounts(updatedDiscounts);
+
+    // Check if any item now has a discount greater than 0
+    const hasAnyDiscount = Object.values(updatedDiscounts).some((pct) => pct > 0);
+    if (hasAnyDiscount) {
+      setStatus("completed"); // <--- Automatically mark as completed when a discount is set
+    }
 
     // Auto-recalculate agreed total sum across all items
     if (order?.order_items) {
@@ -101,7 +102,6 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
 
     startTransition(async () => {
       try {
-        // Map line items with their applied discounts for the server action
         const itemsPayload = order.order_items.map((item) => ({
           itemId: item.id,
           unitPrice: item.unit_price,
@@ -130,7 +130,7 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger >{children}</DialogTrigger>
+      <DialogTrigger>{children}</DialogTrigger>
 
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-6 rounded-xl">
         <DialogHeader>
@@ -157,11 +157,9 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
           <div className="space-y-3 pt-2">
             {/* CUSTOMER INFORMATION CARD */}
             <h4 className="text-sm font-bold w-full uppercase tracking-wider text-neutral-800 flex items-center justify-center gap-1.5">
-              {/* <User className="h-3.5 w-3.5 text-neutral-400" /> */}
               Customer Information
             </h4>
             <div className="p-4 rounded-mc border border-neutral-200 bg-neutral-50/70 space-y-2.5">
-
               <div className="flex flex-col gap-3 text-xs">
                 <div className="flex items-center gap-2">
                   <User className="h-3.5 w-3.5 text-neutral-400" /> 
@@ -218,10 +216,35 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
                       currentDiscount
                     );
 
+                    const attributes =
+                      typeof item.attributes === "string"
+                        ? JSON.parse(item.attributes)
+                        : item.attributes || {};
+                    const attributeEntries = Object.entries(attributes);
+
                     return (
                       <tr key={item.id} className="hover:bg-neutral-50/60">
-                        <td className="py-3 px-3 font-medium text-neutral-900 max-w-[200px] truncate">
-                          {item.product_name}
+                        <td className="py-3 px-3 font-medium text-neutral-900 max-w-[200px]">
+                          <div className="flex flex-col space-y-1">
+                            <span className="truncate">{item.product_name}</span>
+
+                            {attributeEntries.length > 0 && (
+                              <div className="flex flex-wrap items-center gap-1">
+                                {attributeEntries.map(([key, value]) => {
+                                  const stringVal = value === null || value === undefined ? 'None' : String(value);
+                                  return (
+                                    <span
+                                      key={key}
+                                      className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-neutral-100 text-neutral-600 border border-neutral-200/60"
+                                    >
+                                      <span className="text-neutral-400 capitalize mr-1">{key}:</span>
+                                      <span className="font-semibold">{stringVal}</span>
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
                         </td>
                         <td className="py-3 px-2 text-center font-mono">{item.quantity}</td>
                         <td className="py-3 px-3 text-right font-mono text-neutral-500">
@@ -252,7 +275,6 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
 
             {/* STATUS & AGREED TOTAL CONTROLS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              {/* STATUS SELECT */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-neutral-700">
                   Update Status
@@ -264,14 +286,12 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
                   <SelectContent>
                     <SelectItem value="draft">Draft</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
-                    {/* <SelectItem value="confirmed">Confirmed</SelectItem> */}
                     <SelectItem value="completed">Completed</SelectItem>
                     <SelectItem value="cancelled">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              {/* AGREED TOTAL INPUT */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-neutral-700 flex items-center justify-between">
                   <span>Agreed Total (₦)</span>
@@ -290,15 +310,27 @@ export default function ReviewOrder({ children, id }: ReviewOrderProps) {
               </div>
             </div>
 
-            {/* SUBMIT BUTTON */}
+            {/* SUBMIT BUTTONS & CONFIRMATION WRAPPER */}
             <div className="pt-2 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="px-4 py-2 text-xs font-semibold text-neutral-600 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors cursor-pointer"
+              <ConfirmDel
+                name={`Order #${order.public_code || id}`}
+                tablename="order"
+                onDelete={async () => {
+                  const res = await deleteOrder(id);
+                  if (res.success) {
+                    setOpen(false);
+                  }
+                  return res;
+                }}
               >
-                Cancel
-              </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 text-xs font-semibold text-neutral-600 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors cursor-pointer"
+                >
+                  Cancel Order
+                </button>
+              </ConfirmDel>
+
               <button
                 type="button"
                 disabled={isPending}

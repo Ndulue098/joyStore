@@ -68,6 +68,6 @@ export default async function CategoriesPage({}) {
 
       {/* Product Form Modal / Sheet Container */}
       <ProductForm />
-    </div>
+    </div> 
   );
 }

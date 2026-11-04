@@ -32,7 +32,7 @@ export default function ReviewItem({item}: ReviewItemProps) {
         </div> 
 
         <div className="font-bold text-neutral-900 text-right whitespace-nowrap">
-         {item.total*item.quantity} 
+         ₦{Number(item.total * item.quantity).toLocaleString()}
         </div>
     </div>
   );

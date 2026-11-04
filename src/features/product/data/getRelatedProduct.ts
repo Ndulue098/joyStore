@@ -1,9 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { ProductsType } from "@/src/types/types";
 
-/**
- * Fetch related products under the same category_id, excluding the current product
- */
 export async function getRelatedProducts(
   categoryId: number | null,
   currentProductId: number | string,
@@ -22,7 +19,9 @@ export async function getRelatedProducts(
         id,
         name,
         slug
-      )
+      ),
+      product_variants(*),
+      product_variant_fields(*)
     `)
     .eq('category_id', categoryId)
     .eq('is_active', true)
@@ -35,4 +34,4 @@ export async function getRelatedProducts(
   }
 
   return (data as unknown as ProductsType[]) ?? [];
-} 
+}

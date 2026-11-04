@@ -22,6 +22,8 @@ export default async function ProductGrid({ searchParams }: ProductGridProps) {
     limit,
   });
 
+  console.log("products", products);
+
   // 3. Compute total pages dynamically
   const totalPages = Math.ceil(totalCount / limit);
 

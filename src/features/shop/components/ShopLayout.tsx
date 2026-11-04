@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import { ShopSkeleton } from "./ShopSkeleton";
 
 export default async function ShopLayout({
-  
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };

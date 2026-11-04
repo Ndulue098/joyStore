@@ -15,7 +15,7 @@ interface FormValue{
 
 // interface ItemValue{
 //     // id: number;
-//     // name: string;
+//     // name: string; 
 //     // price: number;
 //     // quantity: number;
 //     // totalPrice:number
@@ -30,6 +30,8 @@ export async function submitOrder(formData:FormValue,items:CartType[],totalPrice
     if (!items || items.length===0){ 
         return { success: false, error: 'Your cart is empty.' };
     }
+
+    console.log("items-----> ",items)
 
 
     // 2. Format pickup date (YYYY-MM-DD)
@@ -66,12 +68,22 @@ export async function submitOrder(formData:FormValue,items:CartType[],totalPrice
     }
 
     // Insert Items
-    const orderItemsData = items.map((item) => ({
+   /*  const orderItemsData = items.map((item) => ({
         order_id: order.id,
         product_id: item.id,
         product_name: item.name,
         unit_price: item.price,
         quantity: item.quantity,
+    })); */
+    const orderItemsData = items.map((item) => ({
+        order_id: order.id,
+        product_id: item.baseProductId, // Base product ID
+        product_name: item.name,
+        unit_price: item.price,
+        quantity: item.quantity,
+        // subtotal: item.price * item.quantity, 
+        attributes: item.attributes || {},
+        images: item.imageUrl,
     }));
 
     const { error: itemsError } = await supabase

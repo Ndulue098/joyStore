@@ -105,4 +105,4 @@ export default function ConfirmDel({children,name,tablename,onDelete}: ConfirmDe
       </AlertDialogContent>
     </AlertDialog>
   );
-}
+} 

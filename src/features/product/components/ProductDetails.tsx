@@ -2,76 +2,90 @@
 
 import { CheckCircle2, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { useCartContext } from "../../context/CartContext";
-import { useState } from "react";
-import { CartItem, ProductCategoty } from "@/src/types/types";
+import { useState, useEffect } from "react";
+import { ProductsType, CartItem } from "@/src/types/types";
 
 interface ProductDetailsProps {
-  brand: string | null | undefined;
-  sku: string | undefined;
-  name: string;
-  description: string;
-  unit: string | undefined;
-  specArray: [string, string][];
-  price: number;
-  id: number;
-  slug: string;
-  category_id: number;
-  short_description: string | undefined;
-  category?: ProductCategoty | undefined;
-  image:string | null | undefined
-}
+  product: ProductsType;
+  onImageChange?: (newImage: string | null | undefined) => void;
+} 
 
-export default function ProductDetails({
-  brand,
-  sku,
-  name,
-  description,
-  unit,
-  specArray = [],
-  price,
-  id,
-  slug,
-  category_id,
-  short_description,
-  category,
-  image
-}: ProductDetailsProps) {
-  const { cart, handleAddToCart, isInCart, removeItemFromCart, updateQuantity } =
-    useCartContext();
+export default function ProductDetails({ product, onImageChange }: ProductDetailsProps) {
+  const { cart, handleAddToCart, isInCart, removeItemFromCart, updateQuantity } = useCartContext();
 
+  const variants = product.product_variants || [];
+  const [selectedVariantIndex, setSelectedVariantIndex] = useState<number>(0);
   const [localQuantity, setLocalQuantity] = useState(1);
-  const inCart = isInCart(id);
 
-  // Find current cart item quantity if already added
-  const cartItem = cart?.find((item) => item.id === id);
+  const currentVariant = variants[selectedVariantIndex] || null;
+
+  // Active item identifiers based on selected variant or base product fallback
+  const activeId = currentVariant ? currentVariant.id : product.id;
+  const activeSku = currentVariant?.sku || product.sku;
+  const activePrice = currentVariant ? currentVariant.price : product.price;
+  const activeImage = currentVariant?.image_url || product.imageUrl;
+
+  // Sync image change to parent ProductPage hero image component
+  useEffect(() => {
+    if (onImageChange) {
+      onImageChange(activeImage);
+    }
+  }, [activeImage, onImageChange]); 
+
+  const inCart = isInCart(activeId);
+  const cartItem = cart?.find((item) => item.id === activeId);
   const currentQuantity = inCart ? cartItem?.quantity || 1 : localQuantity;
+
+  // Extract unique attribute keys (e.g., ['gang', 'type'])
+  const attributeKeys = Array.from(
+    new Set(
+      variants.flatMap((v) => (v.attributes ? Object.keys(v.attributes) : []))
+    )
+  );
+
+  function handleAttributeClick(key: string, value: any) {
+    const matchingIndex = variants.findIndex((v) => {
+      const attrVal = v.attributes ? v.attributes[key] : null;
+      return attrVal === value;
+    });
+
+    if (matchingIndex !== -1) {
+      setSelectedVariantIndex(matchingIndex);
+    }
+  }
 
   function handleAdd() {
     const productData: CartItem = {
-      id,
-      category_id,
-      name,
-      slug,
-      sku,
-      brand,
-      description,
-      short_description,
-      price,
-      category:category?.name,
-      total: price,
+      id: product.id,                 
+      variantId: currentVariant?.id,   
+      category_id: product.category_id,
+      name: `${product.name} ${currentVariant?.sku ? `(${currentVariant.sku})` : ''}`,
+      slug: product.slug,
+      sku: activeSku,
+      brand: product.brand,
+      description: product.description,
+      short_description: product.short_description,
+      price: activePrice,
+      category: product?.category?.name, 
+      total: activePrice,
       quantity: localQuantity,
-      imageUrl:image  
+      imageUrl: activeImage,
+      attributes: currentVariant?.attributes || {}, 
     };
     handleAddToCart(productData, localQuantity);
   }
 
   function handleQuantityChange(delta: number) {
     if (inCart) {
-      updateQuantity(id, currentQuantity + delta);
+      updateQuantity(activeId, currentQuantity + delta);
     } else {
       setLocalQuantity((prev) => Math.max(1, prev + delta));
     }
   }
+
+  // Specifications breakdown
+  const baseSpecs = product.specifications ? Object.entries(product.specifications) : [];
+  const variantSpecs = currentVariant?.specifications ? Object.entries(currentVariant.specifications) : [];
 
   return (
     <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
@@ -79,31 +93,100 @@ export default function ProductDetails({
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-2 text-xs">
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 font-semibold uppercase tracking-wider text-amber-800">
-            {brand || "Generic"}
+            {product.brand || "Generic"}
           </span>
-          {sku && (
+          {activeSku && (
             <span className="text-neutral-400 font-mono text-[11px] tracking-tight">
-              SKU: <strong className="text-neutral-600 font-semibold">{sku}</strong>
+              SKU: <strong className="text-neutral-600 font-semibold">{activeSku}</strong>
             </span>
           )}
         </div>
+        <div className="flex items-center justify-between gap-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight leading-tight">
+            {product.name}
+          </h1>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight leading-tight">
-          {name}
-        </h1>
+          {product.colors && product.colors.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1 pt-0.5">
+                <span className="text-[10px] text-neutral-400 font-medium mr-0.5">Colors:</span>
+                {product.colors.map((colorName, idx) => (
+                  <span
+                  key={idx}
+                  style={{ backgroundColor: colorName.toLowerCase() }}
+                  className="inline-flex rounded-full items-center w-4 h-4 text-[9px] font-medium bg-neutral-100 text-neutral-700 border border-neutral-200"
+                  >
+                    {/* {colorName} */}
+                  </span>
+                ))}
+              </div>
+            )}
+        </div>
       </div>
 
-      {/* Product Description */}
-      {description && (
-        <div className="space-y-1.5">
-          <h3 className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-            Product Description
-          </h3>
-          <p className="text-neutral-600 text-sm leading-relaxed font-normal">
-            {description}
-          </p>
+      {/* Interactive Variant Attribute Selectors */}
+      {attributeKeys.length > 0 && (
+        <div className="space-y-3 pt-1">
+          {attributeKeys.map((key) => {
+            const uniqueValues = Array.from(
+              new Set(variants.map((v) => (v.attributes ? v.attributes[key] : null)))
+            );
+
+            return (
+              <div key={key} className="space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-500 capitalize">
+                  {key}:
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  {uniqueValues.map((val) => {
+                    const stringVal = val === null || val === undefined ? 'None' : String(val);
+                    const isSelected = currentVariant?.attributes?.[key] === val;
+
+                    return (
+                      <button
+                        key={`${key}-${stringVal}`} 
+                        type="button"
+                        onClick={() => handleAttributeClick(key, val)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer ${
+                          isSelected
+                            ? "bg-neutral-900 text-white border-neutral-900 shadow-sm"
+                            : "bg-white text-neutral-700 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"
+                        }`}
+                      >
+                        {stringVal}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
+
+      {/* Descriptions (Both General & Variant-Specific) */}
+      <div className="space-y-4">
+        {product.description && (
+          <div className="space-y-1">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+              Overview Description
+            </h3>
+            <p className="text-neutral-600 text-sm leading-relaxed">
+              {product.description}
+            </p>
+          </div>
+        )}
+
+        {currentVariant?.description && (
+          <div className="p-3.5 rounded-xl bg-amber-50/50 border border-amber-200/60 space-y-1">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-amber-800">
+              Variant Note / Details
+            </h3>
+            <p className="text-neutral-700 text-xs sm:text-sm leading-relaxed">
+              {currentVariant.description}
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* Pricing & Quantity Selector Card */}
       <div className="p-4 sm:p-5 rounded-2xl border border-neutral-200/80 bg-neutral-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
@@ -113,11 +196,11 @@ export default function ProductDetails({
           </span>
           <div className="flex items-baseline gap-1">
             <p className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-900 tracking-tight">
-              ₦{Number(price).toLocaleString()}
+              ₦{Number(activePrice).toLocaleString()}
             </p>
-            {unit && (
+            {product.unit && (
               <span className="text-xs font-medium text-neutral-500">
-                / {unit}
+                / {product.unit}
               </span>
             )}
           </div>
@@ -134,7 +217,6 @@ export default function ProductDetails({
               disabled={currentQuantity <= 1}
               onClick={() => handleQuantityChange(-1)}
               className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
-              aria-label="Decrease quantity"
             >
               <Minus className="w-4 h-4" />
             </button>
@@ -145,7 +227,6 @@ export default function ProductDetails({
               type="button"
               onClick={() => handleQuantityChange(1)}
               className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 transition-colors cursor-pointer"
-              aria-label="Increase quantity"
             >
               <Plus className="w-4 h-4" />
             </button>
@@ -159,7 +240,7 @@ export default function ProductDetails({
           type="button"
           disabled={inCart}
           onClick={handleAdd}
-          className={`flex-1 py-3 px-6 active:scale-[0.99] transition-all rounded-xl font-semibold flex items-center justify-center gap-2.5 shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 ${
+          className={`flex-1 py-3 px-6 active:scale-[0.99] transition-all rounded-xl font-semibold flex items-center justify-center gap-2.5 shadow-xs cursor-pointer ${
             inCart
               ? "bg-emerald-600 text-white cursor-default opacity-95"
               : "bg-neutral-900 hover:bg-neutral-800 text-white shadow-sm hover:shadow-md"
@@ -178,40 +259,52 @@ export default function ProductDetails({
           )}
         </button>
 
-        {inCart? <button
+        {inCart && (
+          <button
             type="button"
-            onClick={() => removeItemFromCart(id)}
-            className="py-3 px-5 active:scale-[0.99] transition-all rounded-xl font-semibold flex items-center justify-center gap-2 border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:border-rose-300 shadow-2xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
+            onClick={() => removeItemFromCart(activeId)}
+            className="py-3 px-5 active:scale-[0.99] transition-all rounded-xl font-semibold flex items-center justify-center gap-2 border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:border-rose-300 shadow-2xs cursor-pointer"
           >
             <Trash2 className="w-4 h-4 stroke-[2]" />
             <span>Remove Item</span>
-          </button>:null
-        }
+          </button>
+        )}
       </div>
 
-      {/* Specifications Table */}
-      {specArray.length > 0 && (
-        <div className="space-y-3 pt-2">
+      {/* Specifications (General + Variant Specific Tables) */}
+      {(baseSpecs.length > 0 || variantSpecs.length > 0) && (
+        <div className="space-y-4 pt-2">
           <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-900 pb-2 border-b border-neutral-200">
             Specifications
           </h3>
-          <div className="rounded-xl border border-neutral-200/80 overflow-hidden text-xs divide-y divide-neutral-200/60">
-            {specArray.map(([key, value], i) => (
-              <div
-                key={i}
-                className={`flex justify-between items-center px-4 py-2.5 transition-colors ${
-                  i % 2 === 0 ? "bg-neutral-50/60" : "bg-white"
-                }`}
-              >
-                <span className="font-medium text-neutral-500 capitalize">
-                  {key}
-                </span>
-                <span className="font-semibold text-neutral-900 text-right">
-                  {String(value)}
-                </span>
+
+          {baseSpecs.length > 0 && (
+            <div className="space-y-2">
+              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wide">General Specs</span>
+              <div className="rounded-xl border border-neutral-200/80 overflow-hidden text-xs divide-y divide-neutral-200/60">
+                {baseSpecs.map(([key, value], i) => (
+                  <div key={i} className={`flex justify-between items-center px-4 py-2.5 ${i % 2 === 0 ? "bg-neutral-50/65" : "bg-white"}`}>
+                    <span className="font-medium text-neutral-500 capitalize">{key}</span>
+                    <span className="font-semibold text-neutral-900 text-right">{String(value)}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {variantSpecs.length > 0 && (
+            <div className="space-y-2">
+              <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wide">Variant Specs</span>
+              <div className="rounded-xl border border-amber-200/80 overflow-hidden text-xs divide-y divide-amber-100">
+                {variantSpecs.map(([key, value], i) => (
+                  <div key={i} className={`flex justify-between items-center px-4 py-2.5 ${i % 2 === 0 ? "bg-amber-50/40" : "bg-white"}`}>
+                    <span className="font-medium text-neutral-600 capitalize">{key}</span>
+                    <span className="font-semibold text-neutral-900 text-right">{String(value)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
