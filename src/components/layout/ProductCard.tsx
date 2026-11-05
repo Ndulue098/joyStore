@@ -18,7 +18,6 @@ function parseProductColors(colorsInput: any): string[] {
       const parsed = JSON.parse(colorsInput);
       if (Array.isArray(parsed)) return parsed.map(String);
     } catch {
-      // If it's a comma-separated string like "Black, White, Silver"
       return colorsInput.split(',').map((s) => s.trim()).filter(Boolean);
     }
   }
@@ -26,9 +25,6 @@ function parseProductColors(colorsInput: any): string[] {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-
-  console.log("Rendering ProductCard for product:", product);
-
   const { handleAddToCart } = useCartContext();
   const variants = product.product_variants || [];
 
@@ -80,11 +76,14 @@ export function ProductCard({ product }: ProductCardProps) {
   }
 
   function handleClick() {
+    const variantDisplayName = currentVariant?.name || currentVariant?.sku || '';
+    const fullProductName = `${product.name}${variantDisplayName ? ` - ${variantDisplayName}` : ''}`;
+
     const productData = {
       id: product.id,
       variantId: currentVariant?.id,
       category_id: product.category_id,
-      name: `${product.name} ${currentVariant?.sku ? `(${currentVariant.sku})` : ''}`,
+      name: fullProductName,
       slug: product.slug,
       sku: currentVariant?.sku || product.sku,
       brand: product.brand,
@@ -95,6 +94,7 @@ export function ProductCard({ product }: ProductCardProps) {
       total: displayPrice,
       imageUrl: displayImage,
       attributes: currentVariant?.attributes || {},
+      class_name: product.class_name || '',
     };
  
     handleAddToCart(productData, 1);
@@ -108,7 +108,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group relative z-0 flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200/80 bg-white shadow-xs transition-all duration-200 hover:border-neutral-300 hover:shadow-md">
       
-      {/* 3. Image Container with Controlled State Sync */}
+      {/* Image Container with Controlled State Sync */}
       <div className="relative aspect-4/3 sm:aspect-12/10 w-full overflow-hidden bg-neutral-100/80 flex items-center justify-center">
         
         {variants.length > 1 && (
@@ -177,43 +177,47 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Card Content */}
       <div className="p-3.5 sm:p-4 flex flex-col flex-1 justify-between gap-3">
         <div className="space-y-2">
-          {/* Brand & Category Header */}
+          
+          {/* Brand:xxx & Category Header */}
           <div className="flex items-center justify-between text-xs gap-2">
-            <span className="font-bold text-amber-700 tracking-wider uppercase text-[10px] truncate">
-              {product.brand || "Generic"}
+            <span className="font-bold text-amber-700 tracking-wider uppercase text-[9px] truncate">
+              brand:  
+              <span className="text-neutral-500 text-[10px] ml-0.5">
+                {product.brand || "Generic"}
+              </span>
             </span>
             <span className="text-[11px] text-neutral-400 truncate max-w-[100px] sm:max-w-[120px]">
               {product.category?.name}
-            </span>
+            </span> 
           </div>
 
-          {/* Title */}
-          <div className="flex items-center justify-between gap-1">
-
-          <Link href={`/products/${product.id}`} className="block">
-            <h3 className="text-xs sm:text-sm font-semibold text-neutral-900 line-clamp-1 leading-snug group-hover:text-amber-700 transition-colors">
-              {product.name}
-            </h3>
-          </Link>
-
-          {/* DISPLAY PRODUCT COLORS PROPERLY */}
-          {productColors.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1 pt-0.5">
-              <span className="text-[10px] text-neutral-400 font-medium mr-0.5">Colors:</span>
-              {productColors.map((colorName, idx) => (
-                <span
-                key={idx}
-                style={{ backgroundColor: colorName.toLowerCase() }}
-                className="inline-flex rounded-full items-center w-3 h-3 text-[9px] font-medium bg-neutral-100 text-neutral-700 border border-neutral-200"
-                >
-                  {/* {colorName} */}
-                </span>
-              ))}
-            </div>
-          )}
+          {/* Main Title (Variant Name primary, Product Name / Class secondary) */}
+          <div className="flex items-start justify-between gap-2">
+            <Link href={`/products/${product.id}`} className="block min-w-0 flex-1">
+              <h3 className="text-xs sm:text-sm font-semibold text-neutral-900 line-clamp-1 leading-snug group-hover:text-amber-700 transition-colors">
+                {currentVariant?.name || currentVariant?.sku || product.name}
+              </h3>
+              <p className="text-[11px] text-neutral-500 font-medium truncate mt-0.5">
+                {product.name} {product.class_name ? `/ ${product.class_name}` : ''}
+              </p>
+            </Link>
+ 
+            {/* Colors Swatches Indicator */}
+            {productColors.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1 pt-0.5 shrink-0">
+                {productColors.map((colorName, idx) => (
+                  <span
+                    key={idx}
+                    title={colorName}
+                    style={{ backgroundColor: colorName.toLowerCase() }}
+                    className="inline-flex rounded-full items-center w-3 h-3 border border-neutral-300 shadow-2xs"
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* 4. Scrollable Horizontal Attributes Carousel */}
+          {/* Scrollable Horizontal Attributes Carousel */}
           {attributeKeys.length > 0 && (
             <div className="h-7 w-full overflow-hidden">
               <div 

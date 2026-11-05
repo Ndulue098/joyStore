@@ -10,7 +10,7 @@ export default function ReviewItem({item}: ReviewItemProps) {
   return (
     <div  className="pt-3 first:pt-0 flex items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2.5 min-w-0">
-        <div className="sm:h-12 sm:w-12 h-8 w-8 shrink-0 overflow-hidden rounded-sm md:rounded-lg bg-neutral-100 border border-neutral-200">
+        <div className="sm:h-12 sm:w-12 h-8 w-8 shrink-0 overflow-hidden rounded-xs md:rounded-lg bg-neutral-100 border border-neutral-200">
              {item.imageUrl ? (
             <img
               src={item.imageUrl}
@@ -21,6 +21,25 @@ export default function ReviewItem({item}: ReviewItemProps) {
             <ImageOff className="h-full w-full  stroke-[1.5] text-neutral-300" />
           )}
         </div>
+
+        <div className="flex flex-col gap-0.5 min-w-0">
+        <div className="flex items-center gap-2">
+
+          {item.brand && (
+            <span className="flex items-center gap-1 font-bold text-neutral-400 tracking-wider uppercase text-[9px] truncate">
+              brand:  
+            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block">
+              {item.brand}
+            </span>
+            </span>
+          )} 
+          <span className="flex items-center gap-1 font-bold text-neutral-400 tracking-wider uppercase text-[9px] truncate">
+              class:
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block">
+                {item.class_name || "Generic"}
+              </span>
+          </span>
+        </div>
         <div className="min-w-0">
             <p className="font-semibold text-neutral-900 truncate">
             {item.name}
@@ -28,6 +47,7 @@ export default function ReviewItem({item}: ReviewItemProps) {
             <p className="text-neutral-500">
             {item.quantity} x {item.price}
             </p>
+        </div>
         </div>
         </div> 
 

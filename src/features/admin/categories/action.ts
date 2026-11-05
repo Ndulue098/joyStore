@@ -13,7 +13,7 @@ function generateAutoSku(brand: string, name: string): string {
 }
 
 export async function createCategory(formData: FormData) {
-  const session = await getAdminSession();
+  const session = await getAdminSession(); 
   
   try {
     if (!session) {
@@ -229,6 +229,7 @@ export async function createProduct(formData: FormData) {
     const short_description = (formData.get('short_description') as string) || null;
     const description = formData.get('description') as string;
     const unit = (formData.get('unit') as string) || 'pcs';
+    const className = (formData.get('class_name') as string) || null; // <--- Added class_name
     
     const is_active = formData.get('is_active') === 'true';
     const is_best_seller = formData.get('is_best_seller') === 'true';
@@ -268,7 +269,8 @@ export async function createProduct(formData: FormData) {
         short_description,
         description,
         unit,
-        colors, // <--- Add colors here
+        class_name: className, // <--- Added class_name to insert
+        colors,
         specifications,
         is_active,
         is_best_seller,
@@ -311,12 +313,12 @@ export async function createProduct(formData: FormData) {
         const filePath = `variants/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('productVariant') // <--- Updated to match your exact bucket name
+          .from('productVariant')
           .upload(filePath, variantImageFile, { cacheControl: '3600', upsert: false });
 
         if (!uploadError) {
           const { data: urlData } = supabase.storage
-            .from('productVariant') // <--- Updated to match your exact bucket name
+            .from('productVariant')
             .getPublicUrl(filePath);
           imageUrl = urlData.publicUrl;
         }
@@ -334,6 +336,7 @@ export async function createProduct(formData: FormData) {
 
       processedVariants.push({
         product_id: productId,
+        name: v.name || null,
         sku,
         price: Number(v.price),
         discount_price: v.discount_price ? Number(v.discount_price) : null,
@@ -382,6 +385,7 @@ export async function updateProduct(formData: FormData) {
     const short_description = (formData.get('short_description') as string) || null;
     const description = formData.get('description') as string;
     const unit = (formData.get('unit') as string) || 'pcs';
+    const className = (formData.get('class_name') as string) || null; // <--- Added class_name
 
     const is_active = formData.get('is_active') === 'true';
     const is_best_seller = formData.get('is_best_seller') === 'true';
@@ -421,6 +425,7 @@ export async function updateProduct(formData: FormData) {
         short_description,
         description,
         unit,
+        class_name: className, // 
         colors,
         specifications,
         is_active,
@@ -467,12 +472,12 @@ export async function updateProduct(formData: FormData) {
         const filePath = `variants/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('productVariant') // <--- Updated to match your exact bucket name
+          .from('productVariant')
           .upload(filePath, variantImageFile, { cacheControl: '3600', upsert: false });
 
         if (!uploadError) {
           const { data: urlData } = supabase.storage
-            .from('productVariant') // <--- Updated to match your exact bucket name
+            .from('productVariant')
             .getPublicUrl(filePath);
           imageUrl = urlData.publicUrl;
         }
@@ -490,6 +495,7 @@ export async function updateProduct(formData: FormData) {
 
       const variantPayload = {
         product_id: id,
+        name: v.name || null, // <--- Added variant name
         sku,
         price: Number(v.price),
         discount_price: v.discount_price ? Number(v.discount_price) : null,

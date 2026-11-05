@@ -42,7 +42,7 @@ export default function ProductDetails({ product, onImageChange }: ProductDetail
       variants.flatMap((v) => (v.attributes ? Object.keys(v.attributes) : []))
     )
   );
-
+ 
   function handleAttributeClick(key: string, value: any) {
     const matchingIndex = variants.findIndex((v) => {
       const attrVal = v.attributes ? v.attributes[key] : null;
@@ -71,6 +71,7 @@ export default function ProductDetails({ product, onImageChange }: ProductDetail
       quantity: localQuantity,
       imageUrl: activeImage,
       attributes: currentVariant?.attributes || {}, 
+      class_name: product.class_name || '',
     };
     handleAddToCart(productData, localQuantity);
   }
@@ -103,7 +104,9 @@ export default function ProductDetails({ product, onImageChange }: ProductDetail
         </div>
         <div className="flex items-center justify-between gap-1">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight leading-tight">
-            {product.name}
+            {product.name} <span className="text-[11px] text-neutral-500 font-medium tracking-wider">
+              {product.class_name ? `/ ${product.class_name}` : ''}
+            </span>
           </h1>
 
           {product.colors && product.colors.length > 0 && (

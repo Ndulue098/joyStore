@@ -86,7 +86,7 @@ export default function ProductTableRow({product,id,name,categoryList,productId}
                         className="p-1.5 rounded-md text-neutral-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                         title="Delete product"
                         >
-                        <Trash className="h-4 w-4" />
+                        <Trash className="h-4 w-4" /> 
                       </button>
                     </span>
                   </ConfirmDel>

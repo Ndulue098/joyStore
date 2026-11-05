@@ -42,6 +42,7 @@ const buildFormSchema = (isEditing: boolean) =>
     short_description: z.string().optional(),
     description: z.string().min(1, "Description is required"),
     unit: z.string().min(1, "Unit is required"),
+    className: z.string().optional(), // Added optional class name field
     is_active: z.boolean().default(true),
     is_best_seller: z.boolean().default(false),
     is_new: z.boolean().default(false),
@@ -68,6 +69,7 @@ const buildFormSchema = (isEditing: boolean) =>
     variants: z.array(
       z.object({
         id: z.any().optional(),
+        name: z.string().optional(), // Added name field to variant
         sku: z.string().optional(),
         price: z.coerce.number().min(0, "Price must be a positive number"),
         discount_price: z.coerce.number().min(0).optional(),
@@ -115,7 +117,7 @@ export default function ProductForm({
 
   const schema = useMemo(() => buildFormSchema(isEditing), [isEditing])
 
-const form = useForm({
+  const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
@@ -124,6 +126,7 @@ const form = useForm({
       short_description: "",
       description: "",
       unit: "pcs",
+      className: "",
       is_active: true,
       is_best_seller: false,
       is_new: false,
@@ -135,6 +138,7 @@ const form = useForm({
       variantFields: [],
       variants: [
         {
+          name: "",
           sku: "",
           price: 5000,
           discount_price: 0,
@@ -241,6 +245,7 @@ const form = useForm({
 
             return {
               id: v.id,
+              name: v.name || "",
               sku: v.sku || "",
               price: v.price ?? product.price ?? 5000,
               discount_price: v.discount_price ?? 0,
@@ -256,6 +261,7 @@ const form = useForm({
           })
         } else {
           parsedVariants = [{
+            name: "",
             sku: product.sku || "",
             price: product.price ?? 5000,
             discount_price: product.discount ?? 0,
@@ -278,6 +284,7 @@ const form = useForm({
           short_description: product.short_description || "",
           description: product.description || "",
           unit: product.unit || "pcs",
+          className: product.class_name || product.className || "",
           is_active: product.is_active ?? true,
           is_best_seller: product.is_best_seller ?? false,
           is_new: product.is_new ?? false,
@@ -315,6 +322,7 @@ const form = useForm({
     if (data.short_description) formData.append("short_description", data.short_description)
     formData.append("description", data.description)
     formData.append("unit", data.unit)
+    if (data.className) formData.append("class_name", data.className)
     formData.append("is_active", String(data.is_active))
     formData.append("is_best_seller", String(data.is_best_seller))
     formData.append("is_new", String(data.is_new))
@@ -335,6 +343,7 @@ const form = useForm({
 
       return {
         id: v.id || undefined,
+        name: v.name || "",
         sku: v.sku || "",
         price: v.price,
         discount_price: v.discount_price,
@@ -373,6 +382,7 @@ const form = useForm({
       short_description: "",
       description: "",
       unit: "pcs",
+      className: "",
       is_active: true,
       is_best_seller: false,
       is_new: false,
@@ -384,6 +394,7 @@ const form = useForm({
       variantFields: [],
       variants: [
         {
+          name: "",
           sku: "",
           price: 5000,
           discount_price: 0,
@@ -455,7 +466,7 @@ const form = useForm({
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               <Controller
                 name="category_id"
                 control={form.control}
@@ -485,6 +496,17 @@ const form = useForm({
                     <FieldLabel className="text-xs font-bold text-neutral-700 uppercase">Unit *</FieldLabel>
                     <Input {...field} placeholder="pcs / box / kg" className="h-10 text-sm bg-white" />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="className"
+                control={form.control}
+                render={({ field }) => (
+                  <Field>
+                    <FieldLabel className="text-xs font-bold text-neutral-700 uppercase">Class Name (Optional)</FieldLabel>
+                    <Input {...field} placeholder="e.g. Premium Series" className="h-10 text-sm bg-white" />
                   </Field>
                 )}
               />
@@ -545,11 +567,11 @@ const form = useForm({
                       Separate multiple colors with commas.
                     </p>
                   </div>
-                )}
+                )} 
               />
             </div>
 
-            <Controller
+            <Controller 
               name="short_description"
               control={form.control}
               render={({ field }) => (
@@ -689,7 +711,7 @@ const form = useForm({
               <Button
                 type="button"
                 variant="primary"
-                onClick={() => appendVariant({ sku: "", price: 5000, discount_price: 0, stock_quantity: 10, stock_status: "In Stock", description: "", specifications: [], is_active: true, attributes: {}, image: undefined })}
+                onClick={() => appendVariant({ name: "", sku: "", price: 5000, discount_price: 0, stock_quantity: 10, stock_status: "In Stock", description: "", specifications: [], is_active: true, attributes: {}, image: undefined })}
                 className="text-xs h-8"
               >
                 <Plus className="w-3.5 h-3.5 mr-1" /> Add Variation
@@ -776,7 +798,18 @@ function VariantRowCard({
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Controller
+          name={`variants.${vIndex}.name`}
+          control={control}
+          render={({ field }) => (
+            <Field>
+              <FieldLabel className="text-[10px] font-bold uppercase">Variant Name (Optional)</FieldLabel>
+              <Input {...field} placeholder="e.g. Warm White / 1-Gang" className="h-9 text-xs" />
+            </Field>
+          )}
+        />
+
         <Controller
           name={`variants.${vIndex}.sku`}
           control={control}
@@ -787,7 +820,9 @@ function VariantRowCard({
             </Field>
           )}
         />
+      </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <Controller
           name={`variants.${vIndex}.price`}
           control={control}
@@ -809,9 +844,7 @@ function VariantRowCard({
             </Field>
           )}
         />
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Controller
           name={`variants.${vIndex}.stock_status`}
           control={control}

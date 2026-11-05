@@ -6,7 +6,7 @@ interface TableRowProps {
 }
 
 export default function TableRow({ order_items }: TableRowProps) {
-
+  console.log("TableRow Rendered", order_items);
   return (
     <>
       {order_items.map((order_item, i) => {
@@ -46,6 +46,23 @@ export default function TableRow({ order_items }: TableRowProps) {
             {/* Product Name & Variant Attributes */}
             <td className="py-3.5 px-1 sm:px-2">
               <div className="flex flex-col space-y-1">
+
+                <div className="flex items-center gap-2">
+                  {order_item.brand && (
+                    <span className="flex items-center gap-1 font-bold text-neutral-400 tracking-wider uppercase text-[9px] truncate">
+                      brand:  
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-amber-700 block">
+                      {order_item.brand}
+                    </span>
+                    </span>
+                  )} 
+                  <span className="flex items-center gap-1 font-bold text-neutral-400 tracking-wider uppercase text-[9px] truncate">
+                      class:
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-amber-700 block">
+                        {order_item.class_name || "Generic"}
+                      </span>
+                    </span>
+                </div>    
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100 text-xs sm:text-sm leading-snug">
                   {order_item.product_name}
                 </span>

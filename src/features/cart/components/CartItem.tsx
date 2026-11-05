@@ -11,13 +11,15 @@ interface CartItemProps {
 
 export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps) {
   const subtotal = (item.price || item.total) * item.quantity;
+
+  console.log("CartItem Rendered", item);
    
   return (
     <div className="group flex flex-col sm:flex-row  items-start sm:items-center justify-between gap-4 py-2 sm:py-4 px-2 sm:px-3 rounded-xl hover:bg-neutral-50/80 border-y border-neutral-200/80 transition-colors">
       {/* Product Image & Meta Details */}
       <div className="flex items-center gap-3.5 flex-1 min-w-0 ">
         <Link
-          href={`/products/${item.id}`}
+          href={`/products/${item.baseProductId}`}
           className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-lg border border-neutral-200/80 bg-neutral-100 flex items-center justify-center group-hover:border-neutral-300 transition-colors"
         >
           {item.imageUrl ? (
@@ -32,17 +34,30 @@ export default function CartItem({item,deleteItem,updateQuantity}: CartItemProps
         </Link>
 
         <div className="flex-1 min-w-0 space-y-0.5">
+          <div className="flex items-center gap-2">
+
           {item.brand && (
+            <span className="flex items-center gap-1 font-bold text-neutral-400 tracking-wider uppercase text-[9px] truncate">
+              brand:  
             <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block">
               {item.brand}
             </span>
-          )}
+            </span>
+          )} 
+          <span className="flex items-center gap-1 font-bold text-neutral-400 tracking-wider uppercase text-[9px] truncate">
+              class:
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block">
+                {item.class_name || "Generic"}
+              </span>
+            </span>
+          </div>
           <Link
-            href={`/products/${item.id}`}
+            href={`/products/${item.baseProductId}`}
             className="text-sm font-semibold text-neutral-900 hover:text-amber-700 transition-colors line-clamp-1 block"
           >
             {item.name}
           </Link>
+          
           <div className="text-xs text-neutral-500 font-medium pt-0.5">
             Unit Price:{" "}
             <span className="font-mono font-semibold text-neutral-800">

@@ -84,6 +84,8 @@ export async function submitOrder(formData:FormValue,items:CartType[],totalPrice
         // subtotal: item.price * item.quantity, 
         attributes: item.attributes || {},
         images: item.imageUrl,
+        brand: item.brand || null,
+        class_name: item.class_name || null, 
     }));
 
     const { error: itemsError } = await supabase

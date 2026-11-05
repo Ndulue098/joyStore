@@ -79,6 +79,7 @@ updated_at?:string
 category?:ProductCategoty
 product_variants?:ProductVariant[]
 colors?:string[]
+class_name?:string
 }
 
 
@@ -130,6 +131,7 @@ export type CartItem=Pick<
   quantity: number;
   variantId?: number | string;
   attributes?: Record<string, string>;
+  class_name?: string;
 }
 
 
@@ -157,6 +159,8 @@ unit_price:number
 attributes?:Record<string,string> | string | null
 images?:string | null
 discountnumber?:number
+class_name?:string | null
+brand?:string | null
 }
 
 export type OrderType={
@@ -196,5 +200,6 @@ export type CartType={
   total: number
   baseProductId?: any;                   // <--- Add this line
   attributes?: Record<string, string>;
+  class_name?: string;
 }
 // i mutated the getCategoryrev on the getMontlyOrdersByStatus
