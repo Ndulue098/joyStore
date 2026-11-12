@@ -7,9 +7,9 @@ import { ProductsType } from '@/src/types/types';
 
 export interface ProductCardProps {
   product: ProductsType;
+  forcedVariantIndex?: number;
 }
 
-// Helper function to safely parse and convert colors into a clean string array
 function parseProductColors(colorsInput: any): string[] {
   if (!colorsInput) return [];
   if (Array.isArray(colorsInput)) return colorsInput.map(String);
@@ -24,31 +24,32 @@ function parseProductColors(colorsInput: any): string[] {
   return [];
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, forcedVariantIndex }: ProductCardProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
   const { handleAddToCart } = useCartContext();
   const variants = product.product_variants || [];
+  const hasVariantFields = product.product_variant_fields && product.product_variant_fields.length > 0;
 
-  // 1. State for selected variant (defaults to first variant)
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState<number>(0);
+  // State defaults to forced index if provided (standalone variant mode), otherwise 0
+  const [selectedVariantIndex, setSelectedVariantIndex] = useState<number>(
+    forcedVariantIndex !== undefined ? forcedVariantIndex : 0
+  );
   const [active, setActive] = useState<boolean>(false);
 
   const currentVariant = variants[selectedVariantIndex] || variants[0];
 
-  // Fallback image: Active variant image -> Product base image -> null
   const displayImage = currentVariant?.image_url || product.imageUrl;
   const displayPrice = currentVariant ? currentVariant.price : product.price;
 
-  // 2. Extract unique attribute keys safely
-  const attributeKeys = Array.from(
+  // Extract unique attribute keys safely only if variant fields exist
+  const attributeKeys = hasVariantFields ? Array.from(
     new Set(
       variants.flatMap((v) => (v.attributes ? Object.keys(v.attributes) : []))
     )
-  );
+  ) : [];
 
-  // Parse product colors safely
   const productColors = parseProductColors(product.colors);
 
-  // Helper to update selected variant index when an attribute pill is clicked
   function handleAttributeClick(key: string, value: any) {
     const matchingIndex = variants.findIndex((v) => {
       const attrVal = v.attributes ? v.attributes[key] : null;
@@ -60,17 +61,16 @@ export function ProductCard({ product }: ProductCardProps) {
     }
   }
 
-  // Next / Previous image arrows for multi-image variants 
   function handleNextImage(e: React.MouseEvent) {
     e.preventDefault();
-    if (variants.length > 0) {
+    if (variants.length > 1 && !forcedVariantIndex) {
       setSelectedVariantIndex((prev) => (prev + 1) % variants.length);
     }
   }
 
   function handlePrevImage(e: React.MouseEvent) {
     e.preventDefault();
-    if (variants.length > 0) {
+    if (variants.length > 1 && !forcedVariantIndex) {
       setSelectedVariantIndex((prev) => (prev - 1 + variants.length) % variants.length);
     }
   }
@@ -108,10 +108,10 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group relative z-0 flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200/80 bg-white shadow-xs transition-all duration-200 hover:border-neutral-300 hover:shadow-md">
       
-      {/* Image Container with Controlled State Sync */}
+      {/* Image Container */}
       <div className="relative aspect-4/3 sm:aspect-12/10 w-full overflow-hidden bg-neutral-100/80 flex items-center justify-center">
         
-        {variants.length > 1 && (
+        {variants.length > 1 && !forcedVariantIndex && (
           <>
             <button
               onClick={handlePrevImage}
@@ -136,10 +136,15 @@ export function ProductCard({ product }: ProductCardProps) {
         >
           {displayImage ? (
             <img
-              src={displayImage}
-              alt={product.name}
-              className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-            />
+      src={displayImage}
+      alt={product.name}
+      loading="lazy"
+      decoding="async"
+      onLoad={() => setIsLoaded(true)}
+      className={`h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-105 ${
+        isLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'
+      }`}
+    />
           ) : (
             <div className="flex flex-col items-center justify-center text-neutral-400 gap-1.5 p-4">
               <ImageOff className="h-8 w-8 stroke-[1.5] text-neutral-300" />
@@ -191,7 +196,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </span> 
           </div>
 
-          {/* Main Title (Variant Name primary, Product Name / Class secondary) */}
+          {/* Main Title */}
           <div className="flex items-start justify-between gap-2">
             <Link href={`/products/${product.id}`} className="block min-w-0 flex-1">
               <h3 className="text-xs sm:text-sm font-semibold text-neutral-900 line-clamp-1 leading-snug group-hover:text-amber-700 transition-colors">
@@ -199,7 +204,7 @@ export function ProductCard({ product }: ProductCardProps) {
               </h3>
               <p className="text-[11px] text-neutral-500 font-medium truncate mt-0.5">
                 {product.name} {product.class_name ? `/ ${product.class_name}` : ''}
-              </p>
+              </p> 
             </Link>
  
             {/* Colors Swatches Indicator */}
@@ -217,7 +222,7 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
 
-          {/* Scrollable Horizontal Attributes Carousel */}
+          {/* Scrollable Attributes Carousel (Only renders if product has variant fields defined) */}
           {attributeKeys.length > 0 && (
             <div className="h-7 w-full overflow-hidden">
               <div 
@@ -227,10 +232,10 @@ export function ProductCard({ product }: ProductCardProps) {
                 {attributeKeys.map((key) => {
                   const uniqueValues = Array.from(
                     new Set(variants.map((v) => (v.attributes ? v.attributes[key] : null)))
-                  );
+                  ).filter(Boolean);
 
                   return uniqueValues.map((val) => {
-                    const stringVal = val === null || val === undefined ? 'None' : String(val);
+                    const stringVal = String(val);
                     const isSelected = currentVariant?.attributes?.[key] === val;
 
                     return (
@@ -272,7 +277,6 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           </div>
 
-          {/* ADD TO CART / ADDED BUTTON */}
           <button
             type="button"
             onClick={handleClick}

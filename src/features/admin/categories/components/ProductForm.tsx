@@ -708,14 +708,7 @@ export default function ProductForm({
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-neutral-500">3. Product Variations ({variantRows.length})</h3>
                 <p className="text-[11px] text-neutral-500">Manage individual stock items, pricing, attributes, and variation-specific specs</p>
               </div>
-              <Button
-                type="button"
-                variant="primary"
-                onClick={() => appendVariant({ name: "", sku: "", price: 5000, discount_price: 0, stock_quantity: 10, stock_status: "In Stock", description: "", specifications: [], is_active: true, attributes: {}, image: undefined })}
-                className="text-xs h-8"
-              >
-                <Plus className="w-3.5 h-3.5 mr-1" /> Add Variation
-              </Button>
+              
             </div>
 
             <div className="space-y-4">
@@ -738,6 +731,15 @@ export default function ProductForm({
                 )
               })}
             </div>
+
+            <Button
+                type="button"
+                variant="primary"
+                onClick={() => appendVariant({ name: "", sku: "", price: 5000, discount_price: 0, stock_quantity: 10, stock_status: "In Stock", description: "", specifications: [], is_active: true, attributes: {}, image: undefined })}
+                className="text-xs h-8 flex gap-1 items-center justify-center"
+              >
+                <Plus className="w-3.5 h-3.5 mr-1" /> <span>Add Variation</span> 
+              </Button>
           </div>
 
           <div className="flex justify-end gap-2.5 pt-4 border-t border-neutral-200">

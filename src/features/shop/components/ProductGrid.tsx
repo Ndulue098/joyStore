@@ -1,30 +1,25 @@
 import { SlidersHorizontal } from "lucide-react";
-// import ProductCard from "./ProductCard";
 import Pagination from "./Pagination";
 import EmptyState from "./EmptyState";
 import { getProducts } from "../data/getProducts";
 import { ProductCard } from "@/src/components/layout/ProductCard";
-// import { getProducts } from "@/lib/actions/getProducts";
+import { ProductsType } from "@/src/types/types";
 
 interface ProductGridProps {
   searchParams: { [key: string]: string | string[] | undefined }; 
 }
 
+
 export default async function ProductGrid({ searchParams }: ProductGridProps) {
-  // 1. Resolve searchParams to read current page
   const resolvedParams = await searchParams || {};
   const page = Number(resolvedParams.page) || 1;
   const limit = 9;
 
-  // 2. Pass current page into options & extract totalCount
   const { products, totalCount } = await getProducts(Promise.resolve(searchParams), {
     page,
     limit,
   });
 
-  console.log("products", products);
-
-  // 3. Compute total pages dynamically
   const totalPages = Math.ceil(totalCount / limit);
 
   if (products.length === 0) {
@@ -32,16 +27,38 @@ export default async function ProductGrid({ searchParams }: ProductGridProps) {
       <EmptyState
         icon={<SlidersHorizontal className="h-8 w-8 text-neutral-400" />}
         title="No products match your criteria"
-        description="We couldn't find any electrical supplies matching your filters or search query. Try clearing some filters or searching for another item."
+        description="We couldn't find any electrical supplies matching your filters or search query."
       />
     );
   }
 
+  // Flatten products: if a product has NO variant fields, expand its variants into individual cards
+  const expandedItems: { product: any; forcedVariantIndex?: number }[] = [];
+
+  products.forEach((product:ProductsType) => {
+    const hasVariantFields = product.product_variant_fields && product.product_variant_fields.length > 0;
+    const variants = product.product_variants || [];
+
+    if (!hasVariantFields && variants.length > 0) {
+      // Render each variant as its own standalone card entry
+      variants.forEach((_, vIndex) => {
+        expandedItems.push({ product, forcedVariantIndex: vIndex });
+      });
+    } else {
+      // Render normally as a single card with dynamic attribute switcher
+      expandedItems.push({ product });
+    }
+  });
+
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {expandedItems.map((item, idx) => (
+          <ProductCard 
+            key={`${item.product.id}-${item.forcedVariantIndex ?? 'group'}-${idx}`} 
+            product={item.product} 
+            forcedVariantIndex={item.forcedVariantIndex} 
+          />
         ))}
       </div>
       <Pagination currentPage={page} totalPages={totalPages} />

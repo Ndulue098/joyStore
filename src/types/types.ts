@@ -80,6 +80,11 @@ category?:ProductCategoty
 product_variants?:ProductVariant[]
 colors?:string[]
 class_name?:string
+product_variant_fields?:{
+  name:string
+  type:"text"|"select"|"radio"|"checkbox"|"number"|"date"
+  options?:string[]
+}[]
 }
 
 
@@ -203,3 +208,8 @@ export type CartType={
   class_name?: string;
 }
 // i mutated the getCategoryrev on the getMontlyOrdersByStatus
+
+
+
+
+

@@ -36,6 +36,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         onClick={onClick}
         disabled={disabled}
+        suppressHydrationWarning
         className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${variantStyles[variant]} ${className}`}
         {...props}
       >

@@ -296,12 +296,26 @@ export interface FetchProductsOptions {
   }
 
   // 3. Build base query with embedded variants and variant fields
-  let query = supabase
+ /*  let query = supabase
     .from("product")
     .select(
       `
       *,
       category:categories!category_id!left (id, name, slug),
+      product_variants(*),
+      product_variant_fields(*)
+      `,
+      { count: "exact" }
+    )
+    .eq("is_active", true); */
+
+  // 3. Build base query with embedded variants and variant fields
+  let query = supabase
+    .from("product")
+    .select(
+      `
+      *,
+      category:categories (id, name, slug),
       product_variants(*),
       product_variant_fields(*)
       `,

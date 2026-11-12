@@ -19,7 +19,7 @@ export default async function CategoryCard({subcat}: CategoryCardProps) {
       {validSubcategories.map((obj)=>{
         const productLength=obj.products.length
 
-        return <div key={obj.id} className="w-[280px] sm:w-[320px] shrink-0 snap-start">
+        return <div key={obj.id} className="w-[280px] sm:w-[280px] shrink-0 snap-start">
           <Link
             href={`/shop?category=${obj.slug}`}
             className="group flex flex-col h-full bg-white rounded-2xl border border-neutral-200/80 hover:border-amber-400/80 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-300"
