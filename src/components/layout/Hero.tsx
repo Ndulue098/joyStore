@@ -145,7 +145,7 @@ export default function HeroSection({
           {/* Series Tag on top corner of image */}
           <div className="absolute md:mt-8 top-8 left-8 z-20 pointer-events-none">
             <span className="text-[11px] font-mono tracking-[0.22em] text-white bg-black/60 px-3 py-1.5 backdrop-blur-md rounded-sm border border-white/20 uppercase">
-              0{currentIndex + 1} // {currentSlide.component}
+              0{currentIndex + 1} {"//"} {currentSlide.component}
             </span>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function HeroSection({
         <div className="relative w-full h-full bg-[#FFFFFF] flex flex-col justify-between p-6 sm:p-10 lg:p-[5%] xl:p-[8%] border-l border-neutral-200">
           
           {/* Top Header of Right Column */}
-          <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
+          <div className="flex items-center justify-between border-b border-neutral-100 pb-4 lg:mt-8">
             <span className="text-xs font-medium tracking-[0.24em] uppercase text-neutral-400">
               {currentSlide.tag}
             </span>
@@ -172,7 +172,7 @@ export default function HeroSection({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.02 }}
                 transition={{ duration: 0.65, ease: 'easeInOut' }}
-                className="font-bold text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl tracking-tight text-neutral-950 leading-[1.1] text-balance"
+                className="font-bold text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-7xl tracking-tight text-neutral-950 leading-[1.1] text-balance"
               >
                 {currentSlide.title}
               </motion.h1>
@@ -229,7 +229,7 @@ export default function HeroSection({
       </div>
 
       {/* Bottom progress bar */}
-      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-neutral-100 z-30">
+      {/* <div className="absolute bottom-0 left-0 w-full h-0.5 bg-neutral-100 z-30">
         <motion.div
           key={currentIndex}
           initial={{ width: '0%' }}
@@ -237,7 +237,7 @@ export default function HeroSection({
           transition={{ duration: 6, ease: 'linear' }}
           className="h-full bg-amber-600/80"
         />
-      </div>
+      </div> */}
     </section>
   );
 }

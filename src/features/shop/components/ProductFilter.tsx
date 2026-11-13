@@ -16,7 +16,7 @@ export default async function ProductFilter({}) {
   <div className="flex-1 h-full overflow-y-auto pr-1 flex flex-col min-h-0">
     <Link
       href="/shop"
-      className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center justify-between cursor-pointer shrink-0"
+      className="w-full text-left px-2.5 py-1.5 rounded text-xs font-medium transition-colors flex items-center justify-between cursor-pointer shrink-0"
     >
       <span>All Categories</span>
     </Link>

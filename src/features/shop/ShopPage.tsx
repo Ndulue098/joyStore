@@ -17,7 +17,7 @@ export default function ShopPage({ searchParams }: ShopPageProps) {
   // const resolvedSearchParams = await searchParams;
   // const suspenseKey = JSON.stringify(resolvedSearchParams);
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-8 py-8  sm:py-8 min-h-screen">
       {/* Navigation Breadcrumbs */}
       <CustomBreadcrumbs items={[{ label: "Shop", href: "/shop" }]} />
 

@@ -25,7 +25,7 @@ export default async function ShopLayout({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start mt-4 sm:mt-8 relative">
         
         {/* Desktop Sidebar (3 Cols) */}
-        <aside className="hidden lg:block lg:col-span-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 shadow-2xs sticky top-24 z-10">
+        <aside className="hidden lg:block lg:col-span-3 rounded border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-5 shadow-2xs sticky top-24 z-10">
           <div className="flex items-center justify-between pb-3 border-b border-neutral-200/80 dark:border-neutral-800 mb-3">
             <h3 className="text-xs font-black uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
               Filter Catalogue

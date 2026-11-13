@@ -1,7 +1,7 @@
 
 export default function ShopHero({}) {
   return (
-      <div className="rounded-md bg-neutral-200 text-neutral-700 p-6 sm:p-8 relative overflow-hidden s">
+      <div className="rounded bg-neutral-200 text-neutral-700 p-6 sm:p-8 relative overflow-hidden s">
     {/* Subtle Background Glow Accent */}
     <div className="absolute -top-12 -right-12 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 

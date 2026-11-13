@@ -59,7 +59,7 @@ export default function SearchFilter({}: SearchFilterProps) {
     <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pb-4 mt-8 border-b border-neutral-200">
         {/* Search Input */}
           
-        <Field className="flex flex-row items-center gap-2.5 w-full max-w-md bg-white p-2 rounded-md border border-neutral-300">
+        <Field className="flex flex-row items-center gap-2.5 w-full max-w-md bg-white p-2 rounded border border-neutral-300">
       {/* Search Icon */}
             <Search className="h-4 w-4 shrink-0 text-neutral-500" />
 
@@ -70,7 +70,7 @@ export default function SearchFilter({}: SearchFilterProps) {
                 id="search-products"
                 type="text"
                 placeholder="search products..."
-                className="w-auto flex-1 min-w-0 h-auto rounded-md p-0 border-none bg-transparent text-base text-neutral-900 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none shadow-none"
+                className="w-auto flex-1 min-w-0 h-auto rounded p-0 border-none bg-transparent text-base text-neutral-900 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none shadow-none"
             />
 
             {/* Clear Field Button */}
@@ -95,7 +95,7 @@ export default function SearchFilter({}: SearchFilterProps) {
                 value={searchParams.get("sort") || ""}
                 onValueChange={handleSort}
                 >
-                <SelectTrigger className="w-[200px] appearance-none rounded-md border border-neutral-300 bg-white py-2 pl-3  text-xs font-semibold 
+                <SelectTrigger className="w-[200px] appearance-none rounded border border-neutral-300 bg-white py-2 pl-3  text-xs font-semibold 
                 text-neutral-800 shadow-2xs cursor-pointer focus:border-neutral-900 focus:outline-none">
                     <SelectValue placeholder="Sort by..." />
                 </SelectTrigger>

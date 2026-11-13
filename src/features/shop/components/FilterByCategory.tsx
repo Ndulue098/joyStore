@@ -66,7 +66,7 @@ export default function FilterByCategory({ cat }: FilterByCategoryProps) {
             handleFilter(cat.slug);
           }
         }}
-        className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+        className={`w-full flex items-center justify-between px-2.5 py-2 rounded text-xs font-semibold transition-all cursor-pointer ${
           isParentSelected
             ? "bg-amber-50 text-amber-800 font-bold"
             : "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900"
@@ -107,7 +107,7 @@ export default function FilterByCategory({ cat }: FilterByCategoryProps) {
                    setOpen(false)
                   }}
                 type="button"
-                className={`w-full text-left px-2 py-1.5 rounded-md text-xs transition-colors truncate block cursor-pointer ${
+                className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors truncate block cursor-pointer ${
                   isSubSelected
                     ? "text-amber-800 font-bold bg-amber-50"
                     : "text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100/80"
