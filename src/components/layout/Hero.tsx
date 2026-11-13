@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, SlidersHorizontal } from 'lucide-react';
+import Image from 'next/image';
 
 interface HeroSlide {
   id: string;
@@ -27,7 +28,7 @@ const HERO_SLIDES: HeroSlide[] = [
     tag: 'Luxury Statement Pieces',
     ctaText: 'Shop Chandeliers',
     ctaHref: '/shop/chandeliers',
-    image: '/image/img7.jpg',
+    image: '/Image/img7.jpg',
   },
   {
     id: 'slide-switches',
@@ -51,7 +52,7 @@ const HERO_SLIDES: HeroSlide[] = [
     tag: 'Holiday Collection',
     ctaText: 'Shop Christmas Lights',
     ctaHref: '/shop/christmas-lights',
-    image: '/image/img3.jpg',
+    image: '/Image/img3.jpg',
   },
   {
     id: 'slide-dropdown',
@@ -75,7 +76,7 @@ const HERO_SLIDES: HeroSlide[] = [
     tag: 'Designer Wall Lights',
     ctaText: 'Explore Wall Lights',
     ctaHref: '/shop/wall-lights',
-    image: '/image/img5.jpg',
+    image: '/Image/img5.jpg',
   },
   {
     id: 'slide-street-light',
@@ -87,7 +88,7 @@ const HERO_SLIDES: HeroSlide[] = [
     tag: 'Industrial Grade',
     ctaText: 'Shop Street Lights',
     ctaHref: '/shop/street-light',
-    image: '/image/img6.jpg',
+    image: '/Image/img6.jpg',
   },
 ];
 
@@ -129,7 +130,7 @@ export default function HeroSection({
               transition={{ duration: 0.75, ease: 'easeInOut' }}
               className="absolute inset-0 w-full h-full"
             >
-              <img
+              {/* <img
                 src={currentSlide.image}
                 alt={currentSlide.title}
                 referrerPolicy="no-referrer"
@@ -138,7 +139,14 @@ export default function HeroSection({
               <div 
                 className="absolute inset-0 bg-black/25 pointer-events-none" 
                 aria-hidden="true" 
-              />
+              /> */}
+              <Image
+    src={currentSlide.image}
+    alt={currentSlide.title}
+    fill
+    priority={currentIndex === 0}
+    className="object-cover object-center"
+  />
             </motion.div>
           </AnimatePresence>
 
