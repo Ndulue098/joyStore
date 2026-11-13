@@ -91,15 +91,9 @@ const HERO_SLIDES: HeroSlide[] = [
   },
 ];
 
-interface HeroSectionProps {
-  onOpenCategories: () => void;
-  onExploreProducts: (componentName: string) => void;
-}
 
 export default function HeroSection({
-  onOpenCategories,
-  onExploreProducts,
-}: HeroSectionProps) {
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -211,7 +205,7 @@ export default function HeroSection({
 
                 <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3">
                   <button
-                    onClick={() => onExploreProducts(currentSlide.component)}
+                    // onClick={() => onExploreProducts(currentSlide.component)}
                     className="py-2.5 sm:py-3 px-3 sm:px-4 bg-neutral-950 hover:bg-neutral-800 text-white font-medium text-xs tracking-[0.14em] uppercase transition-all duration-200 rounded-sm flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-[0.99]"
                   >
                     <span>{currentSlide.ctaText}</span>
@@ -219,7 +213,7 @@ export default function HeroSection({
                   </button>
 
                   <button
-                    onClick={onOpenCategories}
+                    // onClick={onOpenCategories}
                     className="py-2.5 sm:py-3 px-3 sm:px-4 border border-neutral-300 hover:border-neutral-900 bg-white hover:bg-neutral-50 text-neutral-900 font-medium text-xs tracking-[0.12em] uppercase transition-all duration-200 rounded-sm flex items-center gap-2 cursor-pointer"
                   >
                     <SlidersHorizontal className="w-3.5 h-3.5 text-neutral-500" />
