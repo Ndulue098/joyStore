@@ -40,7 +40,7 @@ const HERO_SLIDES: HeroSlide[] = [
     tag: 'Contractor Certified',
     ctaText: 'Explore Sockets',
     ctaHref: '/shop/switches-sockets',
-    image: '/image/img2.jpg',
+    image: '/Image/img2.jpg',
   },
   {
     id: 'slide-christmas',
@@ -64,7 +64,7 @@ const HERO_SLIDES: HeroSlide[] = [
     tag: 'Pendant Fixtures',
     ctaText: 'Shop DropDown Lights',
     ctaHref: '/shop/profile-light',
-    image: '/image/img4.jpg',
+    image: '/Image/img4.jpg',
   },
   {
     id: 'slide-wall-light',
