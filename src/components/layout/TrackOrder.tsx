@@ -10,7 +10,7 @@ export default function TrackOrder({}) {
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-      <div className="relative z-10 overflow-hidden rounded-xl bg-neutral-100/90 dark:bg-neutral-900/60 border border-neutral-200/80 dark:border-neutral-800 p-6 sm:p-10 max-w-4xl mx-auto shadow-xs
+      <div className="relative z-10 overflow-hidden rounded bg-neutral-100/90 dark:bg-neutral-900/60 border border-neutral-200/80 dark:border-neutral-800 p-6 sm:p-10 max-w-4xl mx-auto shadow-xs
         justify-center flex
       ">
         {/* Soft Background Accent Glow */}
@@ -49,7 +49,7 @@ export default function TrackOrder({}) {
                     type="text"
                     placeholder="e.g. BL-X7K29P"
                     value={orderCode}
-                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs sm:text-sm font-mono uppercase font-bold text-neutral-900 dark:text-neutral-100 placeholder:normal-case placeholder:font-sans placeholder:font-normal placeholder:text-neutral-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all shadow-xs"
+                    className="w-full pl-10 pr-4 py-3 rounded border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-950 text-xs sm:text-sm font-mono uppercase font-bold text-neutral-900 dark:text-neutral-100 placeholder:normal-case placeholder:font-sans placeholder:font-normal placeholder:text-neutral-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all shadow-xs"
                     onChange={(e) => {
                       setOrderCode(e.target.value)
                       if (error) setError(false)
@@ -61,7 +61,7 @@ export default function TrackOrder({}) {
                 <button
                   type="submit"
                   disabled={loading || !orderCode.trim()}
-                  className="py-3 px-5 bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-white text-white dark:text-neutral-950 font-bold text-xs sm:text-sm rounded-lg transition-all shadow-xs hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                  className="py-3 px-5 bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-white text-white dark:text-neutral-950 font-bold text-xs sm:text-sm rounded transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                 >
                   {loading ? (
                     <>

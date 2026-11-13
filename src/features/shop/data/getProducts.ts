@@ -322,7 +322,6 @@ export interface FetchProductsOptions {
       { count: "exact" }
     )
     .eq("is_active", true);
-
   // 4. Apply Full-Text Search Filter
   if (searchQuery) {
     query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
@@ -359,17 +358,22 @@ export interface FetchProductsOptions {
       break;
 
     case "recommended":
-    default:
+    // default:
       query = query
         .order("featured", { ascending: false })
         .order("is_best_seller", { ascending: false })
         .order("created_at", { ascending: false });
       break;
+
+    case "random":
+    default:
+      query = query.order("random()");
+      break;
   }
 
   // 8. Apply Pagination Range
   query = query.range(from, to);
-
+  // Randomize the order of products for each page load
   const { data, count, error } = await query;
 
   if (error) {

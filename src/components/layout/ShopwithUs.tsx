@@ -57,11 +57,11 @@ export default function ShopwithUs() {
         {TRUST_PILLARS.map((item, index) => (
           <div
             key={index}
-            className="group relative z-10 max-w-80 mx-auto sm:max-w-full rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
+            className="group relative z-10 max-w-80 mx-auto sm:max-w-full rounded bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 p-5 sm:p-6 hover:border-amber-400/80 dark:hover:border-amber-500/80 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
           >
             <div>
               {/* Icon Badge */}
-              <div className="h-9 w-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 group-hover:bg-amber-50 dark:group-hover:bg-amber-950/60 border border-neutral-200 dark:border-neutral-700 group-hover:border-amber-200 dark:group-hover:border-amber-800/80 flex items-center justify-center transition-colors mb-4">
+              <div className="h-9 w-9 rounded bg-neutral-100 dark:bg-neutral-800 group-hover:bg-amber-50 dark:group-hover:bg-amber-950/60 border border-neutral-200 dark:border-neutral-700 group-hover:border-amber-200 dark:group-hover:border-amber-800/80 flex items-center justify-center transition-colors mb-4">
                 <span className="text-neutral-700 dark:text-neutral-300 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                   {item.icon}
                 </span>

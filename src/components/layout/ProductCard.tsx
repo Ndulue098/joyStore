@@ -106,7 +106,7 @@ export function ProductCard({ product, forcedVariantIndex }: ProductCardProps) {
   }
 
   return (
-    <div className="group relative z-0 flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200/80 bg-white shadow-xs transition-all duration-200 hover:border-neutral-300 hover:shadow-md">
+    <div className="group relative z-0 flex flex-col justify-between overflow-hidden rounded-xs border border-neutral-200/80 bg-white shadow-xs transition-all duration-200 hover:border-neutral-300 hover:shadow-md">
       
       {/* Image Container */}
       <div className="relative aspect-4/3 sm:aspect-12/10 w-full overflow-hidden bg-neutral-100/80 flex items-center justify-center">
@@ -280,7 +280,7 @@ export function ProductCard({ product, forcedVariantIndex }: ProductCardProps) {
           <button
             type="button"
             onClick={handleClick}
-            className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shrink-0 ${
+            className={`cursor-pointer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shrink-0 ${
               active
                 ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-xs"
                 : "bg-amber-500 text-neutral-950 hover:bg-amber-400 active:scale-95 shadow-xs"

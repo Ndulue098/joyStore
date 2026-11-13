@@ -13,7 +13,7 @@ interface ProductGridProps {
 export default async function ProductGrid({ searchParams }: ProductGridProps) {
   const resolvedParams = await searchParams || {};
   const page = Number(resolvedParams.page) || 1;
-  const limit = 9;
+  const limit = 20;
 
   const { products, totalCount } = await getProducts(Promise.resolve(searchParams), {
     page,

@@ -1,263 +1,249 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-  Zap,
-  CheckCircle2,
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowRight, SlidersHorizontal } from 'lucide-react';
 
 interface HeroSlide {
   id: string;
-  categorySlug: string;
-  eyebrow: string;
-  headline: string;
-  highlightText: string;
-  supportingText: string;
+  component: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: string;
+  tag: string;
   ctaText: string;
   ctaHref: string;
-  secondaryCtaText: string;
-  secondaryCtaHref: string;
-  badge: string;
-  badgeCategory: string;
-  imageUrl: string;
-  imageAlt: string;
-  bgColor: string;
-  accentColor: string;
-  gradient: string;
-  edgeColor?: string;
+  image: string;
 }
 
 const HERO_SLIDES: HeroSlide[] = [
   {
-    id: 'slide-lighting',
-    categorySlug: 'chandeliers',
-    eyebrow: 'MODERN ARCHITECTURAL ILLUMINATION',
-    headline: 'Light Up Your Space',
-    highlightText: 'Beautifully',
-    supportingText:
-      'Discover chandeliers, ceiling lights, bulbs, and modern lighting solutions tailored for homes, offices, and luxury commercial interiors.',
-    ctaText: 'Shop Lighting',
+    id: 'slide-chandelier',
+    component: 'Chandelier',
+    title: 'Grand Uplight Chandeliers',
+    subtitle: 'Signature Collection',
+    description: 'Where sculpture meets illumination. Elevate your room with timeless chandeliers designed to cast a warm, breathtaking glow over your most cherished spaces.',
+    price: '₦120,000',
+    tag: 'Luxury Statement Pieces',
+    ctaText: 'Shop Chandeliers',
     ctaHref: '/shop/chandeliers',
-    secondaryCtaText: 'How Ordering Works',
-    secondaryCtaHref: '/#how-it-works',
-    badge: 'Trending Collection',
-    badgeCategory: 'Over 30+ Chandeliers & Downlights',
-    imageUrl: 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=1200&q=80',
-    imageAlt: 'Modern crystal chandelier and luxury ceiling lighting fixture',
-    bgColor: 'from-amber-950/20 via-neutral-900 to-neutral-950',
-    accentColor: 'text-amber-400',
-
-    gradient: "bg-transparent",
-    edgeColor: '#1A1614',
+    image: '/image/img7.jpg',
   },
   {
     id: 'slide-switches',
-    categorySlug: 'switches-sockets',
-    eyebrow: 'CERTIFIED WALL ACCESSORIES & FITTINGS',
-    headline: 'The Details That Power',
-    highlightText: 'Every Space',
-    supportingText:
-      'Find reliable switches, USB-enabled power sockets, and premium electrical accessories from certified brands for your next renovation.',
-    ctaText: 'Explore Switches & Sockets',
+    component: 'Switches & Sockets',
+    title: 'Precision Wall Fittings',
+    subtitle: 'Architectural Hardware',
+    description: 'Perfection in the details. Frame your walls in minimalist luxury with precision-crafted switches and power fittings that feel as exquisite as they look.',
+    price: '₦3,500',
+    tag: 'Contractor Certified',
+    ctaText: 'Explore Sockets',
     ctaHref: '/shop/switches-sockets',
-    secondaryCtaText: 'Browse Catalogue',
-    secondaryCtaHref: '/shop',
-    badge: 'Contractor Grade',
-    badgeCategory: 'Modular Wall Plates & USB Sockets',
-    imageUrl: 'https://images.unsplash.com/photo-1636368208791-17b81ed832d2?q=80&w=1029&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    imageAlt: 'Sleek modern minimalist light switches and USB wall sockets',
-    bgColor: 'from-blue-950/20 via-neutral-900 to-neutral-950',
-    accentColor: 'text-amber-400',
-
-    // gradient:"bg-gradient-to-t from-[#121316] via-[#202226] to-[#32353B]",
-    gradient: "bg-transparent",
-    edgeColor: '#242629',
-
+    image: '/image/img2.jpg',
   },
   {
-    id: 'slide-fans',
-    categorySlug: 'fans',
-    eyebrow: 'HIGH PERFORMANCE RESIDENTIAL & COMMERCIAL COOLING',
-    headline: 'Stay Cool.',
-    highlightText: 'Stay Comfortable.',
-    supportingText:
-      'Explore quality ceiling fans, silent exhaust systems, and electrical cooling solutions built to handle Nigerian climate conditions.',
-    ctaText: 'Shop Fans',
-    ctaHref: '/shop/fans',
-    secondaryCtaText: 'View All Products',
-    secondaryCtaHref: '/shop',
-    badge: 'Energy Efficient',
-    badgeCategory: 'Silent DC Motors & Heavy Blade Span',
-    // imageUrl: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=1200&q=80',
-    imageUrl: 'https://images.unsplash.com/photo-1675850520159-bafc0736b15b?q=80&w=995&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    imageAlt: 'Modern high performance ceiling fan in a contemporary room',
-    bgColor: 'from-emerald-950/20 via-neutral-900 to-neutral-950',
-    accentColor: 'text-amber-400',
-
-    // gradient:"bg-gradient-to-t from-[#0F0E0E] via-[#1A1614] to-[#2A221E]",
-    gradient: "bg-transparent",
-        edgeColor: '#221D1A',
-
-    
+    id: 'slide-christmas',
+    component: 'Christmas Light',
+    title: 'Festive & Ambient Illumination',
+    subtitle: 'Seasonal Decor',
+    description: 'Weave magic through your spaces. Elevate your room with delicate string lights that cast a warm, festive glow and turn quiet evenings into celebrations.',
+    price: '₦15,000',
+    tag: 'Holiday Collection',
+    ctaText: 'Shop Christmas Lights',
+    ctaHref: '/shop/christmas-lights',
+    image: '/image/img3.jpg',
   },
   {
-    id: 'slide-cables',
-    categorySlug: 'cables-wires',
-    eyebrow: '100% PURE COPPER CERTIFIED CONDUCTORS',
-    headline: 'Build With the Right',
-    highlightText: 'Electrical Essentials',
-    supportingText:
-      'From certified pure copper cables and conduit wires to lamp holders and heavy-duty extension boxes, find all your project essentials in one place.',
-    ctaText: 'Shop Electrical Supplies',
-    ctaHref: '/shop/cables-wires',
-    secondaryCtaText: 'Negotiate Bulk Price',
-    secondaryCtaHref: '/shop',
-    badge: '100% Pure Copper',
-    badgeCategory: 'Tested NIS & Standard Breakers',
-    imageUrl: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    imageAlt: 'Pure copper electrical cables, coils and installation supplies',
-    bgColor: 'from-amber-950/30 via-neutral-900 to-neutral-950',
-    accentColor: 'text-amber-400',
-
-      // gradient:"bg-gradient-to-t from-[#0F0E0E] via-[#1A1614] to-[#2A221E]"
-    // gradient:"bg-gradient-to-b from-[#222325] via-[#2f3032] to-[#454344]",
-    gradient: "bg-transparent",
-        edgeColor: '#3A3B3D',
-
+    id: 'slide-dropdown',
+    component: 'DropDown Light',
+    title: 'Pendant & DropDown Luminaires',
+    subtitle: 'Statement Lighting',
+    description: 'Sleek black pendant lamps tailored for modern kitchen islands, dining spaces, and contemporary restaurant interiors.',
+    price: '₦18,000',
+    tag: 'Pendant Fixtures',
+    ctaText: 'Shop DropDown Lights',
+    ctaHref: '/shop/profile-light',
+    image: '/image/img4.jpg',
+  },
+  {
+    id: 'slide-wall-light',
+    component: 'Wall Light',
+    title: 'Atmospheric Wall Sconces',
+    subtitle: 'Accent Illumination',
+    description: 'Paint your walls with light. Let a subtle, lingering glow wash across your surfaces, bringing quiet drama and organic warmth to your interior narrative.',
+    price: '₦12,500',
+    tag: 'Designer Wall Lights',
+    ctaText: 'Explore Wall Lights',
+    ctaHref: '/shop/wall-lights',
+    image: '/image/img5.jpg',
+  },
+  {
+    id: 'slide-street-light',
+    component: 'Street Light',
+    title: 'Solar Perimeter Illumination',
+    subtitle: 'Outdoor Architecture',
+    description: 'Command the night outside. Crown your perimeters and open pathways with architectural solar illumination designed to cast a powerful, guiding presence under the open sky.',
+    price: '₦45,000',
+    tag: 'Industrial Grade',
+    ctaText: 'Shop Street Lights',
+    ctaHref: '/shop/street-light',
+    image: '/image/img6.jpg',
   },
 ];
 
+interface HeroSectionProps {
+  onOpenCategories: () => void;
+  onExploreProducts: (componentName: string) => void;
+}
 
-export default function Hero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+export default function HeroSection({
+  onOpenCategories,
+  onExploreProducts,
+}: HeroSectionProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const totalSlides = HERO_SLIDES.length;
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
 
   useEffect(() => {
     if (isPaused) return;
-
-    timerRef.current = setInterval(() => {
-      nextSlide();
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 6000);
+    return () => clearInterval(timer);
+  }, [isPaused]);
 
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [currentSlide, isPaused]);
-
-  const slide = HERO_SLIDES[currentSlide];
+  const currentSlide = HERO_SLIDES[currentIndex];
 
   return (
- <section
-  className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-4 md:mt-6 rounded-2xl transition-colors"
-  onMouseEnter={() => setIsPaused(true)}
-  onMouseLeave={() => setIsPaused(false)}
-  aria-label="Electrical Store Highlights"
->
-  <div className="relative text-primary-H overflow-hidden">
-    
-    {/* Main Slide Content Grid */}
-    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center min-h-[auto] lg:min-h-[500px] p-4 sm:p-6 lg:p-8 gap-8 lg:gap-12">
-      
-      {/* Left Column: Typography & CTAs */}
-      <div className="lg:col-span-6 flex flex-col justify-center items-center lg:items-start space-y-4 sm:space-y-6 ">
+    <section 
+      className="relative w-full h-[calc(100dvh-5rem)] min-h-screen bg-white text-neutral-900 overflow-hidden select-none"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      aria-roledescription="carousel"
+      aria-label="Electrical fixtures collection"
+    >
+      {/* 2-Column Grid: Stacks vertically on mobile, side-by-side on lg+ */}
+      <div className="relative w-full h-full grid grid-cols-1 grid-rows-2 lg:grid-rows-1 lg:grid-cols-2">
         
-        {/* Headline */}
-        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-textPry-H leading-[1.15] text-center lg:text-start flex flex-col md:flex-none">
-          {slide.headline}{' '}
-          <span className="inline-block font-black underline decoration-amber-500/40 underline-offset-8">
-            {slide.highlightText}
-          </span>
-        </h1>
+        {/* Column 1: Image occupying 100% of its slot */}
+        <div className="relative w-full h-full mt-8 md:mt-0 overflow-hidden bg-neutral-900">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.75, ease: 'easeInOut' }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <img
+                src={currentSlide.image}
+                alt={currentSlide.title}
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover object-center"
+              />
+              <div 
+                className="absolute inset-0 bg-black/25 pointer-events-none" 
+                aria-hidden="true" 
+              />
+            </motion.div>
+          </AnimatePresence>
 
-        {/* Supporting Text */}
-        <p className="text-sm sm:text-base text-neutral-600 max-w-xl font-medium leading-relaxed text-center md:text-start">
-          {slide.supportingText}
-        </p>
-
-        {/* CTAs */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center sm:justify-center lg:justify-start gap-3 sm:gap-4 w-full">
-          <button className="px-6 py-3 rounded-md bg-amber-500 hover:bg-amber-400 text-gray-950 w-full sm:w-auto font-bold text-sm md:text-base shadow-lg shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2">
-            <span>{slide.ctaText}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <button className="px-6 py-3 rounded-md border border-neutral-700 bg-neutral-900/60 w-full sm:w-auto hover:bg-neutral-800 text-white font-semibold text-sm md:text-base backdrop-blur-sm transition-all duration-200 cursor-pointer text-center">
-            {slide.secondaryCtaText}
-          </button>
-        </div>
-
-        {/* Value Proposition Badges */}
-        <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-neutral-500 font-medium">
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />
-            <span>Upfront Listed Prices</span>
-          </div>
-          <span className="hidden sm:inline text-neutral-400">•</span>
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />
-            <span>Direct WhatsApp Negotiation</span>
-          </div>
-          <span className="hidden sm:inline text-neutral-400">•</span>
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />
-            <span>In-Store Pickup</span>
+          {/* Series Tag on top corner of image */}
+          <div className="absolute md:mt-8 top-8 left-8 z-20 pointer-events-none">
+            <span className="text-[11px] font-mono tracking-[0.22em] text-white bg-black/60 px-3 py-1.5 backdrop-blur-md rounded-sm border border-white/20 uppercase">
+              0{currentIndex + 1} // {currentSlide.component}
+            </span>
           </div>
         </div>
-      </div>
 
-      {/* Right Column: Hero Visual Showcase */}
-      <div className="lg:col-span-6 relative flex items-center justify-center lg:justify-end rounded-2xl overflow-hidden">
-        {/* Fixed Aspect Ratio Container preventing Layout Shift */}
-        <div className="relative w-full max-w-md lg:max-w-lg aspect-square sm:aspect-[4/3] lg:aspect-square flex items-center justify-center overflow-hidden rounded-2xl">
-          <img
-            key={slide.id}
-            src={slide.imageUrl}
-            alt={slide.imageAlt}
-            className="h-full w-full max-h-[350px] lg:max-h-[460px] object-contain object-center transition-all duration-700 ease-out transform-gpu will-change-transform mix-blend-multiply scale-105"
-          />
+        {/* Column 2: Fully Responsive Text Column */}
+        <div className="relative w-full h-full bg-[#FFFFFF] flex flex-col justify-between p-6 sm:p-10 lg:p-[5%] xl:p-[8%] border-l border-neutral-200">
+          
+          {/* Top Header of Right Column */}
+          <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
+            <span className="text-xs font-medium tracking-[0.24em] uppercase text-neutral-400">
+              {currentSlide.tag}
+            </span>
+            <span className="text-xs font-mono text-neutral-400 tabular-nums">
+              0{currentIndex + 1} / 0{HERO_SLIDES.length}
+            </span>
+          </div>
+
+          {/* Middle Title Area */}
+          <div className="flex-1 flex items-center justify-center w-full px-1 my-0 md:px-4 text-center md:my-4 ">
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={currentSlide.id}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: 0.65, ease: 'easeInOut' }}
+                className="font-bold text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl tracking-tight text-neutral-950 leading-[1.1] text-balance"
+              >
+                {currentSlide.title}
+              </motion.h1>
+            </AnimatePresence>
+          </div>
+
+          {/* Bottom Corner Content Area */}
+          <div className="max-w-lg w-full mx-auto lg:mx-0 lg:ml-auto pt-4 lg:pt-6 border-t border-neutral-100">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide.id}    
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+              >
+                <div className="flex items-baseline gap-3 mb-2">
+                  <span className="text-xs font-mono tracking-widest text-amber-700 uppercase">
+                    {currentSlide.subtitle}
+                  </span>
+                  <span className="text-neutral-300">·</span>
+                  <span className="text-xs font-mono font-medium text-neutral-900 tabular-nums">
+                    From {currentSlide.price}
+                  </span>  
+                </div>
+
+                <p className="text-xs sm:text-sm md:text-base text-neutral-600 font-light leading-relaxed mb-4 sm:mb-6">
+                  {currentSlide.description}
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3">
+                  <button
+                    onClick={() => onExploreProducts(currentSlide.component)}
+                    className="py-2.5 sm:py-3 px-3 sm:px-4 bg-neutral-950 hover:bg-neutral-800 text-white font-medium text-xs tracking-[0.14em] uppercase transition-all duration-200 rounded-sm flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-[0.99]"
+                  >
+                    <span>{currentSlide.ctaText}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={onOpenCategories}
+                    className="py-2.5 sm:py-3 px-3 sm:px-4 border border-neutral-300 hover:border-neutral-900 bg-white hover:bg-neutral-50 text-neutral-900 font-medium text-xs tracking-[0.12em] uppercase transition-all duration-200 rounded-sm flex items-center gap-2 cursor-pointer"
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-neutral-500" />
+                    <span>Browse Categories</span>
+                  </button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
         </div>
-      </div>
-    </div>
 
-    {/* Carousel Controls: Arrows & Indicators */}
-    <div className="relative z-20 px-4 pb-2 pt-4 flex items-center justify-center border-t border-white/5">
-      {/* Slide Indicator Bars */}
-      <div className="flex items-center gap-2">
-        {HERO_SLIDES.map((s, idx) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => goToSlide(idx)}
-            aria-label={`Go to slide ${idx + 1}: ${s.headline}`}
-            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-              idx === currentSlide
-                ? 'w-8 bg-amber-400 shadow-sm shadow-amber-400/50'
-                : 'w-2 bg-neutral-700 hover:bg-neutral-500'
-            }`}
-          />
-        ))}
       </div>
-    </div>
-  </div>
-</section>
-)
+
+      {/* Bottom progress bar */}
+      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-neutral-100 z-30">
+        <motion.div
+          key={currentIndex}
+          initial={{ width: '0%' }}
+          animate={{ width: '100%' }}
+          transition={{ duration: 6, ease: 'linear' }}
+          className="h-full bg-amber-600/80"
+        />
+      </div>
+    </section>
+  );
 }

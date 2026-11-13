@@ -13,6 +13,7 @@ export default async function CategoryCard({subcat}: CategoryCardProps) {
       (sub) => sub.products && sub.products.length > 0
     ) || [];
 
+    console.log("validSubcategories", validSubcategories);
   
   return (
     <>
@@ -22,7 +23,7 @@ export default async function CategoryCard({subcat}: CategoryCardProps) {
         return <div key={obj.id} className="w-[280px] sm:w-[280px] shrink-0 snap-start">
           <Link
             href={`/shop?category=${obj.slug}`}
-            className="group flex flex-col h-full bg-white rounded-2xl border border-neutral-200/80 hover:border-amber-400/80 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-300"
+            className="group flex flex-col h-full bg-white  border border-neutral-200/80 hover:border-amber-400/80 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-300"
           >
             {/* Visual Image Header */}
             <div className="relative aspect-12/10 w-full overflow-hidden bg-neutral-100">
@@ -62,7 +63,7 @@ export default async function CategoryCard({subcat}: CategoryCardProps) {
             </div>
 
             {/* Body Content */}
-            <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+            <div className="p-4 flex-1 flex flex-col justify-between  text-neutral-700">
               <p className="text-xs text-neutral-500 line-clamp-2 leading-relaxed font-normal">
                 {obj.description || "Explore top products in this category."}
               </p>

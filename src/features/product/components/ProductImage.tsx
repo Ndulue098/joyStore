@@ -8,7 +8,7 @@ interface ProductImageProps {
 
 export default function ProductImage({ image, name }: ProductImageProps) {
   return (
-    <div className="lg:col-span-5 w-full sticky top-8 pt-10">
+    <div className="lg:col-span-5 w-full lg:sticky lg:top-8 lg:pt-10">
       <div className="relative aspect-square w-full rounded-2xl bg-neutral-100 border border-neutral-200/80 overflow-hidden shadow-xs flex items-center justify-center">
         {image ? (
           <img
@@ -21,7 +21,7 @@ export default function ProductImage({ image, name }: ProductImageProps) {
             <ImageOff className="h-10 w-10 stroke-[1.5] text-neutral-300" />
             <span className="text-xs font-medium text-neutral-400">
               No Image Available
-            </span>
+            </span> 
           </div>
         )}
       </div>

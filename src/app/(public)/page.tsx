@@ -17,14 +17,14 @@ export default async function Home({searchParams}: pageProps) {
     const resolvedSearchParams = await searchParams;
 
   return (
-    <div>
+    <div className="bg-gray-100">
       <Hero/>
       <CategoryCarousel/>
       <FeaturedProduct/>
       <PromoBanner/> 
       <ShopwithUs/>
-      <HowItWorks/>
       <ProductSection resolvedSearchParams={resolvedSearchParams}/>
+      <HowItWorks/>
       <TrackOrder/>
       <Footer/> 
     </div>

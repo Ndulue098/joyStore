@@ -59,7 +59,7 @@ export function HowItWorks() {
             {STEPS.map((step, index) => (
               <div
                 key={step.number || index}
-                className="relative z-10 flex flex-col justify-between rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 shadow-xs hover:border-amber-400 dark:hover:border-amber-500/80 hover:shadow-md transition-all duration-200 group"
+                className="relative z-10 flex flex-col justify-between rounded bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 shadow-xs hover:border-amber-400 dark:hover:border-amber-500/80 hover:shadow-md transition-all duration-200 group"
               >
                 <div>
                   {/* Step Header */}
@@ -67,7 +67,7 @@ export function HowItWorks() {
                     <span className="text-sm font-extrabold text-amber-600 dark:text-amber-500 font-mono tracking-wider">
                       {step.number}
                     </span>
-                    <div className="h-9 w-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center shrink-0">
+                    <div className="h-9 w-9 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center shrink-0">
                       {step.icon}
                     </div>
                   </div>
@@ -104,7 +104,7 @@ export function HowItWorks() {
             </p>
             <Link
               href="/shop"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-xs sm:text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-xs sm:text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all"
             >
               <span>Start Building Your Order</span>
               <ArrowRight className="h-4 w-4" />

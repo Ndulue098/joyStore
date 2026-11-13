@@ -11,6 +11,7 @@ import {
   MessageSquare,
   LayoutDashboard,
   User2,
+  LogOut,
 } from "lucide-react";
 import Logo from "./Logo";
 import { useRouter } from "next/navigation";
@@ -53,10 +54,9 @@ export default function NavBar({session}:NavBarProps) {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-200 ${
-        scrolled
-          ? "bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md shadow-xs border-b border-neutral-200/80 dark:border-neutral-800 py-2.5"
-          : "bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-3.5"
+      className={`w-full top-0 z-50 transition-all duration-200 absolute border-b border-neutral-200/80 py-2.5 
+        ${
+         scrolled ? " backdrop-blur-md shadow-xs bg-white/90 " : "bg-white"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
@@ -103,7 +103,7 @@ export default function NavBar({session}:NavBarProps) {
                 placeholder="Search cables, switches..."
                 value={headerSearch}
                 onChange={(e) => setHeaderSearch(e.target.value)}
-                className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-800 pl-9 pr-3 py-1.5 text-xs font-medium text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 border border-transparent focus:border-amber-500/80 focus:bg-white dark:focus:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
+                className="w-full rounded bg-neutral-100 dark:bg-neutral-800 pl-9 pr-3 py-1.5 text-xs font-medium text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 border border-transparent focus:border-amber-500/80 focus:bg-white dark:focus:bg-neutral-950 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all"
               />
             </div>
           </form>
@@ -111,7 +111,7 @@ export default function NavBar({session}:NavBarProps) {
           {/* Order Lookup Button */}
           <Link
             href="/order/lookup"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 text-xs font-semibold transition-all shadow-2xs"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 text-xs font-semibold transition-all shadow-2xs"
             title="Track existing order"
           >
             <FileSearch className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
@@ -141,7 +141,8 @@ export default function NavBar({session}:NavBarProps) {
                   href="/api/auth/signout"
                   className="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 font-semibold text-xs transition-colors"
                 >
-                  Sign Out
+                  <LogOut className="w-4 h-4 lg:hidden " />
+                  <span className="hidden lg:block">Sign Out</span>  
                 </Link>
               </div>
             ) : (
@@ -165,7 +166,7 @@ export default function NavBar({session}:NavBarProps) {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none transition-colors cursor-pointer"
+            className="lg:hidden p-2 rounded text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none transition-colors cursor-pointer"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -175,7 +176,7 @@ export default function NavBar({session}:NavBarProps) {
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t rounded-b-2xl border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 pt-4 pb-6 mt-2.5 shadow-xl animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden border-t  rounded-b-2xl border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 pt-4 pb-6 mt-2.5 shadow-xl animate-in slide-in-from-top-2 duration-200">
           {/* Mobile Search Input */}
           <form onSubmit={handleSearchSubmit} className="mb-4">
             <div className="relative">
