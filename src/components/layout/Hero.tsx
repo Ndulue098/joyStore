@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, SlidersHorizontal } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface HeroSlide {
   id: string;
@@ -203,7 +204,7 @@ export default function HeroSection({
                   </span>
                   <span className="text-neutral-300">·</span>
                   <span className="text-xs font-mono font-medium text-neutral-900 tabular-nums">
-                    From {currentSlide.price}
+                     {currentSlide.tag}
                   </span>  
                 </div>
 
@@ -212,21 +213,25 @@ export default function HeroSection({
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3">
+                  <Link href={"/shop"}>
                   <button
                     // onClick={() => onExploreProducts(currentSlide.component)}
                     className="py-2.5 sm:py-3 px-3 sm:px-4 bg-neutral-950 hover:bg-neutral-800 text-white font-medium text-xs tracking-[0.14em] uppercase transition-all duration-200 rounded-sm flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-[0.99]"
-                  >
+                    >
                     <span>{currentSlide.ctaText}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
+                  </Link>
 
+                  <Link href={"#categories"}> 
                   <button
                     // onClick={onOpenCategories}
                     className="py-2.5 sm:py-3 px-3 sm:px-4 border border-neutral-300 hover:border-neutral-900 bg-white hover:bg-neutral-50 text-neutral-900 font-medium text-xs tracking-[0.12em] uppercase transition-all duration-200 rounded-sm flex items-center gap-2 cursor-pointer"
-                  >
+                    >
                     <SlidersHorizontal className="w-3.5 h-3.5 text-neutral-500" />
                     <span>Browse Categories</span>
                   </button>
+                  </Link>
                 </div>
               </motion.div>
             </AnimatePresence>

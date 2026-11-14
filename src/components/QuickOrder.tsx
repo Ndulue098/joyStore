@@ -9,7 +9,7 @@ interface CustomOrderTriggerProps {
 
 export default function CustomOrderTrigger({
   onOpenCustomOrder,
-  whatsappNumber = "07034672159", // Replace with your actual WhatsApp line
+  whatsappNumber = "2347034672159", // Replace with your actual WhatsApp line
 }: CustomOrderTriggerProps) {
   
   const handleConnect = () => {
@@ -23,7 +23,7 @@ export default function CustomOrderTrigger({
   };
 
   return (
-    <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 pointer-events-auto group">
+    <div className="fixed bottom-8 right-6 sm:bottom-8 sm:right-8 z-50 pointer-events-auto group">
       
       {/* Subtle Pulsing Radar Ring Behind the Button */}
       <div className="absolute inset-0 rounded bg-amber-500/30 animate-ping pointer-events-none" />

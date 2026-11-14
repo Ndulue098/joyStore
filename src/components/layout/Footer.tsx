@@ -108,7 +108,7 @@ export default function Footer({}: FooterProps) {
               </div>
               <div className="flex items-center justify-center md:justify-start  gap-2">
                 <Phone className="h-4 w-4 text-neutral-800 dark:text-neutral-200 shrink-0" />
-                <span>07034672159</span>
+                <span>2347034672159</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <MessageSquare className="h-4 w-4 text-emerald-500 shrink-0" />
