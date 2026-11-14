@@ -14,15 +14,16 @@ interface ProductTableRowProps {
 }
 
 export default function ProductTableRow({product,id,name,categoryList,productId}: ProductTableRowProps) {
+
   return (
     <tr className="hover:bg-neutral-50/80 transition-colors">
               {/* Product Info & Thumbnail */}
               <td className="py-3 px-3">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 shrink-0 rounded-sm border border-neutral-200 bg-neutral-100 overflow-hidden flex items-center justify-center text-neutral-400">
-                    {product.imageUrl ? (
+                    {product?.product_variants?.at(0)?.image_url ? (
                       <img
-                      src={product.imageUrl}
+                      src={product?.product_variants.at(0)?.image_url}
                       alt={product.name}
                       className="h-full w-full object-cover"
                       />

@@ -28,7 +28,6 @@ interface ParentCardProps {
 
 export default function ParentCard({ parent,categoriesParent }: ParentCardProps) {
   const [open, setOpen] = useState(false);
-
   const subcategories = parent.subcategories || [];
   const categoryList=parent?.subcategories || []
   const totalSubcategories = subcategories.length;

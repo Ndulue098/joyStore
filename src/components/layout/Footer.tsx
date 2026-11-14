@@ -104,15 +104,15 @@ export default function Footer({}: FooterProps) {
             <div className="space-y-2.5 text-xs text-neutral-600 dark:text-neutral-400 font-medium text-center md:text-left">
               <div className="flex items-start justify-center md:justify-start gap-2">
                 <MapPin className="h-4 w-4 text-neutral-800 dark:text-neutral-200 shrink-0 mt-0.5" />
-                <span>5 Oshodi Street</span>
+                <span>Plaze B. Shop 1 Salvation Road, New Kenyetta market Ugwuaji, Enugu.</span>
               </div>
               <div className="flex items-center justify-center md:justify-start  gap-2">
                 <Phone className="h-4 w-4 text-neutral-800 dark:text-neutral-200 shrink-0" />
-                <span>801 xxx xxx xxx</span>
+                <span>07034672159</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <MessageSquare className="h-4 w-4 text-emerald-500 shrink-0" />
-                <span>WhatsApp: 801 xxx xxx xxx</span>
+                <span>WhatsApp: 07034672159</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <Clock className="h-4 w-4 text-neutral-800 dark:text-neutral-200 shrink-0" />

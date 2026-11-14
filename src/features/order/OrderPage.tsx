@@ -87,11 +87,10 @@ export default async function OrderPage({ orderId }: { orderId: string }) {
             <Logo />
             <div className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm space-y-1">
               <p className="font-medium text-neutral-700 dark:text-neutral-300">
-                Plot 14, Commercial Avenue, Alaba International Market /<br />
-                Lekki-Epe Expressway, Lagos, Nigeria
+                Plaze B. Shop 1 Salvation Road,<br/> New Kenyetta market Ugwuaji, Enugu.
               </p>
               <p className="font-mono text-neutral-500 dark:text-neutral-400">
-                Tel / WhatsApp: <span className="font-semibold text-neutral-800 dark:text-neutral-200">+234 803 123 4567</span>
+                Tel / WhatsApp: <span className="font-semibold text-neutral-800 dark:text-neutral-200">+234 703 467 2159</span>
               </p>
             </div>
           </div>
@@ -237,16 +236,15 @@ export default async function OrderPage({ orderId }: { orderId: string }) {
           </div>
 
           <a
-            href={`https://wa.me/2348143241605?text=Hi,%20I%20want%20to%20finalize%20my%20order%20${public_code || orderId}`}
+            href={`https://wa.me/2347034672159?text=Hi,%20I%20want%20to%20finalize%20my%20order%20${public_code || orderId}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white text-xs font-semibold px-5 py-3 rounded-xl transition-all shadow-xs shrink-0 cursor-pointer w-full sm:w-auto"
           >
             <MessageCircle className="w-4 h-4" />
             <span>Negotiate on WhatsApp</span>
-          </a>
+          </a> 
         </div>
-
       </div>
     </div>
   );
