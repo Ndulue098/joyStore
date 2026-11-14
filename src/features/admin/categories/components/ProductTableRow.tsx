@@ -23,7 +23,7 @@ export default function ProductTableRow({product,id,name,categoryList,productId}
                   <div className="h-8 w-8 shrink-0 rounded-sm border border-neutral-200 bg-neutral-100 overflow-hidden flex items-center justify-center text-neutral-400">
                     {product?.product_variants?.at(0)?.image_url ? (
                       <img
-                      src={product?.product_variants.at(0)?.image_url}
+                      src={product?.product_variants.at(0)?.image_url ?? undefined}
                       alt={product.name}
                       className="h-full w-full object-cover"
                       />

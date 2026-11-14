@@ -8,6 +8,7 @@ import ProductSection from "@/src/components/layout/ProductSection";
 import PromoBanner from "@/src/components/layout/PromoBanner";
 import ShopwithUs from "@/src/components/layout/ShopwithUs";
 import TrackOrder from "@/src/components/layout/TrackOrder";
+import QuickOrder from "@/src/components/QuickOrder";
 
 interface pageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -20,6 +21,7 @@ export default async function Home({searchParams}: pageProps) {
     <div className="bg-gray-100">
       <Hero/>
       <CategoryCarousel/>
+      <QuickOrder/>
       <FeaturedProduct/>
       <PromoBanner/> 
       <ShopwithUs/>

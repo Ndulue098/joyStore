@@ -15,7 +15,7 @@ export default function Logo({}) {
         </span>
       </div>
     </div>
-    <span className="text-[10px] font-bold tracking-widest text-neutral-700 block leading-none">
+    <span className="text-[10px] font-bold tracking-widest text-neutral-700 block leading-none -m-1.5">
       GLOBAL
     </span>
   </div>
