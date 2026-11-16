@@ -111,7 +111,7 @@ export default function HeroSection({
 
   return (
     <section 
-      className="relative w-full h-[calc(100dvh-5rem)] min-h-screen bg-white text-neutral-900 overflow-hidden select-none"
+      className="relative w-full z-100 h-[calc(100dvh-5rem)] min-h-screen bg-white text-neutral-900 overflow-hidden select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-roledescription="carousel"
@@ -160,7 +160,7 @@ export default function HeroSection({
         </div>
 
         {/* Column 2: Fully Responsive Text Column */}
-        <div className="relative w-full h-full bg-[#FFFFFF] flex flex-col justify-between p-6 sm:p-10 lg:p-[5%] xl:p-[8%] border-l border-neutral-200">
+        <div className="relative w-full h-full flex flex-col justify-between p-6 sm:p-10 lg:p-[5%] xl:p-[8%] border-l border-neutral-200">
           
           {/* Top Header of Right Column */}
           <div className="flex items-center justify-between border-b border-neutral-100 pb-4 lg:mt-8">
@@ -173,7 +173,7 @@ export default function HeroSection({
           </div>
 
           {/* Middle Title Area */}
-          <div className="flex-1 flex items-center justify-center w-full px-1 my-0 md:px-4 text-center md:my-4 ">
+          <div className="flex-1 flex items-center justify-center w-full my-0 text-center md:my-4 ">
             <AnimatePresence mode="wait">
               <motion.h1
                 key={currentSlide.id}
@@ -189,7 +189,7 @@ export default function HeroSection({
           </div>
 
           {/* Bottom Corner Content Area */}
-          <div className="max-w-lg w-full mx-auto lg:mx-0 lg:ml-auto pt-4 lg:pt-6 border-t border-neutral-100">
+          <div className="max-w-xl w-full mx-auto lg:mx-auto pt-4 lg:pt-6 border-t border-neutral-100 ">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide.id}    

@@ -54,12 +54,12 @@ export default function NavBar({session}:NavBarProps) {
 
   return (
     <header
-      className={`w-full top-0 z-50 transition-all duration-200 absolute border-b border-neutral-200/80 py-2.5 
+      className={`w-full top-0 z-120 transition-all duration-200 absolute border-b border-neutral-200/80 py-2.5 
         ${
          scrolled ? " backdrop-blur-md shadow-xs bg-white/90 " : "bg-white"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+      <div className="max-w-7xl z-120 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* LEFT: Brand Logo */}
         <div className="flex items-center shrink-0">
           <Logo />

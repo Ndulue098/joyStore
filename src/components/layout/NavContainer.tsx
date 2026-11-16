@@ -6,7 +6,7 @@ export default async function NavContainer({}) {
 const session = await getAdminSession();
 
   return (
-    <nav className="sticky top-0 z-40 w-full transition-all duration-200">
+    <nav className="sticky top-0 z-120 w-full transition-all duration-200">
       <NavBar session={session}/>
     </nav> 
   ); 

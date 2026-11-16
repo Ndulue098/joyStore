@@ -9,7 +9,7 @@ export default function Footer({}: FooterProps) {
   return (
    <footer
       id="store-contact"
-      className="relative z-20 bg-neutral-200 dark:bg-neutral-900 rounded-tl-3xl sm:rounded-tl-4xl rounded-tr-3xl sm:rounded-tr-4xl text-neutral-700 dark:text-neutral-300 pt-12 sm:pt-16 pb-16 sm:pb-20 border-t border-neutral-300 dark:border-neutral-800"
+      className="relative bg-neutral-200  z-100 dark:bg-neutral-900 rounded-tl-3xl sm:rounded-tl-4xl rounded-tr-3xl sm:rounded-tr-4xl text-neutral-700 dark:text-neutral-300 pt-12 sm:pt-16 pb-16 sm:pb-20 border-t border-neutral-300 dark:border-neutral-800"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-10 border-b border-neutral-300 dark:border-neutral-800">
