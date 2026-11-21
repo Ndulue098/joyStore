@@ -5,6 +5,8 @@ import NavBar from "../components/layout/NavBar";
 import CartProvider from "../features/context/CartContext";
 import { Toaster } from "@/components/ui/toast";
 
+import { Analytics } from "@vercel/analytics/next"
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className={`${geistSans.className} min-h-full flex flex-col bg-background text-foreground`}>
+        <Analytics/>
       <CartProvider>
         {children}
         <Toaster/>

@@ -70,7 +70,7 @@ const HERO_SLIDES: HeroSlide[] = [
   {
     id: 'slide-wall-light',
     component: 'Wall Light',
-    title: 'Atmospheric Wall Sconces',
+    title: 'Atmospheric Wall Light',
     subtitle: 'Accent Illumination',
     description: 'Paint your walls with light. Let a subtle, lingering glow wash across your surfaces, bringing quiet drama and organic warmth to your interior narrative.',
     price: '₦12,500',
@@ -145,6 +145,7 @@ export default function HeroSection({
     src={currentSlide.image}
     alt={currentSlide.title}
     fill
+    placeholder="blur"
     priority={currentIndex === 0}
     className="object-cover object-center"
   />
